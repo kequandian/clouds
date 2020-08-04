@@ -7,7 +7,7 @@ ui:
   ## 应用布局 (菜单） top, left
   layout: top
    
-login: 
+auth: 
   ## wechat, github, account
   sso: github
   ## 是否可注册, allow,none
@@ -37,6 +37,12 @@ services:
   issues:
      api: /api/crud/issue/issues
      description: 'API for Issues'
+     cg:  #自动代码配置
+        master: t_issue
+        #group: t_issue_category
+        slaves:
+           - t_issue_item:items
+           - t_issue_tag:tags
      fields：
         ## name 字段
         name: 
@@ -45,22 +51,31 @@ services:
           scope: 
              - list 
              - view
-             - edit 
              - new
-          ## cg-cli 配置
-          cg: 
-            master: t_issue
-            primary: id  ## primary key 默认为 id
-            unique: # 组合唯一键
-               - name
-               - type
-            comment: 名称  ## 数据表注释
-            nonull: true  ## 是否非空
-            default: null  ## 默认值
+             - edit 
+             - $sql  # 没有$sql选项，一般是联表查询字段, 需要人工编辑
+          # 数据字段属性   
+          sql:
+            notnull: true
+            comment: "名称" 
+            default: TIMESTAMP
+            unique: true
             
+        # status 选项字段    
         status: 
            label: 状态
            type: select
+           scope:  #  不能直接编辑状态
+              - list
+              - view
+              - $sql
+           options: 
+              - OPEN #规范定义为全大写
+              - DRAFT
+              - SUBMITTED
+              - APPROVED
+              - CLOSED
+         
  
 
        
