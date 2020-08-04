@@ -80,10 +80,22 @@ pages:
            - t_issue_item:items
            - t_issue_tag:tags
      list:
-        actions:
+        overall_actions:
+            - add_new      #新建列表项
+            - export_xls   #导出excel
+            - import_xls   #导入excel
+            - print_pdf    #打印pdf
+        item_actions:  # 列表单项
             - edit
             - delete
             - submit
+            - meta$close  #状态元操作$关闭
+            - meta$submit #状态元操作$提交
+        batch_actions: # 列表项批处理
+            - submit  #批量提交
+            - approve #批量审批
+            - delete  #批量删除
+            - close   #批量关闭
      fields：
         ## name 字段
         name: 
