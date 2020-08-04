@@ -1,7 +1,7 @@
 version: "1.0"
 ## 参考 docker-compose.yaml 的编排方式，对自动化生成应用进行编排
 
-cloud_meta: 
+meta: 
   author: 作者
   createTime: 创建时间
   updateTime: 更新时间
@@ -47,7 +47,7 @@ entries:
 
 services:
   tickets: #服务组别名称
-     service_meta: 
+     service_meta:   # 服务装配信息
         service_name: tickets  # 独立服务组别名称
         service_tag: 2341512341234 # 服务索引
         service_title: 问题管理  # 标题
