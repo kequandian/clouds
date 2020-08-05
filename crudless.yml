@@ -128,7 +128,49 @@ pages:
               - SUBMITTED
               - APPROVED
               - CLOSED
+        
+        #sex   单选字段
+        sex:
+          lable: 性别
+          type: radio
+          scope:
+            - list
+            - view
+            - new
+            - edit
+          options:
+            - 0:男
+            - 1:女
          
- 
+        # city 字段
+        city:
+          label: 城市
+          tylpe: pcd
+          scope:
+            - list
+          ## 未确定
 
-       
+        # creatTime 日期字段
+        createTime:
+          label: 创建时间
+          type: date
+          scope:
+             - list
+             - view
+
+        # descriptions 文本字段
+        descriptions:
+          label: 备注
+          type: text-area
+          scope:
+            - new
+            - edit
+          span: 10   #设置文本框长度
+          props:
+             autoSize:
+               minRows: 4   #设置文本框高度
+             placeholder: 请输入……
+          rules:           #设置为"required" 非空
+            - required
+            - phone  # or email
+ 
