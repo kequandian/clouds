@@ -96,6 +96,8 @@ pages:
             - approve #批量审批
             - delete  #批量删除
             - close   #批量关闭
+     form:
+        columns: 2 # 表单将按照两列的形式排版显示
      fields：
         ## name 字段
         name: 
@@ -165,7 +167,6 @@ pages:
           scope:
             - new
             - edit
-          span: 10   #设置文本框长度
           props:
              autoSize:
                minRows: 4   #设置文本框高度
