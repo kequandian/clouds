@@ -1,7 +1,7 @@
 version: "1.0"
 ## 参考 docker-compose.yaml 的编排方式，对自动化生成应用进行编排
 
-meta: 
+meta:
   author: 作者
   createTime: 创建时间
   updateTime: 更新时间
@@ -11,167 +11,162 @@ ui:
   theme: Light
   ## 应用布局 (菜单） top, left
   layout: top
-   
-auth: 
+
+auth:
   ## wechat, github, account
   sso: github
   ## 是否可注册, allow,none
   reg: none
   ## 底图可配置,也可以纯色
   bg: url
-   
+
 entries:
   products:
     entry_name: products
     label: 产品管理
-    sub: 
-      - 
-        entry_name: product_type
+    sub:
+      - entry_name: product_type
         label: 产品分类
-      -
-        entry_name: product_tag
+      - entry_name: product_tag
         label: 产品标签
-      - 
-        entry_name: product
+      - entry_name: product
         label: 产品
-  orders: 
-     entry_name: orders:
-     label: 单订管理
+  orders:
+    entry_name: orders
+    label: 单订管理
   tickets:
-     entry_name: tickets:
-     label: 工单管理
-     sub: 
-      - 
-        entry_name: ticket_issues
+    entry_name: tickets
+    label: 工单管理
+    sub:
+      - entry_name: ticket_issues
         label: 问题管理
 
 services:
   tickets: #服务组别名称
-     service_meta:   # 服务装配信息
-        service_name: tickets  # 独立服务组别名称
-        service_tag: 2341512341234 # 服务索引
-        service_title: 问题管理  # 标题
-        service_category: OA  # 分类信息
-        target_domain: dev.cloud.smallsaas.cn  #装配目地址
-     api: 
-        pom: # pom 信息
-           version: 1.0.0  #版本号
-        create_time: 创建时间  #
-        build_time: 2020-06-11  # 更新时间
-        developer: josie  # 服务开发者名称
-        jar_repo_url: http://jar.smallsaas.cn/repositories/issue-1.0.0.jar   #jar包地址
-        jar_dependencies_url: http://jar.smallsaas.cn/dependencies/tree/issue_dependencies.json
-     js: 
-        create_time: 2020-08-01   # 创建时间
-        build_time: 2020-06-11  # 更新时间
-        developer: ling #前端开发者名称
-        js_page_url: http://jar.smallsaas.cn/repository/issue  #前端面页
+    service_meta: # 服务装配信息
+      service_name: tickets # 独立服务组别名称
+      service_tag: 2341512341234 # 服务索引
+      service_title: 问题管理 # 标题
+      service_category: OA # 分类信息
+      target_domain: dev.cloud.smallsaas.cn #装配目地址
+    api:
+      pom: # pom 信息
+        version: 1.0.0 #版本号
+      create_time: 创建时间 #
+      build_time: 2020-06-11 # 更新时间
+      developer: josie # 服务开发者名称
+      jar_repo_url: http://jar.smallsaas.cn/repositories/issue-1.0.0.jar #jar包地址
+      jar_dependencies_url: http://jar.smallsaas.cn/dependencies/tree/issue_dependencies.json
+    js:
+      create_time: 2020-08-01 # 创建时间
+      build_time: 2020-06-11 # 更新时间
+      developer: ling #前端开发者名称
+      js_page_url: http://jar.smallsaas.cn/repository/issue #前端面页
 
 pages:
-   issue:  
-     api: /api/crud/issue/issues
-     description: 'API for Issues'
-     entry_id: ticket_issues  #菜单入口
-     service_id: tickets  #服务标识名称
-     cg:  #自动代码配置
-        master: t_issue
-        #group: t_issue_category
-        slaves:
-           - t_issue_item:items
-           - t_issue_tag:tags
-     list:
-        overall_actions:
-            - add_new      #新建列表项
-            - export_xls   #导出excel
-            - import_xls   #导入excel
-            - print_pdf    #打印pdf
-        item_actions:  # 列表单项
-            - edit
-            - delete
-            - submit
-            - meta$close  #状态元操作$关闭
-            - meta$submit #状态元操作$提交
-        batch_actions: # 列表项批处理
-            - submit  #批量提交
-            - approve #批量审批
-            - delete  #批量删除
-            - close   #批量关闭
-     form:
-        columns: 2 # 表单将按照两列的形式排版显示
-     fields：
-        ## name 字段
-        name: 
-          label: 名称
-          type: input
-          scope: 
-             - list 
-             - view
-             - new
-             - edit 
-             - $sql  # 没有$sql选项，一般是联表查询字段, 需要人工编辑
-          # 数据字段属性   
-          sql:
-            notnull: true
-            comment: "名称" 
-            default: TIMESTAMP
-            unique: true
-            
-        # status 选项字段    
-        status: 
-           label: 状态
-           type: select
-           scope:  #  不能直接编辑状态
-              - list
-              - view
-              - $sql
-           options: 
-              - OPEN #规范定义为全大写
-              - DRAFT
-              - SUBMITTED
-              - APPROVED
-              - CLOSED
-        
-        #sex   单选字段
-        sex:
-          lable: 性别
-          type: radio
-          scope:
-            - list
-            - view
-            - new
-            - edit
-          options:
-            - 0:男
-            - 1:女
-         
-        # city 字段
-        city:
-          label: 城市
-          tylpe: pcd
-          scope:
-            - list
-          ## 未确定
+  issue:
+    api: /api/crud/issue/issues
+    description: "API for Issues"
+    entry_id: ticket_issues #菜单入口
+    service_id: tickets #服务标识名称
+    cg: #自动代码配置
+      master: t_issue
+      #group: t_issue_category
+      slaves:
+        - t_issue_item:items
+        - t_issue_tag:tags
+    list:
+      overall_actions:
+        - add_new #新建列表项
+        - export_xls #导出excel
+        - import_xls #导入excel
+        - print_pdf #打印pdf
+      item_actions: # 列表单项
+        - edit
+        - delete
+        - submit
+        - meta$close #状态元操作$关闭
+        - meta$submit #状态元操作$提交
+      batch_actions: # 列表项批处理
+        - submit #批量提交
+        - approve #批量审批
+        - delete #批量删除
+        - close #批量关闭
+    form:
+      columns: 2 # 表单将按照两列的形式排版显示
+    fields:
+      ## name 字段
+      name:
+        label: 名称
+        type: input
+        scope:
+          - list
+          - view
+          - new
+          - edit
+          - $sql # 没有$sql选项，一般是联表查询字段, 需要人工编辑
+        # 数据字段属性
+        sql:
+          notnull: true
+          comment: "名称"
+          default: TIMESTAMP
+          unique: true
 
-        # creatTime 日期字段
-        createTime:
-          label: 创建时间
-          type: date
-          scope:
-             - list
-             - view
+      # status 选项字段
+      status:
+        label: 状态
+        type: select
+        scope: #  不能直接编辑状态
+          - list
+          - view
+          - $sql
+        options:
+          - OPEN #规范定义为全大写
+          - DRAFT
+          - SUBMITTED
+          - APPROVED
+          - CLOSED
 
-        # descriptions 文本字段
-        descriptions:
-          label: 备注
-          type: text-area
-          scope:
-            - new
-            - edit
-          props:
-             autoSize:
-               minRows: 4   #设置文本框高度
-             placeholder: 请输入……
-          rules:           #设置为"required" 非空
-            - required
-            - phone  # or email
- 
+      #sex   单选字段
+      sex:
+        lable: 性别
+        type: radio
+        scope:
+          - list
+          - view
+          - new
+          - edit
+        options:
+          - 0:男
+          - 1:女
+
+      # city 字段
+      city:
+        label: 城市
+        tylpe: pcd
+        scope:
+          - list
+        ## 未确定
+
+      # creatTime 日期字段
+      createTime:
+        label: 创建时间
+        type: date
+        scope:
+          - list
+          - view
+
+      # descriptions 文本字段
+      descriptions:
+        label: 备注
+        type: text-area
+        scope:
+          - new
+          - edit
+        props:
+          autoSize:
+            minRows: 4 #设置文本框高度
+          placeholder: 请输入……
+        rules: #设置为"required" 非空
+          - required
+          - phone # or email
