@@ -121,8 +121,8 @@ pages:
           - view
           - $sql
         options:
-          - OPEN #规范定义为全大写
-          - DRAFT
+          - OPEN: 开放 # 表示映射关系
+          - DRAFT # 规范定义为全大写
           - SUBMITTED
           - APPROVED
           - CLOSED
@@ -137,8 +137,8 @@ pages:
           - new
           - edit
         options:
-          - 0:男
-          - 1:女
+          - 0: 男
+          - 1: 女
 
       # city 字段
       city:
