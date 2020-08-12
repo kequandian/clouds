@@ -104,7 +104,6 @@ pages:
           - view
           - new
           - edit
-          - $sql # 没有$sql选项，一般是联表查询字段, 需要人工编辑
         # 数据字段属性
         sql:
           notnull: true
