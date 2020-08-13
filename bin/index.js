@@ -5,60 +5,95 @@ const fs = require('fs-extra');
 const Yaml = require('yaml');
 const { yamlToBuildJSON } = require('./utils/formatToBuildJSON');
 const { yamlToSQL } = require('./utils/formatToSQL');
+const cliArgs = require('./utils/cliArgs');
+
+const options = {
+  '-f': undefined,
+  '--json': undefined,
+  '--sql': undefined,
+  '--crud': undefined,
+};
+
+cliArgs(options)
+
+if (Object.values(options).every(v => v === undefined)) {
+  Object.keys(options).forEach(key => {
+    options[key] = true;
+  })
+}
 
 const cwd = process.cwd();
-const [, , yamlPath] = process.argv;
+// const yamlFilePath = path.join(cwd, yamlPath);
+// const fileName = path.basename(yamlFilePath, path.extname(yamlFilePath));
+const sqlFilePath = path.join(cwd, `crudless.sql`);
 
-const yamlFilePath = path.join(cwd, yamlPath);
-const fileName = path.basename(yamlFilePath, path.extname(yamlFilePath));
-
-readYAMLToBuildJSON(yamlFilePath)
-  .then(([data, pages]) => {
-    const genPageList = Object.keys(data);
-    const sqlContent = [];
-    const sqlFilePath = path.join(cwd, `${fileName}.sql`);
-
-    return Promise.all(
-      genPageList.map(pageName => {
-        const outJSONPath = path.join(cwd, `${pageName}.json`);
-        const sql = yamlToSQL(pages[pageName]);
-        sqlContent.push(sql);
-
-        return fs.writeJson(
-          outJSONPath,
-          data[pageName]
-        ).then(_ => console.log(`outJSONPath: `, outJSONPath))
-      })
+let readYAMLFile = new Promise((res, rej) => {
+  if (typeof options["-f"] === 'string') {
+    return fs.readFile(
+      path.join(cwd, options["-f"]),
+      'utf-8'
     )
-      .then(_ => fs.writeFile(sqlFilePath, sqlContent))
-      .then(_ => console.log(`outSQLPath: `, sqlFilePath))
+      .then(res);
+  }
+  return rej();
+})
+  .catch(_ => fs.readFile(path.join(cwd, 'crudless.yml'), 'utf-8'))
+  .catch(_ => fs.readFile(path.join(cwd, 'crudless.yaml'), 'utf-8'))
+  .catch(_ => fs.readFile(path.join(cwd, 'crudless'), 'utf-8'))
+
+readYAMLFile
+  .then(data => {
+    const yaml = Yaml.parse(data);
+    const { pages } = yaml;
+    return genJSON(!options["--json"], pages)
+      .then(_ => genSQL(!options["--sql"], pages))
+  })
+
+function genJSON(can, pages) {
+  if (can) {
+    return Promise.resolve();
+  }
+  const rst = {};
+
+  Object.keys(pages).forEach(pageName => {
+    if (typeof pages[pageName] === 'string') {
+      ;
+    } else if (String(pages[pageName]) === '[object Object]') {
+      const json = yamlToBuildJSON(pages[pageName]);
+      rst[pageName] = json;
+
+    } else {
+      throw new Error('未知的 yaml 格式');
+    }
 
   })
 
-function readYAML(yamlFile) {
-  return fs.readFile(yamlFile, 'utf-8')
-    .then(data => Yaml.parse(data))
+  const genPageList = Object.keys(rst);
+
+  return Promise.all(
+    genPageList.map(pageName => {
+      const outJSONPath = path.join(cwd, `${pageName}.json`);
+
+      return fs.writeJson(
+        outJSONPath,
+        pages[pageName]
+      ).then(_ => console.log(`outJSONPath: `, outJSONPath))
+    })
+  )
 }
 
-function readYAMLToBuildJSON(yamlFile) {
-  return readYAML(yamlFile)
-    .then(yamlData => {
-      const { pages } = yamlData;
-      const rst = {};
+function genSQL(can, pages) {
+  if (can) {
+    return Promise.resolve();
+  }
+  const sqlContent = [];
 
-      Object.keys(pages).forEach(pageName => {
-        if (typeof pages[pageName] === 'string') {
-          ;
-        } else if (String(pages[pageName]) === '[object Object]') {
-          const json = yamlToBuildJSON(pages[pageName]);
-          rst[pageName] = json;
+  Object.keys(pages).forEach(pageName => {
+    const sql = yamlToSQL(pages[pageName]);
+    sqlContent.push(sql);
+  })
 
-        } else {
-          throw new Error('未知的 yaml 格式');
-        }
+  return fs.writeFile(sqlFilePath, sqlContent)
+    .then(_ => console.log(`outSQLPath: `, sqlFilePath))
 
-      })
-
-      return Promise.resolve([rst, pages]);
-    })
 }

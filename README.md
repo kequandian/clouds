@@ -14,6 +14,7 @@
 $ npm install -g
 $ crudless  
 outPath:  ./issue.json
+outSQLPath:  ./crudless.sql
 $ crudless -h
 crudless  ## 默认找同目录的 crudless.yml，并且默认输出前后端配置文件
 crudless -f /path/to/crudless.yml  ## 指定文件并输出所有配置文件
