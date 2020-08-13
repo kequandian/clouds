@@ -106,6 +106,7 @@ pages:
           - edit
         # 数据字段属性
         sql:
+          type: varchar(100)
           notnull: true
           comment: "名称"
           default: TIMESTAMP
@@ -121,8 +122,8 @@ pages:
           - $sql
         options:
           - OPEN: 开放 # 表示映射关系
-          - DRAFT # 规范定义为全大写
-          - SUBMITTED
+          - DRAFT # 这样相当于 DRAFT: DRAFT
+          - SUBMITTED # 规范定义状态应为全大写
           - APPROVED
           - CLOSED
 

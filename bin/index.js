@@ -4,25 +4,34 @@ const path = require('path');
 const fs = require('fs-extra');
 const Yaml = require('yaml');
 const { yamlToBuildJSON } = require('./utils/formatToBuildJSON');
+const { yamlToSQL } = require('./utils/formatToSQL');
 
 const cwd = process.cwd();
 const [, , yamlPath] = process.argv;
 
 const yamlFilePath = path.join(cwd, yamlPath);
+const fileName = path.basename(yamlFilePath, path.extname(yamlFilePath));
 
 readYAMLToBuildJSON(yamlFilePath)
-  .then(data => {
+  .then(([data, pages]) => {
     const genPageList = Object.keys(data);
+    const sqlContent = [];
+    const sqlFilePath = path.join(cwd, `${fileName}.sql`);
 
     return Promise.all(
       genPageList.map(pageName => {
-        const outPath = path.join(cwd, `${pageName}.json`);
+        const outJSONPath = path.join(cwd, `${pageName}.json`);
+        const sql = yamlToSQL(pages[pageName]);
+        sqlContent.push(sql);
+
         return fs.writeJson(
-          outPath,
+          outJSONPath,
           data[pageName]
-        ).then(_ => console.log(`outPath: `, outPath))
+        ).then(_ => console.log(`outJSONPath: `, outJSONPath))
       })
     )
+      .then(_ => fs.writeFile(sqlFilePath, sqlContent))
+      .then(_ => console.log(`outSQLPath: `, sqlFilePath))
 
   })
 
@@ -50,6 +59,6 @@ function readYAMLToBuildJSON(yamlFile) {
 
       })
 
-      return Promise.resolve(rst);
+      return Promise.resolve([rst, pages]);
     })
 }
