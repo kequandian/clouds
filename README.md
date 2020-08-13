@@ -12,8 +12,12 @@
 
 ```bash
 $ npm install -g
-$ crudless ./crudless.yml
+$ crudless  
 outPath:  ./issue.json
+$ crudless -h
+crudless  ## 默认找同目录的 crudless.yml，并且默认输出前后端配置文件
+crudless -f /path/to/crudless.yml  ## 指定文件并输出所有配置文件
+crudless -f /path/to/crudless.yml --json --sql --crud  ## 按不同参数输出相应配置文件
 ```
 
 ## TODO
