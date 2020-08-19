@@ -4,7 +4,7 @@
 
 ## 快速使用
 
-> **Tips：Crudless具体使用请参考[crudless快速使用]([https://github.com/kequandian/hub.crudless.zerocode/blob/master/crudless%E5%BF%AB%E9%80%9F%E4%BD%BF%E7%94%A8.md](https://github.com/kequandian/hub.crudless.zerocode/blob/master/crudless快速使用.md))。**
+**Tips：Crudless具体使用请参考 [crudless快速使用](https://github.com/kequandian/hub.crudless.zerocode/blob/master/crudless快速使用.md)。**
 
 ## TODO
 
