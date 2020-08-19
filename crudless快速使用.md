@@ -2,7 +2,7 @@
 
 ## 1. 使用目的
 
-通过配置编排<span style="color:red;font-weight:bold">crudless.yml</span>文件内容并搭配NodeJS工具*（`curdless`指令）* 生成详细的**前后端与数据库的**配置文件，最后再配合`zero-json` *（**前端**代码生成工具）* 与`cg-api-cli` *（**后端**代码生成工具）* 配合生成**可即时运行**的总代码。
+通过配置编排<span style="color:red;font-weight:bold">crudless.yml</span>文件内容并搭配NodeJS工具 *（`curdless`指令）*  生成详细的**前后端与数据库的**配置文件，最后再配合`zero-json` *（**前端**代码生成工具）* 与`cg-api-cli` *（**后端**代码生成工具）* 配合生成**可即时运行**的总代码。
 
 ## 2. 相关链接
 
