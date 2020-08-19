@@ -117,7 +117,16 @@
 
 ## 4. crudless 生成文件
 
-根据 <u>**2. 相关链接**</u> 中的crudless工具地址拉取并使用其生成相应配置文件。
+根据 <u>**2. 相关链接**</u> 中的crudless工具地址拉取并安装。
+```shell
+$ npm i -g 
+
+## or below two lines after clone
+
+$ npm install
+$ npm link
+```
+使用其生成相应配置文件。
 
 ```shell
 # 切换至crudless.yml同级目录下后执行crudless如下所示
