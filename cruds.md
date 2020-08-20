@@ -8,7 +8,7 @@
 | :------------- | :----------------: | :----------------: | :----------------: | :----------------: | ------------------------------------------------------------ |
 | mask           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | **结构*（表-表）*模式标识**：one*（单表结构）*、onemany*（一对多结构）*、manymany*（多对多结构）*、group*（仅建分组表）*、groupby*（依据某表建立分组表）* |
 | master         | :heavy_check_mark: | :heavy_check_mark: |                    |                    | **主数据表名称**                                             |
-| master_id      |                    | :heavy_check_mark: |                    |                    | 子表关联主表所需要的**关联ID字段** *（需确保准确对应主表ID）* |
+| master_id      |                    | :heavy_check_mark: |                    |                    | 子表关联主表所需要的**关联ID字段**                           |
 | slaves         |                    | :heavy_check_mark: |                    |                    | **从表集合**，其下包含的为多个关联子表名称，如：`"slaves"：["t_1","t_2",...,"t_n"]` |
 | group          |                    |                    | :heavy_check_mark: | :heavy_check_mark: | **分组表名称**                                               |
 | groupBy        |                    |                    |                    | :heavy_check_mark: | **被分组的表名称**                                           |
@@ -30,7 +30,7 @@
 [
     {
         "mask":"one",
-        "master": "master"
+        "master": "table_name"
     }
 ]
 ```
@@ -38,9 +38,9 @@
 ### 解析
 
 
-| **表关系**                 | **表名**                             |
-| -------------------------- | ------------------------------------ |
-| 单表 *（对应`mask：one`）* | master*（对应`"master": "master"`）* |
+| **表关系**                 | **表名**                                      |
+| -------------------------- | --------------------------------------------- |
+| 单表 *（对应`mask：one`）* | table_name *（对应`"master": "table_name"`）* |
 
 ## 2. 一对多（oneTomany）
 
@@ -51,7 +51,7 @@
     {
         "mask": "onemany",
         "master": "cg_master_resource",
-        "masterId": "master_id,other_id",
+        "masterId": "master_id;other_id",
         "slaves": [
             "cg_master_resource_item",
             "cg_master_resource_record"
@@ -62,9 +62,9 @@
 
 ### 解析
 
-| **表关系** | **主表名称**       | **主表对应ID**     | **从表1名称**           | **从表2名称**             |
-| ---------- | ------------------ | ------------------ | ----------------------- | ------------------------- |
-| 一对多     | cg_master_resource | master_id,other_id | cg_master_resource_item | cg_master_resource_record |
+| **表关系** | **主表名称**       | **各从表对应主ID字段** | **从表1名称**           | **从表2名称**             |
+| ---------- | ------------------ | ---------------------- | ----------------------- | ------------------------- |
+| 一对多     | cg_master_resource | master_id;other_id     | cg_master_resource_item | cg_master_resource_record |
 
 
 
