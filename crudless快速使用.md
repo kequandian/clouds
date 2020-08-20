@@ -9,11 +9,11 @@
 >**Tips：地址无法访问则需联系管理员接入授权。**
 
 - [curdless工具地址](https://github.com/kequandian/hub.crudless.zerocode)
-
 - [zero-json工具地址](https://github.com/kequandian/zero-json)
-
 - [cg-api-cli工具地址](https://github.com/zelejs/cg-api-cli)
 - [dev-cli工具地址](https://github.com/kequandian/dev-cli)
+- [crudless.yml模板](https://github.com/kequandian/hub.crudless.zerocode/blob/master/crudless.yml)
+- [cruds.json说明](https://github.com/kequandian/hub.crudless.zerocode/blob/master/cruds.md)
 
 ## 3. 构建crudless.yml
 
@@ -89,7 +89,7 @@ Paramters:
   cruds		cruds文件路径
 ```
 
-> **Tips：其中[cruds.json](https://github.com/kequandian/hub.crudless.zerocode/blob/master/cruds.md)文件目前仍需手动编排，具体请看下述。**
+> **Tips：其中[cruds.json](https://github.com/kequandian/hub.crudless.zerocode/blob/master/cruds.md)文件可自行查阅文档。**
 >
 > 执行命令后会新建一个项目名和**module**同名的maven项目，后续可用maven命令进行编译和测试。
 
