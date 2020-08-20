@@ -6,6 +6,27 @@ meta:
   createTime: 创建时间
   updateTime: 更新时间
 
+ # pom: # pom 信息
+ #     version: 1.0.0 #版本号
+ #     artifact: crudless
+ # service_meta: # 服务装配信息
+ #     service_name: tickets # 独立服务组别名称
+ #     service_tag: 2341512341234 # 服务索引
+ #     service_title: 问题管理 # 标题
+ #     service_category: OA # 分类信息
+ #     target_domain: dev.cloud.smallsaas.cn #装配目地址
+ #  api:
+ #     create_time: 创建时间 #
+ #     build_time: 2020-06-11 # 更新时间
+ #     developer: josie # 服务开发者名称
+ #     jar_repo_url: http://jar.smallsaas.cn/repositories/issue-1.0.0.jar #jar包地址
+ #     jar_dependencies_url: http://jar.smallsaas.cn/dependencies/tree/issue_dependencies.json
+ #  js:
+ #     create_time: 2020-08-01 # 创建时间
+ #     build_time: 2020-06-11 # 更新时间
+ #     developer: ling #前端开发者名称
+ #     js_page_url: http://jar.smallsaas.cn/repository/issue #前端面页
+
 ui:
   ##  风格: 白天,黑夜,蓝天,草原,彩霞,浪漫
   theme: Light
@@ -41,40 +62,26 @@ entries:
       - entry_name: ticket_issues
         label: 问题管理
 
-services:
-  tickets: #服务组别名称
-    service_meta: # 服务装配信息
-      service_name: tickets # 独立服务组别名称
-      service_tag: 2341512341234 # 服务索引
-      service_title: 问题管理 # 标题
-      service_category: OA # 分类信息
-      target_domain: dev.cloud.smallsaas.cn #装配目地址
-    api:
-      pom: # pom 信息
-        version: 1.0.0 #版本号
-      create_time: 创建时间 #
-      build_time: 2020-06-11 # 更新时间
-      developer: josie # 服务开发者名称
-      jar_repo_url: http://jar.smallsaas.cn/repositories/issue-1.0.0.jar #jar包地址
-      jar_dependencies_url: http://jar.smallsaas.cn/dependencies/tree/issue_dependencies.json
-    js:
-      create_time: 2020-08-01 # 创建时间
-      build_time: 2020-06-11 # 更新时间
-      developer: ling #前端开发者名称
-      js_page_url: http://jar.smallsaas.cn/repository/issue #前端面页
-
 pages:
   issue:
     api: /api/crud/issue/issues
     description: "API for Issues"
     entry_id: ticket_issues #菜单入口
-    service_id: tickets #服务标识名称
+    service_provider: local  # local-本地sql定义生成, external-外部服务
+    
+    features:    # 实体能力(capability)
+      - tag      # 具备 tag 功能
+      - image    # 具备 image snapshot 功能
+      - category # 一般分组，通过 crud-category
+      #- group    #独立表进行分组, 与category只能选其一
+
     cg: #自动代码配置
       master: t_issue
       #group: t_issue_category
       slaves:
         - t_issue_item:items
         - t_issue_tag:tags
+        
     list:
       overall_actions:
         - add_new #新建列表项
@@ -92,8 +99,10 @@ pages:
         - approve #批量审批
         - delete #批量删除
         - close #批量关闭
+        
     form:
       columns: 2 # 表单将按照两列的形式排版显示
+      
     fields:
       ## name 字段
       name:
