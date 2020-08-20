@@ -89,7 +89,7 @@ Paramters:
   cruds		cruds文件路径
 ```
 
-> **Tips：其中cruds.json文件目前仍需手动编排，具体请看下述。**
+> **Tips：其中[cruds.json](https://github.com/kequandian/hub.crudless.zerocode/blob/master/cruds.md)文件目前仍需手动编排，具体请看下述。**
 >
 > 执行命令后会新建一个项目名和**module**同名的maven项目，后续可用maven命令进行编译和测试。
 
