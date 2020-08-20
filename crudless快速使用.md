@@ -51,7 +51,7 @@ crudless -f /path/to/crudless.yml --json --sql --crud  ## 按不同参数输出�
 >
 >- **test.json**：用于配合zero-json生成前端页面；
 >- **crudless.sql**：用于配合cg-api-cli生成后端代码；
->- ***.crud.sql**：用于配合cg-api-cli生成SQL表之间的关系。
+>- ***.crud.json**：用于配合cg-api-cli生成SQL表之间的关系，如：业务逻辑关系的数据库设计中，表与表之关的关系，如单表，一对多等。
 
 ## 5. zero-json生成前端
 
@@ -89,7 +89,7 @@ Paramters:
   cruds		cruds文件路径
 ```
 
-> **Tips：其中[cruds.json](https://github.com/kequandian/hub.crudless.zerocode/blob/master/cruds.md)文件可自行查阅文档。**
+> **Tips：其中[*.cruds.json](https://github.com/kequandian/hub.crudless.zerocode/blob/master/cruds.md)文件可自行查阅文档。**
 >
 > 执行命令后会新建一个项目名和**module**同名的maven项目，后续可用maven命令进行编译和测试。
 
