@@ -93,10 +93,6 @@ Paramters:
 >
 > 执行命令后会新建一个项目名和**module**同名的maven项目，后续可用maven命令进行编译和测试。
 
-### cruds.json编排
-
->目前需要手动编写`cruds.json`文件，后续该文件将由crudless模块同时生成。
-
 ## 7. dev-cli运行后端
 
 根据 <u>**2. 相关链接**</u> 中的dev-cli工具地址拉取、配置并使用其运行上述生成的后端代码。
