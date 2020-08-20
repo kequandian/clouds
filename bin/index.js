@@ -76,7 +76,8 @@ function genJSON(can, pages) {
 
       return fs.writeJson(
         outJSONPath,
-        pages[pageName]
+        rst[pageName],
+        { spaces: 2 }
       ).then(_ => console.log(`outJSONPath: `, outJSONPath))
     })
   )
