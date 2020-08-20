@@ -6,7 +6,7 @@
 
 | **Field Name** |        one         |      onemany       |       group        |      groupby       | **Description**                                              |
 | :------------- | :----------------: | :----------------: | :----------------: | :----------------: | ------------------------------------------------------------ |
-| mask           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | **结构*（表-表）*模式标识**：one*（单表结构）*、onemany*（一对多结构）*、manymany*（多对多结构）*、group*（仅建分组表）*、groupby*（依据某表建立分组表）* |
+| mask           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | **结构 *（表-表）* 模式标识**：one *（单表结构）* 、onemany *（一对多结构）* 、manymany *（多对多结构）* 、group *（仅建分组表）* 、groupby *（依据某表建立分组表）*  |
 | master         | :heavy_check_mark: | :heavy_check_mark: |                    |                    | **主数据表名称**                                             |
 | master_id      |                    | :heavy_check_mark: |                    |                    | 子表关联主表所需要的**关联ID字段**                           |
 | slaves         |                    | :heavy_check_mark: |                    |                    | **从表集合**，其下包含的为多个关联子表名称，如：`"slaves"：["t_1","t_2",...,"t_n"]` |
