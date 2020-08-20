@@ -30,7 +30,7 @@
 [
     {
         "mask":"one",
-        "master": "table_name"
+        "master": "t_test"
     }
 ]
 ```
@@ -40,7 +40,7 @@
 
 | **表关系**                 | **表名**                                      |
 | -------------------------- | --------------------------------------------- |
-| 单表 *（对应`mask：one`）* | table_name *（对应`"master": "table_name"`）* |
+| 单表 *（对应`mask：one`）* | t_test *（对应`"master": "t_test"`）* |
 
 ## 2. 一对多（oneTomany）
 
