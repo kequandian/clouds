@@ -34,7 +34,7 @@ function genSQLFields(fields, unique) {
   return fields.map(field => {
     const orderList = ['field', 'type', 'notnull', 'default', 'unique', 'comment'];
     const typeMap = {
-      field: v => "`" + v + "`",
+      field: v => "`" + upperCaseToUnderLine(v) + "`",
       type: v => v,
       default: v => `DEFAULT '${v}'`,
       unique: v => void unique.push(field.field),
@@ -46,6 +46,12 @@ function genSQLFields(fields, unique) {
       return field[key] ? typeMap[key](field[key]) : '';
     }).join(' ').replace(/\s{2,}/g, ' ');
   })
+}
+
+function upperCaseToUnderLine(value) {
+  return value.replace(/[a-z]+[A-Z]{1}/g, s =>
+    s.replace(/[A-Z]/g, u => `_${u.toLowerCase()}`)
+  )
 }
 
 function yamlToSQL(data) {
