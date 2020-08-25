@@ -70,6 +70,7 @@ pages:
     service_provider: local  # local-本地sql定义生成, external-外部服务
     
     features:    # 实体能力(capability)
+      - saas     # 具备 saas 能力，默认增加字段 org_id, org_tag
       - tag      # 具备 tag 功能
       - image    # 具备 image snapshot 功能
       - category # 一般分组，通过 crud-category
