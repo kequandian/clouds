@@ -91,12 +91,18 @@ pages:
             label: "搜索"
             field: "search"
             type: "input"
+        tab: # 
+          field: "status"
+            options:
+              All: 全部
+              Open: 打开
+              Draft: 草稿
       actions:
         - 
           title: 导出
           type: export-excel
           api: /api/io/excel/teamReward
-          data: teamReward
+          data: teamReward 
           scope: top
         - 
           title: 新建
@@ -217,11 +223,11 @@ pages:
         label: 状态
         type: select
         options:
-          - OPEN: 开放 # 表示映射关系
-          - DRAFT: 草稿 # 这样相当于 DRAFT: DRAFT
-          - SUBMITTED: 已提交 # 规范定义状态应为全大写
-          - APPROVED: 已审核
-          - CLOSED: 关闭
+          OPEN: 开放 # 表示映射关系
+          DRAFT: 草稿 # 这样相当于 DRAFT: DRAFT
+          SUBMITTED: 已提交 # 规范定义状态应为全大写
+          APPROVED: 已审核
+          CLOSED: 关闭
         scope: #  不能直接编辑状态
           - list
           - view
