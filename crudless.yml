@@ -73,6 +73,7 @@ pages:
       - saas     # 具备 saas 能力，默认增加字段 org_id, org_tag
       - tag      # 具备 tag 功能
       - image    # 具备 image snapshot 功能
+      - eav      # 自定义字段
       - category # 一般分组，通过 crud-category
       #- group    #独立表进行分组, 与category只能选其一
 
@@ -84,22 +85,57 @@ pages:
         - t_issue_tag:tags
         
     list:
-      overall_actions:
-        - add_new #新建列表项
-        - export_xls #导出excel
-        - import_xls #导入excel
-        - print_pdf #打印pdf
-      item_actions: # 列表单项
-        - edit
-        - delete
-        - submit
-        - meta$close #状态元操作$关闭
-        - meta$submit #状态元操作$提交
-      batch_actions: # 列表项批处理
-        - submit #批量提交
-        - approve #批量审批
-        - delete #批量删除
-        - close #批量关闭
+      search:   # 搜索条件
+        fields
+          - 
+          label: "搜索"
+          field: "search"
+          type: "input"
+      actions:
+        - 
+          title: 导出
+          type: export-excel
+          api: /api/io/excel/teamReward
+          data: teamReward
+          scope: top
+        - 
+          title: 新建
+          type: add_new  #新建列表项
+          scope: top
+        - 
+          title: 导入
+          type: import-excel #导入excel
+          #api: /api/io/undefined
+          scope: top
+        -
+          title: 打印
+          type: print   #打印
+          #api: /api/io/undefined
+          scope: top
+        - 
+          title: 编辑
+          type: edit    # 保留类型  [edit, delete, meta] 
+          outside: true # 操作入口显示在外面
+          scope: item   # 默认为列表项操作
+        - 
+          title: 删除
+          type: delete 
+          outside: false  # 默认为 隐藏入口
+          #scope: item    # 没有定义默认为列表项操作
+        - 
+          title: 提交
+          type: meta      # meta 状态跳转
+          scope: item
+        - 
+          title: 提交
+          type: meta     # 元操作
+          scope: batch   # 批量操作(标准化元操作)
+        - 
+          title: 审批
+          scope: batch    # 批量操作(标准化元操作)
+        - 
+          title: 拒绝
+          scope: batch    # 批量操作(标准化元操作)
         
     form:
       columns: 1 # 表单将按照两列的形式排版显示
@@ -109,45 +145,47 @@ pages:
       name:
         label: 名称
         type: input
+        tips: 请输入名称
+        props:
+          placeholder: 请输入
+        rules: 
+          - required  #非空
         scope:
           - list
           - view
           - new
           - edit
-        props:
-          placeholder: 请输入
         # 数据字段属性
         sql:
           type: varchar(100)
           notnull: true
-          comment: "名称"
+          comment: 名称
           unique: true
-        rules: 
-	   - 
-	     type: required  #非空
-             message: 请输入名称
 
       #sex  单选字段
       sex:
         label: 性别
         type: radio
+        options:  
+          0: 男
+          1: 女
         scope:
           - list
           - view
           - new
           - edit
-        options:
-          - 0: 男
-          - 1: 女
         sql:
           type: varchar(1)
           comment: "性别"
-          unique: false
 
       ## phone 手机号
       phone:
         label: 手机号
         type: input
+        tips: 请输入手机号
+        rules: # "phone" 为验证手机格式
+          - required
+          - phone
         scope:
           - list
           - view
@@ -156,16 +194,14 @@ pages:
         # 数据字段属性
         sql:
           type: varchar(100)
-          notnull: false
           comment: "手机号"
-          unique: false
-        rules: #设置为"required" 非空, "phone" 为验证手机格式
-          - phone
 
       ## email 邮箱
       email:
         label: 邮箱
         type: input
+        rules: #"email" 为验证邮箱格式
+          - email
         scope:
           - list
           - view
@@ -174,33 +210,28 @@ pages:
         # 数据字段属性
         sql:
           type: varchar(100)
-          notnull: false
           comment: "邮箱"
-          unique: false
-        rules: #设置为"required" 非空, "email" 为验证手机格式
-          - email
 
       # status 选项字段
       status:
         label: 状态
         type: select
-        scope: #  不能直接编辑状态
-          - list
-          - view
-          - new
-          - edit
         options:
           - OPEN: 开放 # 表示映射关系
           - DRAFT: 草稿 # 这样相当于 DRAFT: DRAFT
           - SUBMITTED: 已提交 # 规范定义状态应为全大写
           - APPROVED: 已审核
           - CLOSED: 关闭
+        scope: #  不能直接编辑状态
+          - list
+          - view
+          - new
+          - edit
         sql:
           type: varchar(25)
           notnull: true
           comment: "状态"
           default: OPEN
-          unique: false
 
       # creatTime 日期字段
       createTime:
@@ -214,22 +245,39 @@ pages:
           notnull: true
           comment: "创建时间"
           default: CURRENT_TIMESTAMP
-          unique: false
 
       # descriptions 文本字段
       descriptions:
         label: 备注
         type: text-area
+        props:
+          autoSize:
+            minRows: 4 #设置文本框高度
+          placeholder: 请输入……
         scope:
           - list
           - view
           - new
           - edit
-        props:
-          autoSize:
-            minRows: 4 #设置文本框高度
-          placeholder: 请输入……
         sql:
           type: varchar(255)
           comment: "备注"
-          unique: false
+
+          
+initialize:   #执行初始化(仅一次)
+  - teamReward
+  - teamMachineState  #状态机
+
+
+--
+profiles:
+   teamReward: 
+      type: export-excel
+      sql: SELECT '申请' as '名称',(CASE Open WHEN 'Open' THEN '打开' WHEN '2' THEN '提交' END) as '状态' FROM (select 'Open') t
+   teamMachineState:
+      type: meta
+      config: 
+         from: START
+         to: OPEN
+    
+    
