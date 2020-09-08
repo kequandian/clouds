@@ -102,7 +102,7 @@ pages:
         - close #批量关闭
         
     form:
-      columns: 2 # 表单将按照两列的形式排版显示
+      columns: 1 # 表单将按照两列的形式排版显示
       
     fields:
       ## name 字段
@@ -114,32 +114,22 @@ pages:
           - view
           - new
           - edit
+        props:
+          placeholder: 请输入
         # 数据字段属性
         sql:
           type: varchar(100)
           notnull: true
           comment: "名称"
-          default: TIMESTAMP
           unique: true
+        rules: 
+	   - 
+	     type: required  #非空
+             message: 请输入名称
 
-      # status 选项字段
-      status:
-        label: 状态
-        type: select
-        scope: #  不能直接编辑状态
-          - list
-          - view
-          - $sql
-        options:
-          - OPEN: 开放 # 表示映射关系
-          - DRAFT # 这样相当于 DRAFT: DRAFT
-          - SUBMITTED # 规范定义状态应为全大写
-          - APPROVED
-          - CLOSED
-
-      #sex   单选字段
+      #sex  单选字段
       sex:
-        lable: 性别
+        label: 性别
         type: radio
         scope:
           - list
@@ -149,14 +139,68 @@ pages:
         options:
           - 0: 男
           - 1: 女
+        sql:
+          type: varchar(1)
+          comment: "性别"
+          unique: false
 
-      # city 字段
-      city:
-        label: 城市
-        tylpe: pcd
+      ## phone 手机号
+      phone:
+        label: 手机号
+        type: input
         scope:
           - list
-        ## 未确定
+          - view
+          - new
+          - edit
+        # 数据字段属性
+        sql:
+          type: varchar(100)
+          notnull: false
+          comment: "手机号"
+          unique: false
+        rules: #设置为"required" 非空, "phone" 为验证手机格式
+          - phone
+
+      ## email 邮箱
+      email:
+        label: 邮箱
+        type: input
+        scope:
+          - list
+          - view
+          - new
+          - edit
+        # 数据字段属性
+        sql:
+          type: varchar(100)
+          notnull: false
+          comment: "邮箱"
+          unique: false
+        rules: #设置为"required" 非空, "email" 为验证手机格式
+          - email
+
+      # status 选项字段
+      status:
+        label: 状态
+        type: select
+        scope: #  不能直接编辑状态
+          - list
+          - view
+          - new
+          - edit
+        options:
+          - OPEN: 开放 # 表示映射关系
+          - DRAFT: 草稿 # 这样相当于 DRAFT: DRAFT
+          - SUBMITTED: 已提交 # 规范定义状态应为全大写
+          - APPROVED: 已审核
+          - CLOSED: 关闭
+        sql:
+          type: varchar(25)
+          notnull: true
+          comment: "状态"
+          default: OPEN
+          unique: false
 
       # creatTime 日期字段
       createTime:
@@ -165,18 +209,27 @@ pages:
         scope:
           - list
           - view
+        sql:
+          type: datetime
+          notnull: true
+          comment: "创建时间"
+          default: CURRENT_TIMESTAMP
+          unique: false
 
       # descriptions 文本字段
       descriptions:
         label: 备注
         type: text-area
         scope:
+          - list
+          - view
           - new
           - edit
         props:
           autoSize:
             minRows: 4 #设置文本框高度
           placeholder: 请输入……
-        rules: #设置为"required" 非空
-          - required
-          - phone # or email
+        sql:
+          type: varchar(255)
+          comment: "备注"
+          unique: false
