@@ -86,11 +86,11 @@ pages:
         
     list:
       search:   # 搜索条件
-        fields
+        fields:
           - 
-          label: "搜索"
-          field: "search"
-          type: "input"
+            label: "搜索"
+            field: "search"
+            type: "input"
       actions:
         - 
           title: 导出
