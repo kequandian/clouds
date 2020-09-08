@@ -43,24 +43,21 @@ auth:
 
 entries:
   products:
-    entry_name: products
     label: 产品管理
-    sub:
-      - entry_name: product_type
+    sub_entries:
+      product_type:
         label: 产品分类
-      - entry_name: product_tag
+      product_tag:
         label: 产品标签
-      - entry_name: product
+      product:
         label: 产品
   orders:
-    entry_name: orders
     label: 单订管理
   tickets:
-    entry_name: tickets
     label: 工单管理
-    sub:
-      - entry_name: ticket_issues
-        label: 问题管理
+    sub_entries:
+      ticket_issues:
+         label: 问题管理
 
 pages:
   issue:
@@ -88,15 +85,15 @@ pages:
       search:   # 搜索条件
         fields:
           - 
-            label: "搜索"
-            field: "search"
-            type: "input"
-        tab: # 
-          field: "status"
-            options:
-              All: 全部
-              Open: 打开
-              Draft: 草稿
+            label: 搜索
+            field: search
+            type: input
+        tab: # 展开分类
+          field: status
+          all: default  # default 默认包括全部选项, none 代表没有全部选项
+          options:
+            Open: 打开
+            Draft: 草稿
       actions:
         - 
           title: 导出
@@ -184,7 +181,7 @@ pages:
           type: varchar(1)
           comment: "性别"
 
-      ## phone 手机号
+      ## phone 手机号, 
       phone:
         label: 手机号
         type: input
@@ -192,6 +189,7 @@ pages:
         rules: # "phone" 为验证手机格式
           - required
           - phone
+          #- email #邮箱地址检查
         scope:
           - list
           - view
@@ -202,32 +200,17 @@ pages:
           type: varchar(100)
           comment: "手机号"
 
-      ## email 邮箱
-      email:
-        label: 邮箱
-        type: input
-        rules: #"email" 为验证邮箱格式
-          - email
-        scope:
-          - list
-          - view
-          - new
-          - edit
-        # 数据字段属性
-        sql:
-          type: varchar(100)
-          comment: "邮箱"
-
       # status 选项字段
       status:
         label: 状态
         type: select
         options:
-          OPEN: 开放 # 表示映射关系
-          DRAFT: 草稿 # 这样相当于 DRAFT: DRAFT
-          SUBMITTED: 已提交 # 规范定义状态应为全大写
-          APPROVED: 已审核
-          CLOSED: 关闭
+          OPEN: 
+             label: 开放
+             color: #1890ff
+          DRAFT: 
+             label: 草稿
+             color: #1890ff
         scope: #  不能直接编辑状态
           - list
           - view
@@ -283,7 +266,9 @@ profiles:
    teamMachineState:
       type: meta
       config: 
-         from: START
-         to: OPEN
-    
-    
+         -
+           from: START
+           to: OPEN
+         - 
+           from: OPEN
+           to: SUBMITTED
