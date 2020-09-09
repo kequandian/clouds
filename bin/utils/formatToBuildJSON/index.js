@@ -135,6 +135,7 @@ function yamlToBuildJSON(yaml) {
     ...genCRUDAPI(api),
     columns,
     map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
+    searchFields: list && list.search && list.search.fields,
     tableFields: fieldsSource.list,
     createFields: fieldsSource.new,
     updateFields: fieldsSource.edit,

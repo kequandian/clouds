@@ -141,7 +141,7 @@ pages:
           scope: batch # 批量操作(标准化元操作)
 
     form:
-      columns: 1 # 表单将按照两列的形式排版显示
+      columns: 2 # 表单将按照两列的形式排版显示
 
     fields:
       ## name 字段
