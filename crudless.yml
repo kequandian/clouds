@@ -6,26 +6,26 @@ meta:
   createTime: 创建时间
   updateTime: 更新时间
 
- # pom: # pom 信息
- #     version: 1.0.0 #版本号
- #     artifact: crudless
- # service_meta: # 服务装配信息
- #     service_name: tickets # 独立服务组别名称
- #     service_tag: 2341512341234 # 服务索引
- #     service_title: 问题管理 # 标题
- #     service_category: OA # 分类信息
- #     target_domain: dev.cloud.smallsaas.cn #装配目地址
- #  api:
- #     create_time: 创建时间 #
- #     build_time: 2020-06-11 # 更新时间
- #     developer: josie # 服务开发者名称
- #     jar_repo_url: http://jar.smallsaas.cn/repositories/issue-1.0.0.jar #jar包地址
- #     jar_dependencies_url: http://jar.smallsaas.cn/dependencies/tree/issue_dependencies.json
- #  js:
- #     create_time: 2020-08-01 # 创建时间
- #     build_time: 2020-06-11 # 更新时间
- #     developer: ling #前端开发者名称
- #     js_page_url: http://jar.smallsaas.cn/repository/issue #前端面页
+  # pom: # pom 信息
+  #     version: 1.0.0 #版本号
+  #     artifact: crudless
+  # service_meta: # 服务装配信息
+  #     service_name: tickets # 独立服务组别名称
+  #     service_tag: 2341512341234 # 服务索引
+  #     service_title: 问题管理 # 标题
+  #     service_category: OA # 分类信息
+  #     target_domain: dev.cloud.smallsaas.cn #装配目地址
+  #  api:
+  #     create_time: 创建时间 #
+  #     build_time: 2020-06-11 # 更新时间
+  #     developer: josie # 服务开发者名称
+  #     jar_repo_url: http://jar.smallsaas.cn/repositories/issue-1.0.0.jar #jar包地址
+  #     jar_dependencies_url: http://jar.smallsaas.cn/dependencies/tree/issue_dependencies.json
+  #  js:
+  #     create_time: 2020-08-01 # 创建时间
+  #     build_time: 2020-06-11 # 更新时间
+  #     developer: ling #前端开发者名称
+  #     js_page_url: http://jar.smallsaas.cn/repository/issue #前端面页
 
 ui:
   ##  风格: 白天,黑夜,蓝天,草原,彩霞,浪漫
@@ -57,20 +57,20 @@ entries:
     label: 工单管理
     sub_entries:
       ticket_issues:
-         label: 问题管理
+        label: 问题管理
 
 pages:
   issue:
     api: /api/crud/issue/issues
     description: "API for Issues"
     entry_id: ticket_issues #菜单入口
-    service_provider: local  # local-本地sql定义生成, external-外部服务
-    
-    features:    # 实体能力(capability)
-      - saas     # 具备 saas 能力，默认增加字段 org_id, org_tag
-      - tag      # 具备 tag 功能
-      - image    # 具备 image snapshot 功能
-      - eav      # 自定义字段
+    service_provider: local # local-本地sql定义生成, external-外部服务
+
+    features: # 实体能力(capability)
+      - saas # 具备 saas 能力，默认增加字段 org_id, org_tag
+      - tag # 具备 tag 功能
+      - image # 具备 image snapshot 功能
+      - eav # 自定义字段
       - category # 一般分组，通过 crud-category
       #- group    #独立表进行分组, 与category只能选其一
 
@@ -80,69 +80,58 @@ pages:
       slaves:
         - t_issue_item:items
         - t_issue_tag:tags
-        
+
     list:
-      search:   # 搜索条件
+      search: # 搜索条件
         fields:
-          - 
-            label: 搜索
+          - label: 搜索
             field: search
             type: input
         tab: # 展开分类
           field: status
-          all: default  # default 默认包括全部选项, none 代表没有全部选项
+          all: default # default 默认包括全部选项, none 代表没有全部选项
           options:
             Open: 打开
             Draft: 草稿
       actions:
-        - 
-          title: 导出
+        - title: 导出
           type: export-excel
           api: /api/io/excel/teamReward
-          data: teamReward 
+          data: teamReward
           scope: top
-        - 
-          title: 新建
-          type: add_new  #新建列表项
+        - title: 新建
+          type: add_new #新建列表项
           scope: top
-        - 
-          title: 导入
+        - title: 导入
           type: import-excel #导入excel
           #api: /api/io/undefined
           scope: top
-        -
-          title: 打印
-          type: print   #打印
+        - title: 打印
+          type: print #打印
           #api: /api/io/undefined
           scope: top
-        - 
-          title: 编辑
-          type: edit    # 保留类型  [edit, delete, meta] 
+        - title: 编辑
+          type: edit # 保留类型  [edit, delete, meta]
           outside: true # 操作入口显示在外面
-          scope: item   # 默认为列表项操作
-        - 
-          title: 删除
-          type: delete 
-          outside: false  # 默认为 隐藏入口
+          scope: item # 默认为列表项操作
+        - title: 删除
+          type: delete
+          outside: false # 默认为 隐藏入口
           #scope: item    # 没有定义默认为列表项操作
-        - 
-          title: 提交
-          type: meta      # meta 状态跳转
+        - title: 提交
+          type: meta # meta 状态跳转
           scope: item
-        - 
-          title: 提交
-          type: meta     # 元操作
-          scope: batch   # 批量操作(标准化元操作)
-        - 
-          title: 审批
-          scope: batch    # 批量操作(标准化元操作)
-        - 
-          title: 拒绝
-          scope: batch    # 批量操作(标准化元操作)
-        
+        - title: 提交
+          type: meta # 元操作
+          scope: batch # 批量操作(标准化元操作)
+        - title: 审批
+          scope: batch # 批量操作(标准化元操作)
+        - title: 拒绝
+          scope: batch # 批量操作(标准化元操作)
+
     form:
       columns: 1 # 表单将按照两列的形式排版显示
-      
+
     fields:
       ## name 字段
       name:
@@ -151,8 +140,8 @@ pages:
         tips: 请输入名称
         props:
           placeholder: 请输入
-        rules: 
-          - required  #非空
+        rules:
+          - required #非空
         scope:
           - list
           - view
@@ -169,7 +158,7 @@ pages:
       sex:
         label: 性别
         type: radio
-        options:  
+        options:
           0: 男
           1: 女
         scope:
@@ -181,7 +170,7 @@ pages:
           type: varchar(1)
           comment: "性别"
 
-      ## phone 手机号, 
+      ## phone 手机号,
       phone:
         label: 手机号
         type: input
@@ -205,12 +194,12 @@ pages:
         label: 状态
         type: select
         options:
-          OPEN: 
-             label: 开放
-             color: #1890ff
-          DRAFT: 
-             label: 草稿
-             color: #1890ff
+          OPEN:
+            label: 开放
+            color: #1890ff
+          DRAFT:
+            label: 草稿
+            color: #1890ff
         scope: #  不能直接编辑状态
           - list
           - view
@@ -252,23 +241,19 @@ pages:
           type: varchar(255)
           comment: "备注"
 
-          
-initialize:   #执行初始化(仅一次)
+initialize: #执行初始化(仅一次)
   - teamReward
-  - teamMachineState  #状态机
+  - teamMachineState #状态机
 
-
---
+# --
 profiles:
-   teamReward: 
-      type: export-excel
-      sql: SELECT '申请' as '名称',(CASE Open WHEN 'Open' THEN '打开' WHEN '2' THEN '提交' END) as '状态' FROM (select 'Open') t
-   teamMachineState:
-      type: meta
-      config: 
-         -
-           from: START
-           to: OPEN
-         - 
-           from: OPEN
-           to: SUBMITTED
+  teamReward:
+    type: export-excel
+    sql: SELECT '申请' as '名称',(CASE Open WHEN 'Open' THEN '打开' WHEN '2' THEN '提交' END) as '状态' FROM (select 'Open') t
+  teamMachineState:
+    type: meta
+    config:
+      - from: START
+        to: OPEN
+      - from: OPEN
+        to: SUBMITTED
