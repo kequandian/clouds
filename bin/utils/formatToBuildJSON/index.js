@@ -1,5 +1,5 @@
-const { mergeObject } = require('./index');
-
+const { valueTypeEllipsis, valueTypeMap } = require('./valueType');
+const { formTypeEllipsis, formTypeMap } = require('./valueType');
 
 function genCRUDAPI(api, queryString = '') {
   if (api) {
@@ -18,74 +18,45 @@ function genCRUDAPI(api, queryString = '') {
  * 生成映射关系
  * @param {object} map 
  */
-// function createMapObj(map) {
-//   const rst = {};
-//   Object.keys(map).forEach(key => {
-//     return rst[key] = {
-//       map: map[key],
-//       options: Object.keys(map[key]).map(
-//         k => ({ label: map[key][k], value: k })
-//       )
-//     };
-//   })
-//   return rst;
-// }
+function createMapObj(map) {
+  const rst = {};
+  Object.keys(map).forEach(key => {
+    return rst[key] = {
+      map: map[key],
+      options: Object.keys(map[key]).map(
+        k => ({ label: map[key][k], value: k })
+      )
+    };
+  })
+  return rst;
+}
 
 /**
  * 输出为标准 表单 字段
- * @param {array} fields 
+ * @param {object} field 
  * @param {object} mapObj 
- * @param {object} defaulFields 
  */
-function formatFormFields(fields, map, defaulFields = []) {
-  if (!Array.isArray(fields)) {
-    return defaulFields;
-  }
-  return fields.map(field => {
-    const rst = { ...field };
-    const fieldMap = map[field.field];
-    if (fieldMap) {
-      rst.options = Object.keys(fieldMap).map(key => ({
-        label: fieldMap[key].label || fieldMap[key],
-        value: key
-      }));
-    }
-    return rst;
-  })
+function formatFormFields(field, map) {
+  const { sql, ...rst } = field;
+
+  formTypeEllipsis(rst, map);
+  formTypeMap(rst, map);
+
+  return rst;
 }
 
 /**
  * 输出为标准 表格 字段
- * @param {array} fields 
+ * @param {object} field 
  * @param {object} mapObj 
- * @param {object} defaulFields 
  */
-function formatTableFields(fields, map, defaulFields = []) {
-  if (!Array.isArray(fields)) {
-    return defaulFields;
-  }
-  return fields.map(field => {
-    const { type, ...rest } = field;
-    const rst = { ...rest };
-    const fieldMap = map[field.field];
-    if (fieldMap) {
-      const data = {};
-      const color = {};
-      rst.valueType = field.valueType || 'map';
-      Object.keys(fieldMap).forEach(key => {
-        data[key] = fieldMap[key].label || fieldMap[key];
-        if (fieldMap[key].color) {
-          rst.valueType = 'tag';
-          color[key] = fieldMap[key].color || '';
-        }
-      })
-      rst.options = {
-        map: data,
-        color: rst.valueType === 'tag' ? color : undefined,
-      };
-    }
-    return rst;
-  })
+function formatTableFields(field, map) {
+  const { type, sql, ...rst } = field;
+
+  valueTypeEllipsis(rst, sql);
+  valueTypeMap(rst, map);
+
+  return rst;
 }
 
 /**
@@ -106,10 +77,10 @@ function yamlToBuildJSON(yaml) {
   const fieldsSourceFunc = {
     list(key, opt) {
       const { type, ...rest } = opt;
-      fieldsSource[key].push(rest);
+      fieldsSource[key].push(formatTableFields(rest, map));
     },
     default(key, opt) {
-      fieldsSource[key].push(opt);
+      fieldsSource[key].push(formatFormFields(opt, map));
     }
   };
 
@@ -122,8 +93,6 @@ function yamlToBuildJSON(yaml) {
 
   Object.keys(fields).forEach(field => {
     const { type, options, scope, sql, ...rest } = fields[field];
-
-    // console.log(field, sql);
 
     if (String(options) === '[object Object]') {
       if (!map[field]) {
@@ -143,6 +112,7 @@ function yamlToBuildJSON(yaml) {
           handleScope(k, {
             ...rest,
             type,
+            sql,
             field,
           });
         })
@@ -152,6 +122,7 @@ function yamlToBuildJSON(yaml) {
             handleScope(key, {
               ...rest,
               type,
+              sql,
               field,
             });
           }
@@ -160,14 +131,13 @@ function yamlToBuildJSON(yaml) {
     }
   });
 
-  // const mapObj = createMapObj(map);
   const data = {
     ...genCRUDAPI(api),
     columns,
-    // map,
-    tableFields: formatTableFields(fieldsSource.list, map),
-    createFields: formatFormFields(fieldsSource.new, map),
-    updateFields: formatFormFields(fieldsSource.edit, map),
+    map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
+    tableFields: fieldsSource.list,
+    createFields: fieldsSource.new,
+    updateFields: fieldsSource.edit,
   };
   return data;
 }

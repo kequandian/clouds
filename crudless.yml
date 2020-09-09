@@ -243,10 +243,7 @@ pages:
             minRows: 4 #设置文本框高度
           placeholder: 请输入……
         scope:
-          - list
-          - view
-          - new
-          - edit
+          - all
         sql:
           type: varchar(255)
           comment: "备注"
