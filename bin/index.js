@@ -62,7 +62,7 @@ function genJSON(can, pages) {
     if (typeof pages[pageName] === 'string') {
       ;
     } else if (String(pages[pageName]) === '[object Object]') {
-      const json = yamlToBuildJSON(pages[pageName]);
+      const json = yamlToBuildJSON(pages[pageName], pageName);
       rst[pageName] = json;
 
     } else {

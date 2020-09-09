@@ -64,7 +64,7 @@ function formatTableFields(field, map) {
  * 
  * @param {object} yaml 
  */
-function yamlToBuildJSON(yaml) {
+function yamlToBuildJSON(yaml, pageName) {
   const { api, list, form, fields } = yaml;
   const { columns } = form;
 
@@ -74,10 +74,11 @@ function yamlToBuildJSON(yaml) {
   if (Array.isArray(list.actions)) {
     list.actions.forEach(action => {
       const { scope, ...rest } = action;
+      // scope 没有定义默认为列表项(item)操作
       if (scope === 'top') {
-        tableActions.push(tableAction(rest));
+        tableActions.push(tableAction(rest, pageName));
       } else {
-        tableOperation.push(tableAction(rest));
+        tableOperation.push(tableAction(rest, pageName));
       }
     })
   }

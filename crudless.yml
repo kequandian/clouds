@@ -54,7 +54,6 @@ entries:
           dev_name: product_type
           path: /products/types
           label: 产品分类
-          path: /products/types
           #app_id: demo  # 用于授权 (暂时忽略)
           #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
        -
@@ -123,7 +122,7 @@ pages:
           scope: top
         - 
           title: 新建
-          type: path   # 通过路径跳转
+          type: add # add 本质是带有初始值的 path
           scope: top
         - 
           title: 导入
@@ -137,7 +136,7 @@ pages:
           scope: top
         - 
           title: 编辑
-          type: path
+          type: edit # edit 本质是带有初始值的 path
           outside: true # 操作入口显示在外面
           scope: item # 默认为列表项操作
         - 
