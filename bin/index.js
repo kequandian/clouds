@@ -12,6 +12,7 @@ const options = {
   '--json': undefined,
   '--sql': undefined,
   '--crud': undefined,
+  '--cg': undefined,
 };
 
 cliArgs(options)
@@ -26,6 +27,7 @@ const cwd = process.cwd();
 // const yamlFilePath = path.join(cwd, yamlPath);
 // const fileName = path.basename(yamlFilePath, path.extname(yamlFilePath));
 const sqlFilePath = path.join(cwd, `crudless.sql`);
+const cgFilePath = path.join(cwd, `crudless.crud.json`);
 
 let readYAMLFile = new Promise((res, rej) => {
   if (typeof options["-f"] === 'string') {
@@ -47,6 +49,7 @@ readYAMLFile
     const { pages } = yaml;
     return genJSON(!options["--json"], pages)
       .then(_ => genSQL(!options["--sql"], pages))
+      .then(_ => genCGFile(!options["--cg"], pages))
   })
 
 function genJSON(can, pages) {
@@ -96,5 +99,24 @@ function genSQL(can, pages) {
 
   return fs.writeFile(sqlFilePath, sqlContent)
     .then(_ => console.log(`outSQLPath: `, sqlFilePath))
+
+}
+
+function genCGFile(can, pages) {
+  if (can) {
+    return Promise.resolve();
+  }
+  const rst = [];
+  Object.keys(pages).forEach(pageName => {
+    const cgData = pages[pageName].cg;
+    if (cgData) {
+      rst.push({
+        master: cgData.master,
+        slaves: cgData.slaves,
+      });
+    }
+  })
+  return fs.writeJson(cgFilePath, rst)
+    .then(_ => console.log(`outCGFilePath: `, cgFilePath))
 
 }
