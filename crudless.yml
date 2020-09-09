@@ -172,7 +172,15 @@ pages:
         props:
           placeholder: 请输入
         rules:
-          - required # 非空
+          - 
+            type: required
+            message: 请输入手机号
+          - 
+            type: phone
+            message: 手机号码格式不正确
+          #-
+          #  type: email
+          #  message: 邮箱地址格式不正确  
         scope:
           - list
           - view
