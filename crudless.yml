@@ -141,7 +141,7 @@ pages:
         props:
           placeholder: 请输入
         rules:
-          - required #非空
+          - required # 非空
         scope:
           - list
           - view
@@ -196,15 +196,14 @@ pages:
         options:
           OPEN:
             label: 开放
-            color: #1890ff
+            color: "#1890ff"
           DRAFT:
             label: 草稿
-            color: #1890ff
+            color: "#1890ff"
         scope: #  不能直接编辑状态
           - list
           - view
           - new
-          - edit
         sql:
           type: varchar(25)
           notnull: true
