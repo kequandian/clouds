@@ -88,6 +88,23 @@ function yamlToBuildJSON(yaml) {
     edit: [],
     view: [],
   };
+  const fieldsSourceFunc = {
+    list(key, opt) {
+      const { type, ...rest } = opt;
+      fieldsSource[key].push(rest);
+    },
+    default(key, opt) {
+      fieldsSource[key].push(opt);
+    }
+  };
+
+  function handleScope(key, data) {
+    const func = fieldsSourceFunc[key] || fieldsSourceFunc.default;
+    if (typeof func === 'function') {
+      func(key, data);
+    }
+  }
+
   Object.keys(fields).forEach(field => {
     const { type, options, scope, sql, ...rest } = fields[field];
 
@@ -109,22 +126,25 @@ function yamlToBuildJSON(yaml) {
     }
 
     if (Array.isArray(scope)) {
-      scope.forEach(key => {
-        if (fieldsSource[key]) {
-          if (key === 'list') {
-            fieldsSource[key].push({
-              ...rest,
-              field,
-            });
-          } else {
-            fieldsSource[key].push({
+      if (scope.includes('all')) {
+        Object.keys(fieldsSource).forEach(k => {
+          handleScope(k, {
+            ...rest,
+            type,
+            field,
+          });
+        })
+      } else {
+        scope.forEach(key => {
+          if (fieldsSource[key]) {
+            handleScope(key, {
               ...rest,
               type,
               field,
             });
           }
-        }
-      })
+        })
+      }
     }
   });
 
