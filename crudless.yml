@@ -207,8 +207,12 @@ pages:
         type: input
         tips: 请输入手机号
         rules: # "phone" 为验证手机格式
-          - required
-          - phone
+          - 
+            type: required
+            message: 请输入手机号
+          - 
+            type: phone
+            message: 手机号码格式不正确
           #- email #邮箱地址检查
         scope:
           - list
