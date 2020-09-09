@@ -27,12 +27,6 @@ meta:
   #     developer: ling #前端开发者名称
   #     js_page_url: http://jar.smallsaas.cn/repository/issue #前端面页
 
-ui:
-  ##  风格: 白天,黑夜,蓝天,草原,彩霞,浪漫
-  theme: Light
-  ## 应用布局 (菜单） top, left
-  layout: top
-
 auth:
   ## wechat, github, account
   sso: github
@@ -41,23 +35,40 @@ auth:
   ## 底图可配置,也可以纯色
   bg: url
 
+ui:
+  ##  风格: 白天,黑夜,蓝天,草原,彩霞,浪漫
+  theme: Light
+  ## 应用布局 (菜单） top, left
+  layout: top
+
 entries:
-  products:
+  products:   # means entry_name
     label: 产品管理
+    path: /products
+    icon: static/product_entry.png   # 服务组可配置图标
+    #app_id: demo  # 用于授权 (暂时忽略)
+    #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
     sub_entries:
-      product_type:
-        label: 产品分类
-      product_tag:
-        label: 产品标签
-      product:
-        label: 产品
+       product_type:  #sub menu entry_name
+          label: 产品分类
+          path: /products/types
+          #app_id: demo  # 用于授权 (暂时忽略)
+          #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
+       product_tag:
+          label: 产品标签
+          path: /products/tags
+       product:
+          label: 产品
+          path: /products/product
   orders:
     label: 单订管理
+    icon: static/product_entry.png
   tickets:
     label: 工单管理
+    icon: static/product_entry.png
     sub_entries:
-      ticket_issues:
-        label: 问题管理
+       ticket_issues:  #sub menu entry_name
+          label: 问题管理
 
 pages:
   issue:
