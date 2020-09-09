@@ -82,10 +82,9 @@ entries:
 
 pages:
   issue:  # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
-    api: /api/crud/issue/issues
+    api: /api/crud/issues/issue
     description: "API for Issues"
-    entry_id: ticket_issues #菜单入口
-    service_provider: local # local-本地sql定义生成, external-外部服务
+    service_provider: native  # 默认native-通过配置sql定义生成, external-拼接外部服务
 
     features: # 实体能力(capability)
       - saas # 具备 saas 能力，默认增加字段 org_id, org_tag
