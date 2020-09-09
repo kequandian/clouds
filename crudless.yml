@@ -263,7 +263,7 @@ initialize: #执行初始化(仅一次)
   - teamReward
   - teamMachineState #状态机
 
-# --
+---
 profiles:
   teamReward:
     type: export-excel
