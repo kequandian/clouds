@@ -73,9 +73,9 @@ entries:
     dev_name: ticket_mgr
     icon: static/ticket_entry.png
     sub_entries:
-       ticket_issues:  #sub menu entry_name
-          label: 问题管理
-          dev_name: issues_mgr
+      ticket_issues:  #sub menu entry_name
+        label: 问题管理
+        dev_name: issues_mgr
 
 pages:
   issue:
@@ -121,7 +121,8 @@ pages:
           scope: top
         - 
           title: 新建
-          type: add_new #新建列表项
+          type: path   # 通过路径跳转
+          path: '/myPage/myPage-add'
           scope: top
         - 
           title: 导入
@@ -135,8 +136,9 @@ pages:
           scope: top
         - 
           title: 编辑
-          type: edit # 保留类型  [edit, delete, meta]
+          type: path
           outside: true # 操作入口显示在外面
+          path: '/myPage/myPage-edit'
           scope: item # 默认为列表项操作
         - 
           title: 删除

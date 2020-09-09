@@ -1,5 +1,6 @@
 const { valueTypeEllipsis, valueTypeMap } = require('./valueType');
 const { formOptionEllipsis, formOptionMap } = require('./formOptions');
+const tableAction = require('./tableAction');
 
 function genCRUDAPI(api, queryString = '') {
   if (api) {
@@ -66,6 +67,20 @@ function formatTableFields(field, map) {
 function yamlToBuildJSON(yaml) {
   const { api, list, form, fields } = yaml;
   const { columns } = form;
+
+  const tableActions = [];
+  const tableOperation = [];
+
+  if (Array.isArray(list.actions)) {
+    list.actions.forEach(action => {
+      const { scope, ...rest } = action;
+      if (scope === 'top') {
+        tableActions.push(tableAction(rest));
+      } else {
+        tableOperation.push(tableAction(rest));
+      }
+    })
+  }
 
   const map = {};
   const fieldsSource = {
@@ -136,6 +151,8 @@ function yamlToBuildJSON(yaml) {
     columns,
     map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
     searchFields: list && list.search && list.search.fields,
+    tableActions: tableActions,
+    tableOperation: tableOperation,
     tableFields: fieldsSource.list,
     createFields: fieldsSource.new,
     updateFields: fieldsSource.edit,
