@@ -84,7 +84,8 @@ pages:
     list:
       search: # 搜索条件
         fields:
-          - label: 搜索
+          - 
+            label: 搜索
             field: search
             type: input
         tab: # 展开分类
@@ -94,39 +95,49 @@ pages:
             Open: 打开
             Draft: 草稿
       actions:
-        - title: 导出
+        - 
+          title: 导出
           type: export-excel
           api: /api/io/excel/teamReward
           data: teamReward
           scope: top
-        - title: 新建
+        - 
+          title: 新建
           type: add_new #新建列表项
           scope: top
-        - title: 导入
+        - 
+          title: 导入
           type: import-excel #导入excel
           #api: /api/io/undefined
           scope: top
-        - title: 打印
+        - 
+          title: 打印
           type: print #打印
           #api: /api/io/undefined
           scope: top
-        - title: 编辑
+        - 
+          title: 编辑
           type: edit # 保留类型  [edit, delete, meta]
           outside: true # 操作入口显示在外面
           scope: item # 默认为列表项操作
-        - title: 删除
+        - 
+          title: 删除
           type: delete
           outside: false # 默认为 隐藏入口
           #scope: item    # 没有定义默认为列表项操作
-        - title: 提交
+        - 
+          title: 提交
           type: meta # meta 状态跳转
           scope: item
-        - title: 提交
+        - 
+          title: 提交
           type: meta # 元操作
           scope: batch # 批量操作(标准化元操作)
-        - title: 审批
+        - 
+          title: 审批
           scope: batch # 批量操作(标准化元操作)
-        - title: 拒绝
+        - 
+          title: 拒绝
           scope: batch # 批量操作(标准化元操作)
 
     form:
