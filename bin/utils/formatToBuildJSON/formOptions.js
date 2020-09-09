@@ -1,11 +1,11 @@
 
-function formTypeEllipsis(rst, sql) {
+function formOptionEllipsis(rst, sql) {
   if (sql && sql.type === 'text' || ['descriptions', 'remark', 'note'].includes(rst.field)) {
     rst.span = 24;
   }
 }
 
-function formTypeMap(rst, map) {
+function formOptionMap(rst, map) {
   const fieldMap = map[rst.field];
   if (fieldMap) {
     rst.options = Object.keys(fieldMap).map(key => ({
@@ -16,6 +16,6 @@ function formTypeMap(rst, map) {
 }
 
 module.exports = {
-  formTypeEllipsis,
-  formTypeMap,
+  formOptionEllipsis,
+  formOptionMap,
 }

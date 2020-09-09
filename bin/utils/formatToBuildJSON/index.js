@@ -1,5 +1,5 @@
 const { valueTypeEllipsis, valueTypeMap } = require('./valueType');
-const { formTypeEllipsis, formTypeMap } = require('./valueType');
+const { formOptionEllipsis, formOptionMap } = require('./formOptions');
 
 function genCRUDAPI(api, queryString = '') {
   if (api) {
@@ -39,8 +39,8 @@ function createMapObj(map) {
 function formatFormFields(field, map) {
   const { sql, ...rst } = field;
 
-  formTypeEllipsis(rst, map);
-  formTypeMap(rst, map);
+  formOptionEllipsis(rst, map);
+  formOptionMap(rst, map);
 
   return rst;
 }
