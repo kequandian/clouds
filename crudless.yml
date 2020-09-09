@@ -44,6 +44,7 @@ ui:
 entries:
   products:   # means entry_name
     label: 产品管理
+    dev_name: product_mgr   # 用于装配服务时定位菜单入口
     path: /products
     icon: static/product_entry.png   # 服务组可配置图标
     #app_id: demo  # 用于授权 (暂时忽略)
@@ -51,24 +52,30 @@ entries:
     sub_entries:
        product_type:  #sub menu entry_name
           label: 产品分类
+          dev_name: product_types
           path: /products/types
           #app_id: demo  # 用于授权 (暂时忽略)
           #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
        product_tag:
           label: 产品标签
+          dev_name: product_tags
           path: /products/tags
        product:
           label: 产品
+          dev_name: product
           path: /products/product
   orders:
     label: 单订管理
-    icon: static/product_entry.png
+    dev_name: orders_mgr
+    icon: static/orders_entry.png
   tickets:
     label: 工单管理
-    icon: static/product_entry.png
+    dev_name: ticket_mgr
+    icon: static/ticket_entry.png
     sub_entries:
        ticket_issues:  #sub menu entry_name
           label: 问题管理
+          dev_name: issues_mgr
 
 pages:
   issue:
