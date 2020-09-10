@@ -6,7 +6,7 @@ function tableAction(action, pageName) {
     type,
     options: rest,
   };
-  if (['add', 'edit'].includes(type)) {
+  if (['add', 'edit', 'view'].includes(type)) {
     rst.options.path = `${pageName}-${type}`;
   }
   return rst
