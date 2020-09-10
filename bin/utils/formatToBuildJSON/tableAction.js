@@ -11,18 +11,19 @@ function tableAction(action, pageName) {
     rst.type = 'path';
   }
   if (type.indexOf('export') > -1 || type.indexOf('import') > -1) {
-    rst.type = `${type}-excel`;
+    const typeMap = {
+      export: 'export-excle',
+      import: 'import-excle',
+    };
+    rst.type = typeMap[type] || type;
   }
 
-  if (options && options.api) {
-    options.API = options.api;
-    delete options.api;
+  if (rst.options && rst.options.api) {
+    rst.options.API = rst.options.api;
+    delete rst.options.api;
   }
 
-  return {
-    ...rst,
-    options,
-  }
+  return rst
 }
 
 module.exports = tableAction;
