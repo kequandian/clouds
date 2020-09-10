@@ -1,4 +1,4 @@
-const { valueTypeEllipsis, valueTypeMap } = require('./valueType');
+const { valueTypeEllipsis, valueTypeMap, valueTypeBase } = require('./valueType');
 const { formOptionEllipsis, formOptionMap } = require('./formOptions');
 const tableAction = require('./tableAction');
 

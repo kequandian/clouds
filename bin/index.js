@@ -11,7 +11,7 @@ const options = {
   '-f': undefined,
   '--json': undefined,
   '--sql': undefined,
-  '--crud': undefined,
+  '--menu': undefined,
   '--cg': undefined,
 };
 
@@ -28,6 +28,7 @@ const cwd = process.cwd();
 // const fileName = path.basename(yamlFilePath, path.extname(yamlFilePath));
 const sqlFilePath = path.join(cwd, `crudless.sql`);
 const cgFilePath = path.join(cwd, `crudless.crud.json`);
+const menuFilePath = path.join(cwd, `router.config.js`);
 
 let readYAMLFile = new Promise((res, rej) => {
   if (typeof options["-f"] === 'string') {
@@ -46,9 +47,10 @@ let readYAMLFile = new Promise((res, rej) => {
 readYAMLFile
   .then(data => {
     const yaml = Yaml.parse(data.split('---')[0]);
-    const { pages } = yaml;
+    const { entries, pages } = yaml;
     return genJSON(!options["--json"], pages)
       .then(_ => genSQL(!options["--sql"], pages))
+      .then(_ => genMenuFile(!options["--menu"], entries))
       .then(_ => genCGFile(!options["--cg"], pages))
   })
 
@@ -119,4 +121,41 @@ function genCGFile(can, pages) {
   return fs.writeJson(cgFilePath, rst)
     .then(_ => console.log(`outCGFilePath: `, cgFilePath))
 
+}
+
+function genMenuFile(can, entries) {
+  if (can) {
+    return Promise.resolve();
+  }
+  const rst = [];
+  genMenu(rst, entries);
+
+  return fs.writeFile(menuFilePath, `module.exports = ${JSON.stringify(rst, null, 2)}`)
+    .then(_ => console.log(`outMenuFilePath: `, menuFilePath))
+
+}
+
+/**
+ * 分析 yaml 的 entries 来生成 menu, 会直接改变传入的 arr
+ * @param {array} arr 
+ * @param {array} items 
+ */
+function genMenu(arr, items) {
+  if (Array.isArray(items)) {
+    const stack = [...items];
+    while (stack.length) {
+      const item = stack.shift();
+      if (item) {
+        const data = {
+          name: item.label,
+          path: item.path,
+        }
+        if (Array.isArray(item.sub_entries)) {
+          data.items = [];
+          genMenu(data.items, item.sub_entries)
+        }
+        arr.push(data);
+      }
+    }
+  }
 }
