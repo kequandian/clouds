@@ -65,7 +65,7 @@ function formatTableFields(field, map) {
  * @param {object} yaml 
  */
 function yamlToBuildJSON(yaml, pageName) {
-  const { api, list, form, fields } = yaml;
+  const { api, title = pageName, list, form, fields } = yaml;
   const { columns } = form;
 
   const tableActions = [];
@@ -149,6 +149,7 @@ function yamlToBuildJSON(yaml, pageName) {
 
   const data = {
     ...genCRUDAPI(api),
+    pageName: title,
     columns,
     map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
     searchFields: list && list.search && list.search.fields,
