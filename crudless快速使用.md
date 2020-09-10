@@ -47,8 +47,9 @@ crudless  ## 默认找同目录的 crudless.yml，并且默认输出前后端配
 # --json 页面配置文件
 # --sql 建表sql文件
 # --cg 表关系文件
+# --menu 菜单文件
 
-crudless -f /path/to/crudless.yml --json --sql --cg  ## 按不同参数输出相应配置文件
+crudless -f /path/to/crudless.yml --json --sql --cg --menu  ## 按不同参数输出相应配置文件
 ```
 
 执行完毕后将生成`test.json`和`crudless.sql`两份文件。
