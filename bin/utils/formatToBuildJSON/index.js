@@ -52,7 +52,7 @@ function formatFormFields(field, map) {
  * @param {object} mapObj 
  */
 function formatTableFields(field, map) {
-  const { type, sql, ...rst } = field;
+  const { type, sql, props, rules, ...rst } = field;
 
   valueTypeEllipsis(rst, sql);
   valueTypeMap(rst, map);

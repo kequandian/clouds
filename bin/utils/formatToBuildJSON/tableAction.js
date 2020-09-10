@@ -8,7 +8,7 @@ function tableAction(action, pageName) {
   };
   if (['add', 'edit', 'view'].includes(type)) {
     rst.options.path = `${pageName}/${pageName}-${type}`;
-    rst.valueType = 'path';
+    rst.type = 'path';
   }
   return rst
 }
