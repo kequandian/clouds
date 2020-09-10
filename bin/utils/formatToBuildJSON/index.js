@@ -66,7 +66,7 @@ function formatTableFields(field, map) {
  * @param {object} yaml 
  */
 function yamlToBuildJSON(yaml, pageName) {
-  const { api, title = pageName, list, form, fields } = yaml;
+  const { api, title = pageName, layout, list, form, fields } = yaml;
   const { columns } = form;
 
   const tableActions = [];
@@ -153,6 +153,7 @@ function yamlToBuildJSON(yaml, pageName) {
     pageName: title,
     columns,
     map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
+    layout,
     searchFields: list && list.search && list.search.fields,
     tableActions: tableActions,
     tableOperation: tableOperation,
