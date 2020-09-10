@@ -45,7 +45,7 @@ let readYAMLFile = new Promise((res, rej) => {
 
 readYAMLFile
   .then(data => {
-    const yaml = Yaml.parse(data);
+    const yaml = Yaml.parse(data.split('---')[0]);
     const { pages } = yaml;
     return genJSON(!options["--json"], pages)
       .then(_ => genSQL(!options["--sql"], pages))
