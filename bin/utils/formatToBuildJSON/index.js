@@ -56,6 +56,7 @@ function formatTableFields(field, map) {
 
   valueTypeEllipsis(rst, sql);
   valueTypeMap(rst, map);
+  valueTypeBase(rst, type);
 
   return rst;
 }
