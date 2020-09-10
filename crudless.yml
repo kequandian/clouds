@@ -83,6 +83,7 @@ pages:
   issue:  # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
     api: /api/crud/issues/issue
     title: '页面名称'
+    layout: TitleContent ## 默认 action 位于右上角
     description: "API for Issues"
     service_provider: native  # 默认native-通过配置sql定义生成, external-拼接外部服务
 

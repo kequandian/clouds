@@ -1,6 +1,6 @@
 
 function tableAction(action, pageName) {
-  const { title, type, ...rest } = action;
+  const { title, type, options, ...rest } = action;
   const rst = {
     title,
     type,
@@ -10,7 +10,19 @@ function tableAction(action, pageName) {
     rst.options.path = `${pageName}/${pageName}-${type}`;
     rst.type = 'path';
   }
-  return rst
+  if (type.indexOf('export') > -1 || type.indexOf('import') > -1) {
+    rst.type = `${type}-excel`;
+  }
+
+  if (options && options.api) {
+    options.API = options.api;
+    delete options.api;
+  }
+
+  return {
+    ...rst,
+    options,
+  }
 }
 
 module.exports = tableAction;
