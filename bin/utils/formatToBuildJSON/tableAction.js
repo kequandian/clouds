@@ -7,7 +7,7 @@ function tableAction(action, pageName) {
     options: rest,
   };
   if (['add', 'edit', 'view'].includes(type)) {
-    rst.options.path = `${pageName}-${type}`;
+    rst.options.path = `${pageName}/${pageName}-${type}`;
     rst.valueType = 'path';
   }
   return rst
