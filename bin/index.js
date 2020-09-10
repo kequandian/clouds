@@ -115,6 +115,7 @@ function genCGFile(can, pages) {
       rst.push({
         master: cgData.master,
         slaves: cgData.slaves,
+        features: pages[pageName].features,
       });
     }
   })
