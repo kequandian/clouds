@@ -80,7 +80,7 @@ function yamlToBuildJSON(yaml, pageName) {
       if (scope === 'top') {
         tableActions.push(tableAction(rest, pageName));
       } else {
-        tableOperation.push(tableAction(rest, pageName));
+        tableOperation.push(tableAction(rest, pageName, true));
       }
     })
   }

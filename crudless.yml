@@ -144,6 +144,9 @@ pages:
           outside: true # 操作入口显示在外面
           scope: item # 默认为列表项操作
         - 
+          title: 详情
+          type: view # view 本质是带有初始值的 path
+        - 
           title: 删除
           type: delete
           outside: false # 默认为 隐藏入口

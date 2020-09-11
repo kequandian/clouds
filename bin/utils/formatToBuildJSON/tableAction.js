@@ -1,5 +1,11 @@
 
-function tableAction(action, pageName) {
+/**
+ * 处理列表的 action 项
+ * @param {object} action 
+ * @param {string} pageName 
+ * @param {boolean} outside 是否自动将 outside 设置为 false
+ */
+function tableAction(action, pageName, outside) {
   const { title, type, options, ...rest } = action;
   const rst = {
     title,
@@ -21,6 +27,10 @@ function tableAction(action, pageName) {
   if (rst.options && rst.options.api) {
     rst.options.API = rst.options.api;
     delete rst.options.api;
+  }
+
+  if (outside) {
+    rst.options.outside = rst.options.outside || false;
   }
 
   return rst
