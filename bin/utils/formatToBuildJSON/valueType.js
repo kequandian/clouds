@@ -4,6 +4,8 @@ const baseValueTypeMap = {
   image: 'image',
   currency: 'currency',
   percentage: 'percentage',
+  index: 'index',
+  complex: 'complex',
 };
 
 function valueTypeBase(rst, type) {

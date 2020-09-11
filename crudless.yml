@@ -193,7 +193,7 @@ pages:
           comment: 名称
           unique: true
 
-      # 在列表里复合显示一个字段
+      # 在列表里复合显示一个字段(纯文本)
       contact:
         label: 联系信息
         type: plain
@@ -201,6 +201,22 @@ pages:
           format:
             - "姓名: <name>"
             - "电话: <phone>"
+        scope:
+          - list
+
+      # 在列表里复合显示一个字段
+      # 这里演示了同时在一个表格单元显示 图片与金额
+      demo:
+        label: 复合字段
+        type: complex
+        options:
+          fields: 
+          -
+            field: cover
+            type: image
+          -
+            field: money
+            type: currency
         scope:
           - list
 
