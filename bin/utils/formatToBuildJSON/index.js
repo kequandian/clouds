@@ -22,12 +22,21 @@ function genCRUDAPI(api, queryString = '') {
 function createMapObj(map) {
   const rst = {};
   Object.keys(map).forEach(key => {
-    return rst[key] = {
-      map: map[key],
-      options: Object.keys(map[key]).map(
-        k => ({ label: map[key][k], value: k })
-      )
+    const mapData = {
+      map: {},
+      options: [],
+      corlo: {},
     };
+    Object.keys(map[key]).forEach(k => {
+      if (typeof map[key][k] === 'string') {
+        mapData.map[k] = map[key][k];
+      } else {
+        mapData.map[k] = map[key][k].label;
+        mapData.corlo[k] = map[key][k].color;
+      }
+      mapData.options.push({ label: map[key][k], value: k });
+    })
+    return rst[key] = mapData;
   })
   return rst;
 }
@@ -66,8 +75,8 @@ function formatTableFields(field, map) {
  * @param {object} yaml 
  */
 function yamlToBuildJSON(yaml, pageName) {
-  const { api, title = pageName, layout, list = {}, form, fields } = yaml;
-  const { columns } = form;
+  const { api, title = pageName, layout, list = {}, form = {}, fields } = yaml;
+  const { columns = 2 } = form;
   const { actions = [], search = {} } = list;
 
   const tableActions = [];
