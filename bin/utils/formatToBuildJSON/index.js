@@ -187,6 +187,7 @@ function yamlToBuildJSON(yaml, pageName) {
     tableFields: fieldsSource.list,
     createFields: fieldsSource.new,
     updateFields: fieldsSource.edit,
+    viewFields: fieldsSource.view,
   };
   return data;
 }
