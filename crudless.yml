@@ -120,7 +120,7 @@ pages:
       actions:
         - 
           title: 导出
-          type: export-excel
+          type: export
           api: /api/io/excel/teamReward
           data: teamReward
           scope: top
@@ -130,8 +130,8 @@ pages:
           scope: top
         - 
           title: 导入
-          type: import-excel #导入excel
-          #api: /api/io/undefined
+          type: import
+          name: importScopeName
           scope: top
         - 
           title: 打印

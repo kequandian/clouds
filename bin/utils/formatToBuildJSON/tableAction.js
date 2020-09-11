@@ -12,16 +12,19 @@ function tableAction(action, pageName, outside) {
     type,
     options: rest,
   };
-  if (['add', 'edit', 'view'].includes(type)) {
-    rst.options.path = `${pageName}/${pageName}-${type}`;
-    rst.type = 'path';
-  }
-  if (type.indexOf('export') > -1 || type.indexOf('import') > -1) {
-    const typeMap = {
-      export: 'export-excle',
-      import: 'import-excle',
-    };
-    rst.type = typeMap[type] || type;
+  if (type) {
+    rst.type = type;
+    if (['add', 'edit', 'view'].includes(type)) {
+      rst.options.path = `${pageName}/${pageName}-${type}`;
+      rst.type = 'path';
+    }
+    if (type.indexOf('export') > -1 || type.indexOf('import') > -1) {
+      const typeMap = {
+        export: 'export-excel',
+        import: 'import-excel',
+      };
+      rst.type = typeMap[type] || type;
+    }
   }
 
   if (rst.options && rst.options.api) {
