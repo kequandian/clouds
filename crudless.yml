@@ -111,7 +111,7 @@ pages:
             label: 搜索
             field: search
             type: input
-        tab: # 展开分类
+        tabs: # 展开分类
           field: status
           all: default # default 默认包括全部选项, none 代表没有全部选项
           options:
