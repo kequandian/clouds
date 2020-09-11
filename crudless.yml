@@ -190,6 +190,17 @@ pages:
           comment: 名称
           unique: true
 
+      # 在列表里复合显示一个字段
+      contact:
+        label: 联系信息
+        type: plain
+        options:
+          format:
+            - "姓名: <name>"
+            - "电话: <phone>"
+        scope:
+          - list
+
       #sex  单选字段
       sex:
         label: 性别

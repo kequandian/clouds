@@ -109,8 +109,7 @@ function yamlToBuildJSON(yaml, pageName) {
   };
   const fieldsSourceFunc = {
     list(key, opt) {
-      const { type, ...rest } = opt;
-      fieldsSource[key].push(formatTableFields(rest, map));
+      fieldsSource[key].push(formatTableFields(opt, map));
     },
     default(key, opt) {
       fieldsSource[key].push(formatFormFields(opt, map));
@@ -126,8 +125,9 @@ function yamlToBuildJSON(yaml, pageName) {
 
   Object.keys(fields).forEach(field => {
     const { type, options, scope, sql, ...rest } = fields[field];
+    const isMap = ['radio', 'select', 'checkbox'].includes(type);
 
-    if (String(options) === '[object Object]') {
+    if (String(options) === '[object Object]' && isMap) {
       if (!map[field]) {
         map[field] = {};
       }
@@ -144,6 +144,7 @@ function yamlToBuildJSON(yaml, pageName) {
         Object.keys(fieldsSource).forEach(k => {
           handleScope(k, {
             ...rest,
+            options: isMap ? undefined : options,
             type,
             sql,
             field,
@@ -154,6 +155,7 @@ function yamlToBuildJSON(yaml, pageName) {
           if (fieldsSource[key]) {
             handleScope(key, {
               ...rest,
+              options: isMap ? undefined : options,
               type,
               sql,
               field,
