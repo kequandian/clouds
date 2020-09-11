@@ -22,7 +22,7 @@ function genSQl(tableName, fields) {
     unique.length ?
       `UNIQUE (${unique.map(f => "`" + f + "`").join(',')})`
       : '',
-  ].join(', \n  ');
+  ].filter(s => s).join(', \n  ');
 
   return "DROP TABLE IF EXISTS `" + tableName + "`;\n" +
     "CREATE TABLE `" + tableName + "` (\n  "
