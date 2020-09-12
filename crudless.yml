@@ -103,7 +103,7 @@ pages:
       slaves:
         - t_issue_item:items
         - t_issue_tag:tags
-
+        
     list:
       search: # 搜索条件
         fields:
@@ -156,11 +156,13 @@ pages:
         - 
           title: 审核通过
           type: action   # 自定义 ACTION
-          action: confirm
+          api: /api/crud/entity/entities/1/action/pass
+          meta: workflow  # 调用工作流固有元接口, meta[state, workflow] 状态机与工作流
           scope: item
         - 
           title: 提交
-          type: meta  # meta 状态跳转 (无其他操作)
+          type: action
+          meta: cancel   # meta 状态跳转, 跳转名称包含 pass, cancel
           scope: item  
         ### BATCH ACTIONS
         - 
@@ -312,14 +314,14 @@ pages:
 
 initialize: #执行初始化(仅一次)
   - teamReward
-  - teamMachineState #状态机
+  - teamState #状态机
 
 ---
 profiles:
   teamReward:
     type: export-excel
     sql: SELECT '申请' as '名称',(CASE Open WHEN 'Open' THEN '打开' WHEN '2' THEN '提交' END) as '状态' FROM (select 'Open') t
-  teamMachineState:
+  teamState:
     type: meta
     config:
       - from: START
