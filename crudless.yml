@@ -151,6 +151,7 @@ pages:
           type: action   # 自定义 ACTION
           api: /api/crud/issue/issues/1/action/pass
           action: pass   # 同 /api/crud/issue/issues/1/action/pass
+          plugin: pass   # 同 /api/plugin/actions/pass/issue/1,  即 /api/plugin/actions/{action}/{entity}/{id}, 
           meta: workflow  # 同时调用工作流固有元接口, meta[state, workflow] 状态机与工作流
           scope: item
         - 
@@ -158,6 +159,11 @@ pages:
           type: action
           meta: cancel   # meta 状态跳转, 跳转名称包含 pass, cancel
           scope: item  
+        ### VIEW ACTION  # 实体详情操作
+        -
+          title: 审核通过
+          type: action
+          scope: view  # 实体详情内操作
         ### BATCH ACTIONS
         - 
           title: 审批
