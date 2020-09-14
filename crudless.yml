@@ -129,6 +129,11 @@ pages:
         - title: 新建
           type: add # add 本质是带有初始值的 path
           scope: top
+        - title: 新建
+          type: modal # 在弹出的模态框中完成新建, 一般用于字段数量较少的场景
+          modalTitle: 新建数据 # 模态框的标题
+          modalWidth: 760 # 模态框的宽度
+          scope: top
         - title: 导出
           type: export
           api: /api/io/excel/teamReward
@@ -147,6 +152,10 @@ pages:
           type: edit # edit 本质是带有初始值的 path
           outside: true # 操作入口显示在外面
           scope: item # 默认为列表项操作
+        - title: 编辑
+          type: modal # 在弹出的模态框中完成编辑, 一般用于字段数量较少的场景
+          modalTitle: 编辑数据 # 模态框的标题
+          modalWidth: 760 # 模态框的宽度
         - title: 详情
           type: view # view 本质是带有初始值的 path
         - title: 删除

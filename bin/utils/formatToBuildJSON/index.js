@@ -79,36 +79,6 @@ function yamlToBuildJSON(yaml, pageName) {
   const { columns = 2 } = form;
   const { actions = [], search = {} } = list;
 
-  const tableActions = [];
-  const tableOperation = [];
-
-  if (Array.isArray(actions)) {
-    actions.forEach(action => {
-      const { scope, ...rest } = action;
-      // scope 没有定义默认为列表项(item)操作
-      if (scope === 'top') {
-        tableActions.push(tableAction(rest, pageName));
-      } else {
-        tableOperation.push(tableAction(rest, pageName, true));
-      }
-    })
-  }
-  // 将 search.tabs 的配置 映射到 actions
-  if (search && search.tabs) {
-    const { field, all, options } = search.tabs;
-    tableActions.unshift({
-      type: 'tabs',
-      options: {
-        field: field,
-        all: all === 'default', // default 默认包括全部选项, none 代表没有全部选项
-        tabs: Object.keys(options).map(key => ({
-          label: options[key],
-          value: key,
-        })),
-      }
-    });
-  }
-
   const map = {};
   const fieldsSource = {
     list: [],
@@ -175,8 +145,45 @@ function yamlToBuildJSON(yaml, pageName) {
     }
   });
 
-  const data = {
+
+  const tableActions = [];
+  const tableOperation = [];
+
+  const actionUseSetting = {
     ...genCRUDAPI(api),
+    createFields: fieldsSource.new,
+    updateFields: fieldsSource.edit,
+  }
+
+  if (Array.isArray(actions)) {
+    actions.forEach(action => {
+      const { scope, ...rest } = action;
+      // scope 没有定义默认为列表项(item)操作
+      if (scope === 'top') {
+        tableActions.push(tableAction(rest, pageName, undefined, actionUseSetting));
+      } else {
+        tableOperation.push(tableAction(rest, pageName, true, actionUseSetting));
+      }
+    })
+  }
+  // 将 search.tabs 的配置 映射到 actions
+  if (search && search.tabs) {
+    const { field, all, options } = search.tabs;
+    tableActions.unshift({
+      type: 'tabs',
+      options: {
+        field: field,
+        all: all === 'default', // default 默认包括全部选项, none 代表没有全部选项
+        tabs: Object.keys(options).map(key => ({
+          label: options[key],
+          value: key,
+        })),
+      }
+    });
+  }
+
+  const data = {
+    ...actionUseSetting,
     pageName: title,
     columns,
     map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
