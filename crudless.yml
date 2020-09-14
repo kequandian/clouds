@@ -41,46 +41,61 @@ ui:
   ## 应用布局 (菜单） top, left
   layout: top
 
+theme:
+  primary-color: "#610b0b"
+  primary-color-light: "#860909"
+  primary-color-bgColor: "#fcd0d0"
+  menu-ico: "#81cfff"
+  menu-top-bgColor: "#0b4f79"
+  menu-top-active-bgColor: "#2489c7"
+  menu-top-fontColor: "#fff"
+  menu-top-fontSize: "16px"
+  menu-left-bgColor: "white"
+  menu-left-active-bgColor: "#2489c7"
+  menu-left-fontColor: "#0b4f79"
+  menu-left-fontSize: "16px"
+  menu-left-active-fontColor: "#fff"
+
 entries:
-  - dev_name: product_mgr   # 用于装配服务时定位菜单入口
+  - dev_name: product_mgr # 用于装配服务时定位菜单入口
     label: 产品管理
     path: /products
-    icon: static/product_entry.png   # 服务组可配置图标
+    icon: static/product_entry.png # 服务组可配置图标
     #app_id: demo  # 用于授权 (暂时忽略)
     #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
     sub_entries:
-       - dev_name: product_type
-         path: /products/types
-         label: 产品分类
-         #app_id: demo  # 用于授权 (暂时忽略)
-         #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
-       - dev_name: product_tag
-         label: 产品标签
-         path: /products/tags
-       - dev_name: product
-         label: 产品
-         path: /products/product
+      - dev_name: product_type
+        path: /products/types
+        label: 产品分类
+        #app_id: demo  # 用于授权 (暂时忽略)
+        #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
+      - dev_name: product_tag
+        label: 产品标签
+        path: /products/tags
+      - dev_name: product
+        label: 产品
+        path: /products/product
   - dev_name: orders
     label: 单订管理
     icon: static/orders_entry.png
   - dev_name: ticket_mgr
     label: 工单管理
     icon: static/ticket_entry.png
-    path: /issues   # 需要匹配pages/下面的路径，用于面包屑显示
+    path: /issues # 需要匹配pages/下面的路径，用于面包屑显示
     sub_entries:
-       - dev_name: ticket_issues
-         label: 问题管理
-         path: /issues/issue   # 需要匹配pages/下面的路径
+      - dev_name: ticket_issues
+        label: 问题管理
+        path: /issues/issue # 需要匹配pages/下面的路径
 
 pages:
-  issue:  # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
+  issue: # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
     api: /api/crud/issues/issue
-    title: '页面名称'
-    layout: 
+    title: "页面名称"
+    layout:
       table: Content ## 默认 action 位于 title 下方
       form: TitleContent ## 默认 action 位于 title 右边
     description: "API for Issues"
-    service_provider: native  # 默认native-通过配置sql定义生成, external-拼接外部服务
+    service_provider: native # 默认native-通过配置sql定义生成, external-拼接外部服务
 
     features: # 实体能力(capability)
       - saas # 具备 saas 能力，默认增加字段 org_id, org_tag
@@ -96,7 +111,7 @@ pages:
       slaves:
         - t_issue_item:items
         - t_issue_tag:tags
-        
+
     list:
       search: # 搜索条件
         fields:
@@ -111,71 +126,58 @@ pages:
             Draft: 草稿
       actions:
         ### TOP ACTIONS
-        - 
-          title: 新建
+        - title: 新建
           type: add # add 本质是带有初始值的 path
           scope: top
-        - 
-          title: 导出
+        - title: 导出
           type: export
           api: /api/io/excel/teamReward
           data: teamReward
           scope: top
-        - 
-          title: 导入
+        - title: 导入
           type: import
           name: importScopeName
           scope: top
-        - 
-          title: 打印
+        - title: 打印
           type: print #打印
           #api: /api/io/undefined
           scope: top
         ### ITEM ACTIONS
-        - 
-          title: 编辑
+        - title: 编辑
           type: edit # edit 本质是带有初始值的 path
           outside: true # 操作入口显示在外面
           scope: item # 默认为列表项操作
-        - 
-          title: 详情
+        - title: 详情
           type: view # view 本质是带有初始值的 path
-        - 
-          title: 删除
+        - title: 删除
           type: delete
           outside: false # 默认为 隐藏入口
           #scope: item   # 没有定义默认为列表项操作
         ## ACTIONS
-        - 
-          title: 审核通过
-          type: action   # 自定义 ACTION
+        - title: 审核通过
+          type: action # 自定义 ACTION
           api: /api/crud/issue/issues/1/action/pass
-          action: pass   # 同 /api/crud/issue/issues/1/action/pass
-          plugin: pass   # 同 /api/plugin/actions/pass/issue/1,  即 /api/plugin/actions/{action}/{entity}/{id}, 
-          meta: workflow  # 同时调用工作流固有元接口, meta[state, workflow] 状态机与工作流
+          action: pass # 同 /api/crud/issue/issues/1/action/pass
+          plugin: pass # 同 /api/plugin/actions/pass/issue/1,  即 /api/plugin/actions/{action}/{entity}/{id},
+          meta: workflow # 同时调用工作流固有元接口, meta[state, workflow] 状态机与工作流
           scope: item
-        - 
-          title: 提交
+        - title: 提交
           type: action
-          meta: cancel   # meta 状态跳转, 跳转名称包含 pass, cancel
-          scope: item  
+          meta: cancel # meta 状态跳转, 跳转名称包含 pass, cancel
+          scope: item
         ### VIEW ACTION  # 实体详情操作
-        -
-          title: 审核通过
+        - title: 审核通过
           type: action
-          scope: view  # 实体详情内操作
+          scope: view # 实体详情内操作
         ### BATCH ACTIONS
-        - 
-          title: 审批
+        - title: 审批
           scope: batch # 批量操作
-        - 
-          title: 拒绝
+        - title: 拒绝
           scope: batch # 批量操作
-        - 
-          title: 提交
-          type: meta  # meta 元操作
+        - title: 提交
+          type: meta # meta 元操作
           scope: batch # 批量操作
-          
+
     form:
       columns: 1 # 表单将按照两列的形式排版显示
 
@@ -218,11 +220,11 @@ pages:
         label: 复合字段
         type: complex
         options:
-          fields: 
-          - field: cover
-            type: image
-          - field: money
-            type: currency
+          fields:
+            - field: cover
+              type: image
+            - field: money
+              type: currency
         scope:
           - list
 

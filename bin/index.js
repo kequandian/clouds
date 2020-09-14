@@ -13,6 +13,7 @@ const options = {
   '--sql': undefined,
   '--menu': undefined,
   '--cg': undefined,
+  '--theme': undefined,
 };
 
 cliArgs(options)
@@ -29,6 +30,7 @@ const cwd = process.cwd();
 const sqlFilePath = path.join(cwd, `crudless.sql`);
 const cgFilePath = path.join(cwd, `crudless.crud.json`);
 const menuFilePath = path.join(cwd, `router.config.js`);
+const themeFilePath = path.join(cwd, `theme.less`);
 
 let readYAMLFile = new Promise((res, rej) => {
   if (typeof options["-f"] === 'string') {
@@ -47,11 +49,12 @@ let readYAMLFile = new Promise((res, rej) => {
 readYAMLFile
   .then(data => {
     const yaml = Yaml.parse(data.split('---')[0]);
-    const { entries, pages } = yaml;
+    const { theme, entries, pages } = yaml;
     return genJSON(!options["--json"], pages)
       .then(_ => genSQL(!options["--sql"], pages))
       .then(_ => genMenuFile(!options["--menu"], entries))
       .then(_ => genCGFile(!options["--cg"], pages))
+      .then(_ => genThemeFile(!options["--theme"], theme))
   })
 
 function genJSON(can, pages) {
@@ -133,6 +136,23 @@ function genMenuFile(can, entries) {
 
   return fs.writeFile(menuFilePath, `module.exports = ${JSON.stringify(rst, null, 2)}`)
     .then(_ => console.log(`outMenuFilePath: `, menuFilePath))
+
+}
+
+function genThemeFile(can, theme) {
+  if (can) {
+    return Promise.resolve();
+  }
+  const rst = [];
+
+  if (typeof theme === 'object') {
+    Object.keys(theme).forEach(key => {
+      rst.push(`@ZEle-${key}: ${theme[key]}`);
+    })
+  }
+
+  return fs.writeFile(themeFilePath, rst.join('\n'))
+    .then(_ => console.log(`outThemeFilePath: `, themeFilePath))
 
 }
 
