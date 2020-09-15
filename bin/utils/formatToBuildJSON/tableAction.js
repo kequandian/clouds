@@ -19,13 +19,6 @@ function tableAction(action, pageName, outside, setting) {
       rst.options.path = `${pageName}/${pageName}-${type}`;
       rst.type = 'path';
     }
-    if (type.indexOf('export') > -1 || type.indexOf('import') > -1) {
-      const typeMap = {
-        export: 'export-excel',
-        import: 'import-excel',
-      };
-      rst.type = typeMap[type] || type;
-    }
   }
 
   if (rst.options && rst.options.api) {
