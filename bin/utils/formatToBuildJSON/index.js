@@ -76,7 +76,7 @@ function formatTableFields(field, map) {
  */
 function yamlToBuildJSON(yaml, pageName) {
   const { api, title = pageName, layout, list = {}, form = {}, fields } = yaml;
-  const { columns = 2 } = form;
+  const { columns = 2, viewExtra = [] } = form;
   const { actions = [], search = {} } = list;
 
   const map = {};
@@ -151,6 +151,7 @@ function yamlToBuildJSON(yaml, pageName) {
 
   const actionUseSetting = {
     ...genCRUDAPI(api),
+    columns,
     createFields: fieldsSource.new,
     updateFields: fieldsSource.edit,
   }
@@ -185,7 +186,6 @@ function yamlToBuildJSON(yaml, pageName) {
   const data = {
     ...actionUseSetting,
     pageName: title,
-    columns,
     map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
     layout,
     searchFields: search && search.fields,
@@ -195,6 +195,7 @@ function yamlToBuildJSON(yaml, pageName) {
     createFields: fieldsSource.new,
     updateFields: fieldsSource.edit,
     viewFields: fieldsSource.view,
+    viewOthers: viewExtra,
   };
   return data;
 }

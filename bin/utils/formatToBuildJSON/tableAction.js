@@ -43,6 +43,9 @@ function tableAction(action, pageName, outside, setting) {
         component: 'Form',
         config: {
           layout: 'Grid',
+          layoutConfig: {
+            value: Array(setting.columns).fill(~~(24 / setting.columns))
+          },
           API: outside === undefined ? {
             createAPI: setting.createAPI,
           } : {
