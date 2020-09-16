@@ -1,15 +1,14 @@
 const fs = require('fs-extra');
 const path = require('path');
-const cwd = process.cwd();
 
-module.exports = function genMenuFile(can, entries) {
+module.exports = function genMenuFile(can, outputDir, entries) {
   if (can) {
     return Promise.resolve();
   }
   const rst = [];
   genMenu(rst, entries);
 
-  const menuFilePath = path.join(cwd, `router.config.js`);
+  const menuFilePath = path.join(outputDir, `router.config.js`);
 
   return fs.writeFile(menuFilePath, `module.exports = ${JSON.stringify(rst, null, 2)}`)
     .then(_ => console.log(`outMenuFilePath: `, menuFilePath))

@@ -7,7 +7,7 @@ module.exports = function cliArgs(options) {
       if (options.hasOwnProperty(arg)) {
         if (validArgs[i + 1] && !options.hasOwnProperty(validArgs[i + 1])) {
           options[arg] = validArgs[i + 1];
-        } else {
+        } else if (options[arg] === undefined) {
           options[arg] = true;
         }
 

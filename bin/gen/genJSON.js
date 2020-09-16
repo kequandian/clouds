@@ -1,9 +1,8 @@
 const fs = require('fs-extra');
 const path = require('path');
 const { yamlToBuildJSON } = require('../utils/formatToBuildJSON');
-const cwd = process.cwd();
 
-module.exports = function genJSON(can, pages) {
+module.exports = function genJSON(can, outputDir, pages) {
   if (can) {
     return Promise.resolve();
   }
@@ -26,7 +25,7 @@ module.exports = function genJSON(can, pages) {
 
   return Promise.all(
     genPageList.map(pageName => {
-      const outJSONPath = path.join(cwd, `${pageName}.json`);
+      const outJSONPath = path.join(outputDir, `${pageName}.json`);
 
       return fs.writeJson(
         outJSONPath,

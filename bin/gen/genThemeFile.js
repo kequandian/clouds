@@ -1,8 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
-const cwd = process.cwd();
 
-module.exports = function genMenuFile(can, theme) {
+module.exports = function genMenuFile(can, outputDir, theme) {
   if (can) {
     return Promise.resolve();
   }
@@ -14,7 +13,7 @@ module.exports = function genMenuFile(can, theme) {
     })
   }
 
-  const themeFilePath = path.join(cwd, `theme.less`);
+  const themeFilePath = path.join(outputDir, `theme.less`);
 
   return fs.writeFile(themeFilePath, rst.join('\n'))
     .then(_ => console.log(`outThemeFilePath: `, themeFilePath))

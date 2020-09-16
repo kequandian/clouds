@@ -1,8 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
-const cwd = process.cwd();
 
-module.exports = function genCGFile(can, pages) {
+module.exports = function genCGFile(can, outputDir, pages) {
   if (can) {
     return Promise.resolve();
   }
@@ -18,7 +17,7 @@ module.exports = function genCGFile(can, pages) {
     }
   })
 
-  const cgFilePath = path.join(cwd, `crudless.crud.json`);
+  const cgFilePath = path.join(outputDir, `crudless.crud.json`);
 
   return fs.writeJson(cgFilePath, rst)
     .then(_ => console.log(`outCGFilePath: `, cgFilePath))
