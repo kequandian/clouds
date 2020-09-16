@@ -1,6 +1,7 @@
 const { valueTypeEllipsis, valueTypeMap, valueTypeBase } = require('./valueType');
 const { formOptionEllipsis, formOptionMap } = require('./formOptions');
 const tableAction = require('./tableAction');
+const searchFields = require('./searchFields')
 
 function genCRUDAPI(api, queryString = '') {
   if (api) {
@@ -186,9 +187,9 @@ function yamlToBuildJSON(yaml, pageName) {
   const data = {
     ...actionUseSetting,
     pageName: title,
-    map: createMapObj(map), // 自动生成的话不需要这个, 这是为了手动改代码的冗余配置
+    map: createMapObj(map), // 详情页需要通过这个字段来映射状态
     layout,
-    searchFields: search && search.fields,
+    searchFields: searchFields(search.fields),
     tableActions: tableActions,
     tableOperation: tableOperation,
     tableFields: fieldsSource.list,
