@@ -27,9 +27,11 @@ const options = {
 
 cliArgs(options)
 
-if (Object.values(options).every(v => v === undefined)) {
+if (Object.values(options).every(v => !v)) {
   Object.keys(options).forEach(key => {
-    options[key] = true;
+    if (options[key] === undefined) {
+      options[key] = true;
+    }
   })
 }
 
@@ -55,7 +57,7 @@ if (options['--input'] && options['--output']) {
 
 function genFile(inputPath) {
   let outputDir = cwd;
-  if (path.isAbsolute(inputPath)) {
+  if (typeof inputPath === 'string' && path.isAbsolute(inputPath)) {
     outputDir = path.dirname(inputPath);
   }
 
@@ -77,6 +79,8 @@ function genFile(inputPath) {
     .then(data => {
       const yaml = Yaml.parse(data.split('---')[0]);
       const { theme, entries, pages } = yaml;
+      console.log(456, options);
+
       return genJSON(!options["--json"], outputDir, pages)
         .then(_ => genSQL(!options["--sql"], outputDir, pages))
         .then(_ => genMenuFile(!options["--menu"], outputDir, entries))
