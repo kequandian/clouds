@@ -79,6 +79,13 @@ function yamlToBuildJSON(yaml, pageName) {
   const { api, title = pageName, layout, list = {}, form = {}, fields } = yaml;
   const { columns = 2, viewExtra = [] } = form;
   const { actions = [], search = {} } = list;
+  const requiredField = ['api', 'layout', 'fields'];
+
+  requiredField.forEach(key => {
+    if (yaml[key] === undefined) {
+      console.log(`传入的 yml 数据中缺失 key ${key}`);
+    }
+  })
 
   const map = {};
   const fieldsSource = {

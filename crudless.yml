@@ -46,8 +46,9 @@ theme:
   primary-color-light: "#860909"
   primary-color-bgColor: "#fcd0d0"
   menu-ico: "#81cfff"
-  menu-top-bgColor: "#0b4f79"
-  menu-top-active-bgColor: "#2489c7"
+  menu-top-bgColor: "#0b4f79" # 导航条底色
+  menu-top-active-bgColor: "#2489c7" # 已选中的导航颜色
+  menu-top-bgColor-light: "#2489c7" # 鼠标悬停颜色
   menu-top-fontColor: "#fff"
   menu-top-fontSize: "16px"
   menu-left-bgColor: "white"
