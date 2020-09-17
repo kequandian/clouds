@@ -48,7 +48,7 @@ if (options['--input'] && options['--output']) {
 
   const jsonFileList = getAllFilePath(inputPath).filter(i => path.extname(i) === '.json');
   jsonFileList.forEach(filePath => {
-    shell.exec(`zero-json manage crud -i ${filePath} -o ${outPath}`);
+    shell.exec(`zero-json manage crud -i ${filePath} -o ${outPath} -d`);
   })
 
 } else {
@@ -79,7 +79,6 @@ function genFile(inputPath) {
     .then(data => {
       const yaml = Yaml.parse(data.split('---')[0]);
       const { theme, entries, pages } = yaml;
-      console.log(456, options);
 
       return genJSON(!options["--json"], outputDir, pages)
         .then(_ => genSQL(!options["--sql"], outputDir, pages))
