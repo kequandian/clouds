@@ -309,6 +309,12 @@ pages:
           comment: "状态"
           default: OPEN
 
+      image:
+        label: 图片
+        type: image
+        scope:
+          - all
+
       # creatTime 日期字段
       createTime:
         label: 创建时间

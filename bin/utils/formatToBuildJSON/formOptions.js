@@ -15,7 +15,28 @@ function formOptionMap(rst, map) {
   }
 }
 
+const typeMap = {
+  image: {
+    type: 'upload-image',
+    type: 'text',
+  },
+};
+function formType(rst) {
+  const data = typeMap[rst.field];
+
+  if (data) {
+    if (typeof data === 'object') {
+      Object.keys(data).forEach(key => {
+        rst[key] = data[key];
+      })
+    } else if (typeof data === 'string') {
+      rst.type = data;
+    }
+  }
+}
+
 module.exports = {
   formOptionEllipsis,
   formOptionMap,
+  formType,
 }

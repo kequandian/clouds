@@ -1,5 +1,5 @@
 const { valueTypeEllipsis, valueTypeMap, valueTypeBase } = require('./valueType');
-const { formOptionEllipsis, formOptionMap } = require('./formOptions');
+const { formOptionEllipsis, formOptionMap, formType } = require('./formOptions');
 const tableAction = require('./tableAction');
 const searchFields = require('./searchFields')
 
@@ -52,6 +52,7 @@ function formatFormFields(field, map) {
 
   formOptionEllipsis(rst, map);
   formOptionMap(rst, map);
+  formType(rst);
 
   return rst;
 }
@@ -62,8 +63,9 @@ function formatFormFields(field, map) {
  * @param {object} mapObj 
  */
 function formatTableFields(field, map) {
-  const { type, sql, props, rules, ...rst } = field;
+  const { type, sql, props, rules, ...rest } = field;
 
+  const rst = JSON.parse(JSON.stringify(rest));
   valueTypeEllipsis(rst, sql);
   valueTypeMap(rst, map);
   valueTypeBase(rst, type);

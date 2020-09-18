@@ -1,7 +1,14 @@
 
 const baseValueTypeMap = {
   plain: 'plain',
-  image: 'image',
+  image: {
+    valueType: 'image',
+    options: {
+      width: 36,
+      height: 36,
+      border: true,
+    }
+  },
   currency: 'currency',
   percentage: 'percentage',
   index: 'index',
