@@ -18,7 +18,7 @@ function formOptionMap(rst, map) {
 const typeMap = {
   image: {
     type: 'upload-image',
-    type: 'text',
+    json: 'text',
   },
 };
 function formType(rst) {
