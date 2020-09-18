@@ -1,3 +1,4 @@
+const { mergeObject } = require('../../utils/index');
 
 function formOptionEllipsis(rst, sql) {
   if (sql && sql.type === 'text' || ['descriptions', 'remark', 'note'].includes(rst.field)) {
@@ -18,7 +19,9 @@ function formOptionMap(rst, map) {
 const typeMap = {
   image: {
     type: 'upload-image',
-    json: 'text',
+    options: {
+      json: 'text',
+    }
   },
 };
 function formType(rst) {
@@ -27,7 +30,11 @@ function formType(rst) {
   if (data) {
     if (typeof data === 'object') {
       Object.keys(data).forEach(key => {
-        rst[key] = data[key];
+        if (typeof data[key] === 'object') {
+          rst[key] = mergeObject(rst[key], data[key]);
+        } else {
+          rst[key] = data[key];
+        }
       })
     } else if (typeof data === 'string') {
       rst.type = data;

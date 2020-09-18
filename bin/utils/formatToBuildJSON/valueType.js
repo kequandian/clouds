@@ -1,3 +1,4 @@
+const { mergeObject } = require('../../utils/index');
 
 const baseValueTypeMap = {
   plain: 'plain',
@@ -20,7 +21,11 @@ function valueTypeBase(rst, type) {
   if (data) {
     if (typeof data === 'object') {
       Object.keys(data).forEach(key => {
-        rst[key] = data[key];
+        if (typeof data[key] === 'object') {
+          rst[key] = mergeObject(rst[key], data[key]);
+        } else {
+          rst[key] = data[key];
+        }
       })
     } else if (typeof data === 'string') {
       rst.valueType = data;
