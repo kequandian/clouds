@@ -22,7 +22,7 @@ const typeMap = {
   },
 };
 function formType(rst) {
-  const data = typeMap[rst.field];
+  const data = typeMap[rst.type];
 
   if (data) {
     if (typeof data === 'object') {
