@@ -91,7 +91,7 @@ entries:
 pages:
   issue: # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
     api: /api/crud/issues/issue
-    title: 
+    title:
       table: 页面名称
       new: 新增数据
       edit: 编辑数据
@@ -251,6 +251,7 @@ pages:
               type: image
             - field: money
               type: currency
+          direction: horizontal # 默认水平布局, 设置为 vertical 则垂直布局
         scope:
           - list
 
