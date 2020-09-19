@@ -91,7 +91,11 @@ entries:
 pages:
   issue: # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
     api: /api/crud/issues/issue
-    title: "页面名称"
+    title: 
+      table: 页面名称
+      new: 新增数据
+      edit: 编辑数据
+      view: 页面详情
     layout:
       table: Content ## 默认 action 位于 title 下方
       form: TitleContent ## 默认 action 位于 title 右边
