@@ -123,6 +123,8 @@ pages:
           - label: 搜索
             field: search
             type: input
+            props:
+              placeholder: 请输入姓名/电话
         tabs: # 展开分类
           field: status
           all: default # default 默认包括全部选项, none 代表没有全部选项
@@ -170,30 +172,30 @@ pages:
           outside: false # 默认为 隐藏入口
           #scope: item   # 没有定义默认为列表项操作
         ## ACTIONS
-        - title: 审核通过   ## 通地实体自定义action api
+        - title: 审核通过 ## 通地实体自定义action api
           type: action # 自定义 ACTION
           api: /api/crud/issue/issues/{id}/action/approve
           #action: approve # 同 /api/crud/issue/issues/{id}/action/approve
           #plugin: approve #与 action 二选一: 同 /api/plugin/actions/approve/issue/{id}, 即 /api/plugin/actions/{action}/{entity}/{id},
           scope: item
-          expect:   # 操作有效的条件状态
-             field: status
-             value: SUBMITTED
-        - title: 审核通过   ## 简写, 功能同上
+          expect: # 操作有效的条件状态
+            field: status
+            value: SUBMITTED
+        - title: 审核通过 ## 简写, 功能同上
           type: action # 自定义 ACTION
           #api: /api/crud/issue/issues/{id}/action/approve
-          action: approve  # 同 api: /api/crud/issue/issues/{id}/action/approve
+          action: approve # 同 api: /api/crud/issue/issues/{id}/action/approve
           #plugin: approve # action 二选一: 同 /api/plugin/actions/approve/issue/{id}, 即 /api/plugin/actions/{action}/{entity}/{id},
           scope: item
         - title: 拒绝
           type: action
-          #api: /api/meta/entity/{entity}/entities/{id}/action/cancel 
+          #api: /api/meta/entity/{entity}/entities/{id}/action/cancel
           meta: cancel # meta 状态跳转, 跳转名称包含 pass, reject, cancel, 同 api: /api/meta/entity/{entity}/entities/{id}/action/cancel
           scope: item
         ### VIEW ACTION  # 实体详情操作
         - title: 审核通过
           type: action
-          action: approve   # 同 api: /api/crud/issue/issues/{id}/action/approve
+          action: approve # 同 api: /api/crud/issue/issues/{id}/action/approve
           scope: view # 实体详情内操作
         ### BATCH ACTIONS
         - title: 审批
