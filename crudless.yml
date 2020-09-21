@@ -133,6 +133,7 @@ pages:
         ### TOP ACTIONS
         - title: 新建
           type: add # add 本质是带有初始值的 path
+          style: default # 设置按钮的颜色风格 primary secondary, 默认 default
           scope: top
         - title: 新建
           type: modal # 在弹出的模态框中完成新建, 一般用于字段数量较少的场景
@@ -165,6 +166,7 @@ pages:
           type: view # view 本质是带有初始值的 path
         - title: 删除
           type: delete
+          tips: 确定要删除吗? # scope 为 item 时有效
           outside: false # 默认为 隐藏入口
           #scope: item   # 没有定义默认为列表项操作
         ## ACTIONS
