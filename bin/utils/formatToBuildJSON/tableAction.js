@@ -7,11 +7,12 @@
  * @param {object} setting 含有用于生成 modal 的数据
  */
 function tableAction(action, pageName, outside, setting) {
-  const { title, type, options, ...rest } = action;
+  const { title, type, options, expect, ...rest } = action;
   const rst = {
     title,
     type,
     options: rest,
+    expect,
   };
   if (type) {
     rst.type = type;
