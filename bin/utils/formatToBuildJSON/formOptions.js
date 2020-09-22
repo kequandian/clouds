@@ -20,7 +20,7 @@ const typeMap = {
   image: {
     type: 'upload-image',
     options: {
-      json: 'text',
+      type: 'text',
     }
   },
 };
