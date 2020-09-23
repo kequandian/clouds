@@ -78,10 +78,10 @@ function formatTableFields(field, map) {
  * @param {object} yaml 
  */
 function yamlToBuildJSON(yaml, pageName) {
-  const { api, title = pageName, layout, list = {}, form = {}, fields } = yaml;
-  const { columns = 2, viewExtra = [], viewItems = {} } = form;
+  const { api, title = pageName, layout, list = {}, form = {}, view, fields } = yaml;
+  const { columns = 2 } = form;
   const { actions = [], search = {} } = list;
-  const requiredField = ['api', 'layout', 'fields'];
+  const requiredField = ['api', 'layout', 'view', 'fields'];
 
   requiredField.forEach(key => {
     if (yaml[key] === undefined) {
@@ -94,7 +94,6 @@ function yamlToBuildJSON(yaml, pageName) {
     list: [],
     new: [],
     edit: [],
-    view: [],
   };
   const fieldsSourceFunc = {
     list(key, opt) {
@@ -204,9 +203,7 @@ function yamlToBuildJSON(yaml, pageName) {
     tableFields: fieldsSource.list,
     createFields: fieldsSource.new,
     updateFields: fieldsSource.edit,
-    viewFields: fieldsSource.view,
-    viewOthers: viewExtra,
-    viewItems: viewItems,
+    viewConfig: view,
   };
   return data;
 }

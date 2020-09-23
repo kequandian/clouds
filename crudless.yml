@@ -95,7 +95,6 @@ pages:
       table: 页面名称
       new: 新增数据
       edit: 编辑数据
-      view: 页面详情
     layout:
       table: Content ## 默认 action 位于 title 下方
       form: TitleContent ## 默认 action 位于 title 右边
@@ -208,24 +207,33 @@ pages:
 
     form:
       columns: 1 # 表单将按照两列的形式排版显示
-      viewItems: # 以带有图片的卡片列表的形式渲染子项
-        title: 子项标题
-        api: # 从该 api 获取子项数据
-        map:
-          title: "<title> 所属人: <name>"
-          subTitle: ""
-          image: cover
-          imageTitle: ""
-        format:
-          - "联系方式: <phone>/<email>"
-          - "简介: <note>"
-        operation:
-          - title: 跳转页面
-            type: path
-            options:
-              outside: true
-              path: /page/myPage
-      viewExtra:
+
+    view:
+      # 目前支持 plain cardList statusLog 这几种 type
+      left:
+        - title: 详情页面
+          type: plain
+          fields:
+            - label: 名称
+              field: name
+        - title: 子项标题 # 以带有图片的卡片列表的形式渲染子项
+          type: cardList
+          api: # 从该 api 获取子项数据
+          map:
+            title: "<title> 所属人: <name>"
+            subTitle: ""
+            image: "<cover>"
+            imageTitle: ""
+          format:
+            - "联系方式: <phone>/<email>"
+            - "简介: <note>"
+          operation:
+            - title: 跳转页面
+              type: path
+              options:
+                outside: true
+                path: /page/myPage
+      right:
         - title: 联系方式
           type: plain
           fields:
@@ -236,7 +244,7 @@ pages:
             - label: 微信
               field: weChat
         - title: 订单状态
-          type: statusList
+          type: statusLog
           api: /api/getLogs/[id] # 这里的动态参数 id 应该使用 方括号
 
     fields:
@@ -251,7 +259,6 @@ pages:
             message: 请输入名称
         scope:
           - list
-          - view
           - new
           - edit
         # 数据字段属性
@@ -296,7 +303,6 @@ pages:
           1: 女
         scope:
           - list
-          - view
           - new
           - edit
         sql:
@@ -317,7 +323,6 @@ pages:
           #  message: 邮箱地址格式不正确
         scope:
           - list
-          - view
           - new
           - edit
         # 数据字段属性
@@ -338,7 +343,6 @@ pages:
             color: "#1890ff"
         scope: #  不能直接编辑状态
           - list
-          - view
           - new
         sql:
           type: varchar(25)
@@ -358,7 +362,6 @@ pages:
         type: date
         scope:
           - list
-          - view
         sql:
           type: datetime
           notnull: true
