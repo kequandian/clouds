@@ -79,7 +79,7 @@ function formatTableFields(field, map) {
  */
 function yamlToBuildJSON(yaml, pageName) {
   const { api, title = pageName, layout, list = {}, form = {}, fields } = yaml;
-  const { columns = 2, viewExtra = [] } = form;
+  const { columns = 2, viewExtra = [], viewItems = {} } = form;
   const { actions = [], search = {} } = list;
   const requiredField = ['api', 'layout', 'fields'];
 
@@ -206,6 +206,7 @@ function yamlToBuildJSON(yaml, pageName) {
     updateFields: fieldsSource.edit,
     viewFields: fieldsSource.view,
     viewOthers: viewExtra,
+    viewItems: viewItems,
   };
   return data;
 }

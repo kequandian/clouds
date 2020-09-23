@@ -208,6 +208,23 @@ pages:
 
     form:
       columns: 1 # 表单将按照两列的形式排版显示
+      viewItems: # 以带有图片的卡片列表的形式渲染子项
+        title: 子项标题
+        api: # 从该 api 获取子项数据
+        map:
+          title: "<title> 所属人: <name>"
+          subTitle: ""
+          image: cover
+          imageTitle: ""
+        format:
+          - "联系方式: <phone>/<email>"
+          - "简介: <note>"
+        operation:
+          - title: 跳转页面
+            type: path
+            options:
+              outside: true
+              path: /page/myPage
       viewExtra:
         - title: 联系方式
           type: plain
@@ -220,6 +237,7 @@ pages:
               field: weChat
         - title: 订单状态
           type: statusList
+          api: /api/getLogs/[id] # 这里的动态参数 id 应该使用 方括号
 
     fields:
       ## name 字段
