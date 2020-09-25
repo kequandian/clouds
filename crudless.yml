@@ -163,6 +163,14 @@ pages:
           type: modal # 在弹出的模态框中完成编辑, 一般用于字段数量较少的场景
           modalTitle: 编辑数据 # 模态框的标题
           modalWidth: 760 # 模态框的宽度
+          modal:
+            fields: # 默认会自动填入对应的编辑字段, 也可以这样手动覆盖
+              - label: 名称
+                type: input
+                field: name
+            api: # 默认会自动填入对应的 CRUD api, 也可以这样手动覆盖
+              getAPI: /api/crud/(id)/action
+              updateAPI: /api/crud/(id)/action
         - title: 详情
           type: view # view 本质是带有初始值的 path
         - title: 删除

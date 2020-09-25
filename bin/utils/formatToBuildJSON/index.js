@@ -48,7 +48,7 @@ function createMapObj(map) {
  * @param {object} mapObj 
  */
 function formatFormFields(field, map) {
-  const { sql, ...rst } = field;
+  const { sql, valueType, ...rst } = field;
 
   formOptionEllipsis(rst, map);
   formOptionMap(rst, map);

@@ -7,7 +7,7 @@
  * @param {object} setting 含有用于生成 modal 的数据
  */
 function tableAction(action, pageName, outside, setting) {
-  const { title, type, options, expect, ...rest } = action;
+  const { title, type, options, expect, modal = {}, ...rest } = action;
   const rst = {
     title,
     type,
@@ -32,6 +32,7 @@ function tableAction(action, pageName, outside, setting) {
   }
 
   if (type === 'modal') {
+    const { fields, api } = modal;
     rst.options.items = [
       {
         component: 'Form',
@@ -40,14 +41,17 @@ function tableAction(action, pageName, outside, setting) {
           layoutConfig: {
             value: Array(setting.columns).fill(~~(24 / setting.columns))
           },
-          API: outside === undefined ? {
-            createAPI: setting.createAPI,
-          } : {
-              getAPI: setting.getAPI.replace('[id]', '(id)'),
-              updateAPI: setting.updateAPI.replace('[id]', '(id)'),
-            },
-          fields: outside === undefined ? setting.createFields
-            : setting.updateFields
+          API: api || (
+            outside === undefined ? {
+              createAPI: setting.createAPI,
+            } : {
+                getAPI: setting.getAPI.replace('[id]', '(id)'),
+                updateAPI: setting.updateAPI.replace('[id]', '(id)'),
+              }),
+          fields: fields || (
+            outside === undefined ? setting.createFields
+              : setting.updateFields
+          )
         }
       }
     ]
