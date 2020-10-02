@@ -27,6 +27,37 @@ meta:
   #     developer: ling #前端开发者名称
   #     js_page_url: http://jar.smallsaas.cn/repository/issue #前端面页
 
+data:
+   field-config:
+      - name: shedule_config
+        value: 排期配置
+      - name: sms_config
+        value: 短信通知配置
+      - name: defaultImage
+        group: shedule_config
+        description: 默认图片配置
+        value: https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1600766787&di=dc12b1588ebe5757206bc55122223ef7&src=http://a0.att.hudong.com/56/12/01300000164151121576126282411.jpg
+      - name: CREATED_PLAN_SMS_NOTIFY
+        group: sms_config
+        description: 广告主生成订单通知给店小二
+        value: SMS_203677187
+      - name: CREATED_ORDER_SMS_NOTIFY
+        group: sms_config
+        description: 订单审核通过发给商务
+        value: SMS_203677196
+      - name: DISTRIBUTED_ORDER_SMS_NOTIFY
+        group: sms_config
+        description: 订单生成后送给影院执行人
+        value: SMS_203677243
+      - name: REMIND_ORDER_SMS_NOTIFY
+        group: sms_config
+        description: 倒计时前一天通知影院执行人
+        value: SMS_203677248
+      - name: PUBLISHED_ORDER_SMS_NOTIFY
+        group: sms_config
+        description: 执行后提醒影城上传结案报告
+        value: SMS_203677255
+
 auth:
   ## wechat, github, account
   sso: github
@@ -86,7 +117,7 @@ entries:
     sub_entries:
       - dev_name: ticket_issues
         label: 问题管理
-        path: /issues/issue # 需要匹配pages/下面的路径
+        path: /issues/issue # 需要匹配pages/下面的路径      
 
 pages:
   issue: # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
