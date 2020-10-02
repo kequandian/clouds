@@ -142,10 +142,10 @@ pages:
 
     cg: #自动代码配置
       master: t_issue
-      #group: t_issue_category
+      master-id: issue_id;issue_id
       slaves:
-        - t_issue_item:items
-        - t_issue_tag:tags
+        - t_issue_item
+        - t_issue_attachments
 
     list:
       search: # 搜索条件
