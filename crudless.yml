@@ -93,31 +93,38 @@ entries:
     label: 产品管理
     path: /products
     icon: static/product_entry.png # 服务组可配置图标
+    permissions: 'products.view'
     #app_id: demo  # 用于授权 (暂时忽略)
     #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
     sub_entries:
       - dev_name: product_type
         path: /products/types
         label: 产品分类
+        permissions: 'productType.view'
         #app_id: demo  # 用于授权 (暂时忽略)
         #app_secret: AJOI7800AFJEO7AOFE   # 用于授权 (暂时忽略)
       - dev_name: product_tag
         label: 产品标签
         path: /products/tags
+        permissions: 'productTag.view'
       - dev_name: product
         label: 产品
         path: /products/product
+        permissions: 'product.view'
   - dev_name: orders
     label: 单订管理
     icon: static/orders_entry.png
+    permissions: 'orders.view'
   - dev_name: ticket_mgr
     label: 工单管理
     icon: static/ticket_entry.png
     path: /issues # 需要匹配pages/下面的路径，用于面包屑显示
+    permissions: 'ticket.view'
     sub_entries:
       - dev_name: ticket_issues
         label: 问题管理
         path: /issues/issue # 需要匹配pages/下面的路径      
+        permissions: 'issue.view'
 
 pages:
   issue: # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
