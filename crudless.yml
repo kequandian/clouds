@@ -182,7 +182,8 @@ pages:
         - title: 导出
           type: export
           api: /api/io/excel/teamReward
-          data: teamReward
+          data: 
+            sql: SELECT '申请' as '名称',(CASE Open WHEN 'Open' THEN '打开' WHEN '2' THEN '提交' END) as '状态' FROM (select 'Open') t
           scope: top
         - title: 导入
           type: import
@@ -428,19 +429,3 @@ pages:
           type: varchar(255)
           comment: "备注"
 
-initialize: #执行初始化(仅一次)
-  - teamReward
-  - teamState #状态机
-
----
-profiles:
-  teamReward:
-    type: export-excel
-    sql: SELECT '申请' as '名称',(CASE Open WHEN 'Open' THEN '打开' WHEN '2' THEN '提交' END) as '状态' FROM (select 'Open') t
-  teamState:
-    type: meta
-    config:
-      - from: START
-        to: OPEN
-      - from: OPEN
-        to: SUBMITTED
