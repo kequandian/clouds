@@ -125,7 +125,11 @@ entries:
         label: 问题管理
         path: /issues/issue # 需要匹配pages/下面的路径      
         permissions: 'issue.view'
-
+  - dev_name: agent_report
+    label: 股东毛利净利报表
+    path: /agent/agentReport
+    permissions: 'agentReport.view'
+    
 pages:
   issue: # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
     api: /api/crud/issues/issue
@@ -429,3 +433,33 @@ pages:
           type: varchar(255)
           comment: "备注"
 
+  ## 报表页
+  agentReport:
+    api: /api/adm/stat/meta/agentReport
+    title:
+      table: 股东毛利净利报表
+    layout:
+      table: Content ## 默认 action 位于 title 下方
+      form: TitleContent ## 默认 action 位于 title 右边
+    description: "Agent Statistic Data Report"
+    service_provider: native # 默认native-通过配置sql定义生成, external-拼接外部服务
+
+    features: # 实体能力(capability)
+      #- saas # 具备 saas 能力，默认增加字段 org_id, org_tag
+      #- tag # 具备 tag 功能
+      #- image # 具备 image snapshot 功能
+      #- eav # 自定义字段
+      #- category # 一般分组，通过 crud-category
+      #- group    #独立表进行分组, 与category只能选其一
+      - report
+
+    list:
+      actions:
+        - title: 导出
+          type: export-excel
+          api: /api/io/excel/export/股东毛利净利
+          scope: top
+        - title: 打印
+          type: export-pdf
+          api: /api/io/pdf/export/股东毛利净利
+          scope: top
