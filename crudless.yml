@@ -133,6 +133,7 @@ entries:
 pages:
   issue: # 与匹配pages/ 下面的终端路径一致，即 pages/issues/issue
     api: /api/crud/issues/issue
+    path: /issues/issue
     title:
       table: 页面名称
       new: 新增数据
@@ -436,6 +437,7 @@ pages:
   ## 报表页
   agentReport:
     api: /api/adm/stat/meta/agentReport
+    path: /reports/agentReport
     title:
       table: 股东毛利净利报表
     layout:
