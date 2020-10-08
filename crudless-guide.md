@@ -11,13 +11,13 @@ prices:
         type: currency
         options:
           style:
-            fontWeight: 900
+            fontWeight: 900      
       - field: retailPrice
         type: currency
         options:
           symbol: "刊例价: ￥"
           style:
-            color: "#888"
+            color: "#888"       
     direction: vertical
   scope:
     - list
@@ -25,6 +25,20 @@ prices:
 
 #### 如何配置列表项字段进行页面跳转
 ```
+ planNumber:
+        label: 计划单号
+        type: complex        
+        options:
+          fields:
+            - field: planNumber
+              type: path      #页面跳转的类型配置为：path
+              options:
+                path: "/advertismanage/advertingPlan/advertingPlan-view"    #  跳转到页面的api        
+                query:
+                  id: planId     #跳转到页面对应的id字段
+        scope:
+          - list
+          - view
 ```
 
 #### 如何配置列表项操作执行页面跳转
