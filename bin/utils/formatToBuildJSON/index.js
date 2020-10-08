@@ -111,7 +111,7 @@ function yamlToBuildJSON(yaml, pageName) {
     }
   }
 
-  Object.keys(fields).forEach(field => {
+  fields && Object.keys(fields).forEach(field => {
     const { type, options, scope, sql, ...rest } = fields[field];
     const isMap = ['radio', 'select', 'checkbox'].includes(type);
 

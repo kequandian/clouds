@@ -458,10 +458,10 @@ pages:
     list:
       actions:
         - title: 导出
-          type: export-excel
+          type: export
           api: /api/io/excel/export/股东毛利净利
           scope: top
         - title: 打印
-          type: export-pdf
+          type: export
           api: /api/io/pdf/export/股东毛利净利
           scope: top
