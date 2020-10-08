@@ -29,6 +29,7 @@ function genMenu(arr, items) {
         const data = {
           name: item.label,
           path: item.path,
+          permissions: item.permissions,
         }
         if (Array.isArray(item.sub_entries)) {
           data.items = [];
