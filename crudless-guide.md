@@ -44,6 +44,13 @@ prices:
 #### 如何配置列表项操作执行页面跳转
 ```
 actions:
+  - title: 创建计划
+    type: path #path为页面跳转类型
+    outside: true
+    path: /advertismanage/advertingPlan/advertingPlan-help #跳转到的页面路径
+    query:
+      advertiserId: id #跳转到指定页面需要传递的id
+    scope: item
   - 
 ```
 
