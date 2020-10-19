@@ -73,6 +73,29 @@ function yamlToSQL(data) {
   return genSQl(master, fieldsFormat);
 }
 
+function yamlToReportSQL(pageName, yamlData, sqlData) {
+  const { data } = yamlData;
+  const { type, search, tips } = data;
+
+
+  return `INSERT INTO \`st_statistics_meta\` (
+  \`field\`,
+  \`query_sql\`,
+  \`type\`,
+  \`search\`,
+  \`tips\`
+)
+VALUES
+  (
+    ${pageName ? `'${pageName}'` : 'NULL'},
+    ${sqlData ? `'${sqlData.replace(/\'/g, '\\\'')}'` : 'NULL'},
+    ${type ? `'${type}'` : 'NULL'},
+    ${search ? `'${search}'` : 'NULL'},
+    ${tips ? `'${tips}'` : 'NULL'},
+  ); `
+}
+
 module.exports = {
   yamlToSQL,
+  yamlToReportSQL,
 }
