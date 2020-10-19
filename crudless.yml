@@ -230,6 +230,7 @@ pages:
           #plugin: approve #与 action 二选一: 同 /api/plugin/actions/approve/issue/{id}, 即 /api/plugin/actions/{action}/{entity}/{id},
           scope: item
           expect: # 操作有效的条件状态
+            permission: ordertask.edit  ##操作按钮的有效条件
             field: status
             value: SUBMITTED
         - title: 审核通过 ## 简写, 功能同上
