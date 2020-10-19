@@ -9,8 +9,10 @@ module.exports = function genSQL(can, outputDir, pages) {
   const sqlContent = [];
 
   Object.keys(pages).forEach(pageName => {
-    const sql = yamlToSQL(pages[pageName]);
-    sqlContent.push(sql);
+    if (pages[pageName].cg) {
+      const sql = yamlToSQL(pages[pageName]);
+      sqlContent.push(sql);
+    }
   })
 
   const sqlFilePath = path.join(outputDir, `crudless.sql`);

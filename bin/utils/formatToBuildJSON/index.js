@@ -200,7 +200,7 @@ function yamlToBuildJSON(yaml, pageName) {
     searchFields: searchFields(search.fields),
     tableActions: tableActions,
     tableOperation: tableOperation,
-    tableFields: fieldsSource.list,
+    tableFields: fieldsSource.list, // 如果为空数组, 则表明是自动报表页
     createFields: fieldsSource.new,
     updateFields: fieldsSource.edit,
     viewConfig: view,
