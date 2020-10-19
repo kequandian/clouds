@@ -203,6 +203,8 @@ pages:
           type: edit # edit 本质是带有初始值的 path
           outside: true # 操作入口显示在外面
           scope: item # 默认为列表项操作
+          expect:
+            permission: advertingplan.edit   ##permission后面的字段是权限id后台提供，结合系统管理的权限控制
         - title: 编辑
           type: modal # 在弹出的模态框中完成编辑, 一般用于字段数量较少的场景
           modalTitle: 编辑数据 # 模态框的标题
