@@ -441,30 +441,29 @@ pages:
   agentReport:
     api: /api/adm/stat/meta/agentReport
     path: /reports/agentReport
+    type: report
     title:
       table: 股东毛利净利报表
-    layout:
-      table: Content ## 默认 action 位于 title 下方
-      form: TitleContent ## 默认 action 位于 title 右边
     description: "Agent Statistic Data Report"
     service_provider: native # 默认native-通过配置sql定义生成, external-拼接外部服务
 
-    features: # 实体能力(capability)
-      #- saas # 具备 saas 能力，默认增加字段 org_id, org_tag
-      #- tag # 具备 tag 功能
-      #- image # 具备 image snapshot 功能
-      #- eav # 自定义字段
-      #- category # 一般分组，通过 crud-category
-      #- group    #独立表进行分组, 与category只能选其一
-      - report
+    ## 数据包括查询语句，以及数据类型，查询条件
+    data:
+       sql: agentReport.sql
+       columns: "[S,D]"
+       query: ""
 
     list:
       actions:
         - title: 导出
-          type: export
-          api: /api/io/excel/export/股东毛利净利
+          type: export-excel
+          api: /api/io/excel/export/agentReport
           scope: top
+          expect:
+            permission: agentReport.export
         - title: 打印
-          type: export
-          api: /api/io/pdf/export/股东毛利净利
+          type: export-pdf
+          api: /api/io/pdf/export/agentReport
           scope: top
+          expect:
+            permission: agentReport.print
