@@ -34,7 +34,8 @@ data:
     - name: sms_config
       value: 短信通知配置
     - name: defaultImage
-      group: shedule_config
+      group: shedule_config # 该配置属于某个组下, 必须要先在前面定义了对应的 group
+      title: 基础图片
       description: 默认图片配置
       value: https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1600766787&di=dc12b1588ebe5757206bc55122223ef7&src=http://a0.att.hudong.com/56/12/01300000164151121576126282411.jpg
     - name: CREATED_PLAN_SMS_NOTIFY

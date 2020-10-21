@@ -13,14 +13,16 @@ const genSQL = require('./gen/genSQL');
 const genMenuFile = require('./gen/genMenuFile');
 const genCGFile = require('./gen/genCGFile');
 const genThemeFile = require('./gen/genThemeFile');
+const genConfigSQL = require('./gen/genConfigSQL');
 
 const options = {
   '-f': undefined,
-  '--json': undefined,
-  '--sql': undefined,
+  '--json': undefined, // 生成页面的 json
+  '--sql': undefined, // 页面的 sql (CRUD, 自动报表)
   '--menu': undefined,
   '--cg': undefined,
   '--theme': undefined,
+  '--config': undefined, // 项目的 系统配置,数据字典 sql
   '--input': '',
   '--output': '',
 };
@@ -85,5 +87,6 @@ function genFile(inputPath) {
         .then(_ => genMenuFile(!options["--menu"], outputDir, entries))
         .then(_ => genCGFile(!options["--cg"], outputDir, pages))
         .then(_ => genThemeFile(!options["--theme"], outputDir, theme))
+        .then(_ => genConfigSQL(!options["--config"], outputDir, yaml.data))
     })
 }

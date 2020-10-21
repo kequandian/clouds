@@ -95,7 +95,23 @@ VALUES
   ); `
 }
 
+function yamlToConfigSQL(groupName, groupData) {
+  const { items } = groupData;
+  return `INSERT INTO \`t_config_field_group\` ( \`pid\`, \`lang\`, \`name\`, \`comment\`, \`sort\`, \`type\`, \`org_id\`) 
+VALUES ( NULL, 'zh', '${groupName}', '${groupData.comment}', NULL, 'CONFIG', '100000000000000010');
+
+set @groupNameGroupId = @@identity;
+
+${items.map(item => {
+    return `INSERT INTO \`t_config_field\` ( \`field\`, \`group_id\`, \`lang\`, \`name\`, \`value\`, \`data_type\`, \`description\`, \`org_id\`) SELECT
+'${item.name}', @groupNameGroupId, 'zh', '${item.title}', '${item.value}', 'STRING', '${item.description}', '100000000000000010';
+`
+  })}
+`
+}
+
 module.exports = {
   yamlToSQL,
   yamlToReportSQL,
+  yamlToConfigSQL,
 }
