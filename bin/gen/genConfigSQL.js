@@ -22,7 +22,8 @@ module.exports = function genConfigSQL(can, outputDir, data) {
           });
         } else {
           groupMap[item.name] = {
-            comment: item.value,
+            name: item.value,
+            description: item.description,
             items: []
           }
         }

@@ -98,7 +98,7 @@ VALUES
 function yamlToConfigSQL(groupName, groupData) {
   const { items } = groupData;
   return `INSERT INTO \`t_config_field_group\` ( \`pid\`, \`lang\`, \`name\`, \`comment\`, \`sort\`, \`type\`, \`org_id\`) 
-VALUES ( NULL, 'zh', '${groupName}', '${groupData.comment}', NULL, 'CONFIG', '100000000000000010');
+VALUES ( NULL, 'zh', '${groupData.name}', '${groupData.description}', NULL, 'CONFIG', '100000000000000010');
 
 set @groupNameGroupId = @@identity;
 
