@@ -44,7 +44,7 @@ function valueTypeMap(rst, map) {
   if (fieldMap) {
     const data = {};
     const color = {};
-    rst.valueType = 'map';
+    // rst.valueType = 'map';
     Object.keys(fieldMap).forEach(key => {
       data[key] = fieldMap[key].label || fieldMap[key];
       if (fieldMap[key].color) {
