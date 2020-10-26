@@ -14,6 +14,7 @@ const genMenuFile = require('./gen/genMenuFile');
 const genCGFile = require('./gen/genCGFile');
 const genThemeFile = require('./gen/genThemeFile');
 const genConfigSQL = require('./gen/genConfigSQL');
+const checkFields = require('./check/checkFields');
 
 const options = {
   '-f': undefined,
@@ -23,6 +24,7 @@ const options = {
   '--cg': undefined,
   '--theme': undefined,
   '--config': undefined, // 项目的 系统配置,数据字典 sql
+  '--swagger': '', // 
   '--input': '',
   '--output': '',
 };
@@ -81,6 +83,13 @@ function genFile(inputPath) {
     .then(data => {
       const yaml = Yaml.parse(data.split('---')[0]);
       const { theme, entries, pages } = yaml;
+
+      if (options['--swagger']) {
+        const swaggerPath = path.join(cwd, options['--swagger']);
+
+        checkFields(outputDir, swaggerPath, pages);
+        return false;
+      }
 
       return genJSON(!options["--json"], outputDir, pages)
         .then(_ => genSQL(!options["--sql"], outputDir, pages))
