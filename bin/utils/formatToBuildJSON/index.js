@@ -26,14 +26,14 @@ function createMapObj(map) {
     const mapData = {
       map: {},
       options: [],
-      corlo: {},
+      color: {},
     };
     Object.keys(map[key]).forEach(k => {
       if (typeof map[key][k] === 'string') {
         mapData.map[k] = map[key][k];
       } else {
         mapData.map[k] = map[key][k].label;
-        mapData.corlo[k] = map[key][k].color;
+        mapData.color[k] = map[key][k].color;
       }
       mapData.options.push({ label: map[key][k], value: k });
     })

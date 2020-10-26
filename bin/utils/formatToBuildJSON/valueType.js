@@ -48,13 +48,13 @@ function valueTypeMap(rst, map) {
     Object.keys(fieldMap).forEach(key => {
       data[key] = fieldMap[key].label || fieldMap[key];
       if (fieldMap[key].color) {
-        rst.valueType = 'tag';
+        rst.valueType = ['tag', 'dot'].includes(rst.valueType) ? rst.valueType : 'tag';
         color[key] = fieldMap[key].color || '';
       }
     })
     rst.options = {
       map: data,
-      color: rst.valueType === 'tag' ? color : undefined,
+      color: ['tag', 'dot'].includes(rst.valueType) ? color : undefined,
     };
   }
 }
