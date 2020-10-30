@@ -6,7 +6,7 @@ const path = require('path');
  * @returns Promise
  */
 module.exports = function format(swaggerFilePath) {
-  const swaggerFiletPath = `${path.dirname(swaggerFilePath)}/swagger.json`;
+  const swaggerFiletPath = path.join(swaggerFilePath, 'swagger.json');
 
   return fs.readJSON(swaggerFiletPath).then((jsonData) => {
     const rstData = {};
@@ -29,7 +29,7 @@ module.exports = function format(swaggerFilePath) {
       const current = rstData[API];
       checkRef(current, jsonData);
     });
-    return fs.outputFile(`${path.dirname(swaggerFilePath)}/format.json`, JSON.stringify(rstData, null, 2), {
+    return fs.outputFile(path.join(swaggerFilePath, 'format.json'), JSON.stringify(rstData, null, 2), {
       encoding: 'utf-8'
     });
   });

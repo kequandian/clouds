@@ -17,7 +17,10 @@ module.exports = function checkFields(outputDir, swaggerPath, pages) {
       });
 
       const checkFilePath = path.join(outputDir, `check.json`);
-      return fs.writeJson(checkFilePath, rst, { spaces: 2 });
+      return fs.writeJson(checkFilePath, rst, { spaces: 2 })
+        .then(_ => {
+          console.log(`outFile: ${checkFilePath}`)
+        })
     })
 }
 
