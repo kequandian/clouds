@@ -32,8 +32,9 @@ function getCheckData(page, swaggerPath) {
     }
     let swaggerField = {};
     if (Array.isArray(data.get.fields)) {
-      data.get.fields.forEach(key => {
-        swaggerField[key] = true;
+      data.get.fields.forEach(item => {
+        const { field } = item || {};
+        swaggerField[field] = true;
       })
     }
 
