@@ -145,6 +145,13 @@ pages:
       form: TitleContent ## 默认 action 位于 title 右边
     description: "API for Issues"
     service_provider: native # 默认native-通过配置sql定义生成, external-拼接外部服务
+    
+    ## 开发阶段自定义界面配置 NamedCart
+    dev:
+      component: 
+        name: DevPad
+        alignment: top  # [top, bottom, left, right]
+        width: auto # [200em]
 
     features: # 实体能力(capability)
       - saas # 具备 saas 能力，默认增加字段 org_id, org_tag
