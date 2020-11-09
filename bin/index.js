@@ -85,7 +85,10 @@ function genFile(inputPath) {
       const { theme, entries, pages } = yaml;
 
       if (options['--swagger']) {
-        const swaggerPath = path.join(cwd, options['--swagger']);
+        let swaggerPath = path.join(cwd, options['--swagger']);
+        if (path.isAbsolute(options['--swagger'])) {
+          swaggerPath = options['--swagger'];
+        }
 
         checkFields(outputDir, swaggerPath, pages);
         return false;
