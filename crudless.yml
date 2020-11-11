@@ -203,6 +203,15 @@ pages:
           type: import
           name: importScopeName
           scope: top
+        - title: 导入 
+          scope: top
+          type: import-modal   #导入以模态框的形式弹出
+          modalTitle: 导入    
+          modalWidth: 600
+          templateUrl: /attachments/影片排期.xlsx   #导入模板所在的 url
+          name: ca_film_schedule    #后端的导入的 name，会自动填充在 /api/io/excel/import/<name>（后端提供）
+          expect:
+            permission: filmschedule.new  
         - title: 打印
           type: print #打印
           #api: /api/io/undefined
