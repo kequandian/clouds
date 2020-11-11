@@ -314,13 +314,13 @@ pages:
             - label: 名称
               field: name
         - title: 子项标题 # 以带有图片的卡片列表的形式渲染子项
-          type: cardList
+          type: cardList    #如不需要图片，只以卡片列表的形式显示，则用card
           api: # 从该 api 获取子项数据
           map:
-            title: "<title> 所属人: <name>"
-            subTitle: ""
-            image: "<cover>"
-            imageTitle: ""
+            title: "<title> 所属人: <name>"     #卡片的标题
+            subTitle: ""                       #标题旁的内容填写，如没有则填false
+            image: "<cover>"                   #卡片下的图片，如没有则填false
+            imageTitle: ""                     #图片胖的标题，如没有则填false
           format:
             - "联系方式: <phone>/<email>"
             - "简介: <note>"
@@ -343,6 +343,16 @@ pages:
         - title: 订单状态
           type: statusLog
           api: /api/getLogs/[id] # 这里的动态参数 id 应该使用 方括号
+          operation:        #订单状态列表下的操作按钮
+            - title: 确认结案
+              type: request
+              options:
+                tips: 确定确认结案吗？
+                method: get
+                outside: true
+                API: /api/crud/orderTask/orderTasks/(id)/action/verify
+                button:      #表示按钮的风格，跟前面的action操作按钮中的style一样
+                  type: primary
 
     fields:
       ## name 字段
