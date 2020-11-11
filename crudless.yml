@@ -259,11 +259,35 @@ pages:
           action: approve # 同 api: /api/crud/issue/issues/{id}/action/approve
           #plugin: approve # action 二选一: 同 /api/plugin/actions/approve/issue/{id}, 即 /api/plugin/actions/{action}/{entity}/{id},
           scope: item
+          expect:      #表示要同时满足以下条件才会出现，status为PENDING_APPROVAL时，且有assistantName的时候该审核通过按钮才会出现
+            field:
+              - status           
+              - assistantName
+            value:
+              - PENDING_APPROVAL
+              - IS_NOT_NULL       #表示assistantName的值为非空
         - title: 拒绝
           type: action
           #api: /api/meta/entity/{entity}/entities/{id}/action/cancel
           meta: cancel # meta 状态跳转, 跳转名称包含 pass, reject, cancel, 同 api: /api/meta/entity/{entity}/entities/{id}/action/cancel
           scope: item
+        - title: 不通过
+          modalTitle: 拒绝原因
+          modalWidth: 550
+          outside: true
+          type: modal        #弹出填写不通过原因的模态框
+          modal:
+            component: "Form"
+            fields:
+              - label: 拒绝原因
+                type: text-area
+                span: 24
+                field: note
+                rules:
+                  - type: required
+            api:
+              updateAPI: /api/crud/advertiser/advertisers/pass/(id)/REFUSE 
+          scope: item    
         ### VIEW ACTION  # 实体详情操作
         - title: 审核通过
           type: action
