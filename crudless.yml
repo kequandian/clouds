@@ -330,6 +330,30 @@ pages:
               options:
                 outside: true
                 path: /page/myPage
+        - title: 结案         #详情页面上传文件配置，可支持多个文件上传
+          type: zele
+          canExtraData: true
+          config:
+            items:
+              - component: "Form"
+                config:
+                  layout: Grid
+                  goBack: false
+                  API:
+                    createAPI: /api/crud/orderTask/orderTasks/[id]/action/provides
+                  fields:
+                    - field: _group
+                      value: 结案文件
+                      type: group
+                    - label:
+                      field: files
+                      type: upload-file
+#                      rules:
+#                        - type: required
+#                          message: 请上传结案文件！
+                    - label:
+                      field: fileName
+                      type: hidden        
       right:
         - title: 联系方式
           type: plain
