@@ -58,8 +58,36 @@ data:
     - name: PUBLISHED_ORDER_SMS_NOTIFY
       group: sms_config
       description: 执行后提醒影城上传结案报告
-      value: SMS_203677255
-
+      value: SMS_203677255   
+  permission:
+      - name: 第二层权限组
+        identifier: second-permission
+        item:
+          - name: 第三层权限组
+            identifier: third-permisson
+            item:
+            - name: 查看权限
+              identifier: perm.view
+            - name: 编辑权限
+              identifier: perm.edit
+            - name: 新增权限
+              identifier: perm.add
+            - name: 删除权限
+              identifier: perm.del
+      - name: 第二层权限组2
+        identifier: second-permisson2
+        item:
+        - name: 第三层权限组
+          identifier: third-permisson2
+          item:
+            - name: 查看权限
+              identifier: thisperm.view
+            - name: 编辑权限
+              identifier: perm.edit
+            - name: 新增权限
+              identifier: perm.add
+            - name: 删除权限
+              identifier: perm.del
 auth:
   ## wechat, github, account
   sso: github
