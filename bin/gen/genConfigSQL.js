@@ -39,6 +39,6 @@ module.exports = function genConfigSQL(can, outputDir, data) {
   }
   const sqlFilePath = path.join(outputDir, `config.sql`);
 
-  return fs.writeFile(sqlFilePath, sqlContent)
+  return fs.writeFile(sqlFilePath, sqlContent.join(''))
     .then(_ => console.log(`outConfigSQLPath: `, sqlFilePath))
 }
