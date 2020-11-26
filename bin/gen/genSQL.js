@@ -26,6 +26,6 @@ module.exports = function genSQL(can, outputDir, pages) {
 
   const sqlFilePath = path.join(outputDir, `crudless.sql`);
 
-  return fs.writeFile(sqlFilePath, sqlContent)
+  return fs.writeFile(sqlFilePath, sqlContent.join(''))
     .then(_ => console.log(`outSQLPath: `, sqlFilePath))
 }
