@@ -110,8 +110,39 @@ ${items.map(item => {
 `
 }
 
+function yamlToPermSQL(data) {
+  const rst = [
+    `INSERT INTO \`sys_perm_group\` (\`id\`,\`org_id\`, \`pid\`, \`identifier\`, \`name\`) VALUES (\`100000000000000001\`,'100000000000000010', NULL, 'root', '权限管理');`,
+  ];
+
+  data.forEach(i => {
+    const { name, identifier, item } = i;
+    rst.push(`INSERT INTO \`sys_perm_group\` ( \`org_id\`, \`pid\`, \`identifier\`, \`name\`) SELECT '100000000000000010', '100000000000000001', '${identifier}', '${name}';`);
+
+    if (Array.isArray(item)) {
+      item.forEach(i => {
+        const { name, identifier, item } = i;
+        rst.push('set @pId = @@identity;');
+        rst.push(`INSERT INTO \`sys_perm_group\` ( \`org_id\`, \`pid\`, \`identifier\`, \`name\`) SELECT '100000000000000010', @pId, '${identifier}', '${name}';`);
+
+        if (Array.isArray(item)) {
+          rst.push('set @seId = @@identity;');
+          item.forEach(i => {
+            const { name, identifier } = i;
+            rst.push(`INSERT INTO \`sys_perm\` ( \`group_id\`, \`identifier\`, \`name\`) SELECT @seId, '${identifier}', '${name}'`);
+          })
+
+        }
+      })
+    }
+  })
+
+  return rst.join('\n');
+}
+
 module.exports = {
   yamlToSQL,
   yamlToReportSQL,
   yamlToConfigSQL,
+  yamlToPermSQL,
 }

@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
-const { yamlToConfigSQL } = require('../utils/formatToSQL');
+const { yamlToConfigSQL, yamlToPermSQL } = require('../utils/formatToSQL');
 
 module.exports = function genConfigSQL(can, outputDir, data) {
   if (can || !data) {
@@ -35,6 +35,11 @@ module.exports = function genConfigSQL(can, outputDir, data) {
         );
       })
 
+    }
+    if (Array.isArray(data['permission'])) {
+      sqlContent.push(
+        yamlToPermSQL(data['permission'])
+      );
     }
   }
   const sqlFilePath = path.join(outputDir, `config.sql`);
