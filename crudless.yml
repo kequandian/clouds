@@ -1,0 +1,234 @@
+pages:
+  masterResource:
+    api: /api/crud/masterResource/masterResources
+    path: /masterResource
+    title: 
+      table: 列表
+    layout:
+      table: Content
+      form: TitleContent
+    list:
+      search:
+        fields:
+          - label: 名字
+            field: name
+            props:
+              placeholder: 请输入
+            type: input
+        tabs:
+          field: status
+          all: default
+          options:
+            ORDER_STATUS: 开启
+            CLOSE_STATUS: 关闭
+      actions:
+        - title: 导出
+          type: export
+          scope: top
+        - title: 新增
+          type: add
+          style: primary
+          scope: top
+        - title: 查看详情
+          type: view
+          outside: true
+          scope: item
+        - title: 编辑
+          type: edit
+          outside: true
+          scope: item
+        - title: 删除
+          type: request
+          tips: 确定要删除吗?
+          method: delete
+          api: /api/crud/masterResource/masterResources/(id)
+          scope: item
+    view:
+      left:
+        - title: 基本信息
+          type: plain
+          fields:
+            - label: orgTag
+              field: orgTag
+            - label: 名字
+              field: name
+            - label: 状态
+              field: status
+              options:
+                map:
+                  ORDER_STATUS: 开启
+                  CLOSE_STATUS: 关闭
+            - label: 创建时间
+              field: createTime
+            - label: 编码
+              field: code
+            - label: 标题
+              field: title
+    form:
+      columns: 1
+    fields:
+      orgTag:
+        label: orgTag
+        type: input
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: varchar(100)
+          comment: orgTag
+      name:
+        label: 名字
+        type: input
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: varchar(100)
+          comment: name
+      status:
+        label: 状态
+        type: select
+        options:
+          ORDER_STATUS:
+            label: 开启
+            color: "#00BFFF"
+          CLOSE_STATUS:
+            label: 关闭
+            color: "#bdbdbd"
+        scope:
+          - list
+          - new
+          - edit
+          - view
+      createTime:
+        label: 创建时间
+        type: date
+        scope:
+          - list
+          - view
+        sql:
+          type: datetime
+          comment: 创建时间
+      code:
+        label: 编码
+        type: input
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: varchar(100)
+          comment: 编码
+      title:
+        label: 标题
+        type: input
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: varchar(100)
+          comment: 标题
+      registeredTime:
+        label: 注册时间
+        type: date
+        scope:
+          - list
+          - view
+        sql:
+          type: datetime
+          comment: 注册时间
+      startTime:
+        label: 开始时间
+        type: date
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: datetime
+          comment: 开始时间
+      endTime:
+        label: 结束时间
+        type: date
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: datetime
+          comment: 结束时间
+      updateTime:
+        label: 更新时间
+        type: date
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: datetime
+          comment: 更新时间
+      closedTime:
+        label: 关闭时间
+        type: date
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: datetime
+          comment: 关闭时间
+      expiredTime:
+        label: 过期时间
+        type: date
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: datetime
+          comment: 过期时间
+      appointedTime:
+        label: 指定时间
+        type: date
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: datetime
+          comment: 指定时间
+      description:
+        label: 描述
+        type: input
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: varchar(100)
+          comment: 描述
+      note:
+        label: 备注
+        type: input
+        scope:
+          - list
+          - new
+          - edit
+          - view
+        sql:
+          type: varchar(100)
+          comment: 备注
