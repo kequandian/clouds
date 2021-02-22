@@ -1,8 +1,11 @@
 ﻿using Microsoft.SqlServer.Management.SqlParser.Parser;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Console
 {
@@ -27,7 +30,7 @@ namespace Console
         public static void ParseSQL()
         {
             StringBuilder builder = new StringBuilder();
-            FileStream fileStream = new FileStream("cg-mysql-schema.sql", FileMode.Open);
+            FileStream fileStream = new FileStream("category.sql", FileMode.Open);
             using (StreamReader reader = new StreamReader(fileStream))
             {
                 string line = string.Empty;
@@ -62,21 +65,140 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             bool isMatched = false;
             bool IsExecAutoParamHelp = false;
 
+            bool isCreate = false;
+            bool isNewFieldFlag = false;
+
+            JObject obj = new JObject();
+            JObject fieldObj = new JObject();
+            JObject fieldChildObj = new JObject();
+
+            string objName = string.Empty;
+            string objFieldName = string.Empty;
+
+            //记录每行第一，第二个 TOKEN_ID
+            int count = 0;
+            string fieldTypeName = string.Empty;
+            bool isFieldTypeName = false;
+            bool isDefault = false;
+            bool closeTable = false;
+
             while (token != Tokens.EOF)
             {
                 int index = parser.GetNext(ref state, out start, out end, out isMatched, out IsExecAutoParamHelp);
                 try
                 {
                     token = (Tokens)index;
-                    System.Console.WriteLine($"{token} = {Sql.Substring(start, end - start + 1)}");
 
-                    //Console.WriteLine(token);
+                    //System.Console.WriteLine($"{token} = {Sql.Substring(start, end - start + 1)}");
+
+                    if (token == Tokens.TOKEN_CREATE)
+                    {
+                        isCreate = true;
+                    }
+
+                    if(token != Tokens.TOKEN_PRIMARY)
+                    {
+                        if (isCreate || isNewFieldFlag)
+                        {
+                            string valueData = Sql.Substring(start, end - start + 1);
+
+                            if (isCreate && !isNewFieldFlag && token == Tokens.TOKEN_ID)
+                            {
+                                objName = valueData;
+                            }
+
+                            //40 = 小括号
+                            if (Convert.ToInt32(token) == 40)
+                            {
+                                isNewFieldFlag = true;
+                            }
+
+                            if (isNewFieldFlag && token == Tokens.TOKEN_ID && count != -1)
+                            {
+                                count++;
+                                if (count == 1)
+                                {
+                                    objFieldName = valueData;
+                                }
+                                else if (count == 2)
+                                {
+                                    count = -1;
+                                    fieldChildObj = new JObject();
+                                    fieldTypeName = valueData;
+                                    isFieldTypeName = true;
+                                }
+                            }
+
+                            if (isNewFieldFlag && fieldTypeName != string.Empty && isFieldTypeName && token == Tokens.TOKEN_INTEGER)
+                            {
+                                isFieldTypeName = false;
+                                fieldChildObj.Add("dataType", string.Format("{0}:({1})", fieldTypeName, valueData));
+                            }
+
+                            if (isNewFieldFlag && token == Tokens.TOKEN_NOT)
+                            {
+                                fieldChildObj.Add("notNull", "NOT NULL");
+                            }
+
+                            if (isNewFieldFlag && token == Tokens.TOKEN_ID && valueData == "AUTO_INCREMENT")
+                            {
+                                fieldChildObj.Add("isAutoIncrement", true);
+                            }
+
+                            if(isNewFieldFlag && token == Tokens.TOKEN_DEFAULT)
+                            {
+                                isDefault = true;
+                            }
+
+                            if(isNewFieldFlag && isDefault && token == Tokens.TOKEN_INTEGER)
+                            {
+                                fieldChildObj.Add("default", valueData);
+                            }
+                            else if (isNewFieldFlag && isDefault && token == Tokens.TOKEN_NULL)
+                            {
+                                fieldChildObj.Add("default", valueData);
+                            }
+
+                            if(isNewFieldFlag && token == Tokens.TOKEN_UNIQUE)
+                            {
+                                fieldChildObj.Add("unique", valueData);
+                            }
+
+                            if (isNewFieldFlag && token == Tokens.TOKEN_STRING)
+                            {
+                                string newValue = valueData.Substring(1, valueData.Length - 2);
+                                fieldChildObj.Add("comment", newValue);
+                            }
+
+                            if (Convert.ToInt32(token) == 44)
+                            {
+                                isCreate = false;
+                                count = 0;
+                                isDefault = false;
+                                fieldObj.Add(objFieldName, fieldChildObj);
+                            }
+
+                        }
+                    }
+                    else if (token == Tokens.TOKEN_PRIMARY)
+                    {
+                        closeTable = false;
+                    }
+
+                    if (closeTable)
+                    {
+                        //TODO  
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     System.Console.WriteLine(ex.Message);
                 }
             }
+
+            obj.Add(objName, fieldObj);
+            System.Console.WriteLine(obj.ToString());
         }
 
         public static T DoSome<T>()
