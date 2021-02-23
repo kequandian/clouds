@@ -81,6 +81,8 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             bool isFieldTypeName = false;
             bool isDefault = false;
             bool closeTable = false;
+            bool isPrimary = false;
+            bool isUnique = false;
 
             while (token != Tokens.EOF)
             {
@@ -91,16 +93,17 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
                     //System.Console.WriteLine($"{token} = {Sql.Substring(start, end - start + 1)}");
 
+                    string valueData = Sql.Substring(start, end - start + 1);
+
                     if (token == Tokens.TOKEN_CREATE)
                     {
                         isCreate = true;
                     }
 
-                    if(token != Tokens.TOKEN_PRIMARY)
+                    if(!isPrimary)
                     {
                         if (isCreate || isNewFieldFlag)
                         {
-                            string valueData = Sql.Substring(start, end - start + 1);
 
                             if (isCreate && !isNewFieldFlag && token == Tokens.TOKEN_ID)
                             {
@@ -142,7 +145,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
                             if (isNewFieldFlag && token == Tokens.TOKEN_ID && valueData == "AUTO_INCREMENT")
                             {
-                                fieldChildObj.Add("isAutoIncrement", true);
+                                fieldChildObj.Add("autoIncrement", true);
                             }
 
                             if(isNewFieldFlag && token == Tokens.TOKEN_DEFAULT)
@@ -180,14 +183,26 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
                         }
                     }
-                    else if (token == Tokens.TOKEN_PRIMARY)
+                    
+                    if (token == Tokens.TOKEN_PRIMARY)
                     {
-                        closeTable = false;
+                        isPrimary = true;
+                        closeTable = true;
                     }
 
-                    if (closeTable)
+                    if (closeTable && token == Tokens.TOKEN_UNIQUE )
                     {
-                        //TODO  
+                        isUnique = true;
+                    }
+
+                    if(isUnique && token == Tokens.TOKEN_ID)
+                    {
+                        isUnique = false;
+                        isPrimary = false;
+                        closeTable = false;
+                        JObject nJO = (JObject)fieldObj[valueData];
+                        nJO.Add("unique", "UNIQUE");
+                        fieldObj[valueData] = nJO;
                     }
 
                 }
