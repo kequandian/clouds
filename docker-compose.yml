@@ -1,0 +1,9 @@
+
+version: '3.4'
+
+services:
+  crudlessnetcore:
+    image: crudlessnetcore
+    build:
+      context: .
+      dockerfile: ./Dockerfile

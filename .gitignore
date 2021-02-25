@@ -4,3 +4,4 @@ Debug/
 Release/
 .vs/
 /crudless.netcore.csproj.user
+.vscode/

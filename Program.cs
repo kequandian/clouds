@@ -24,29 +24,41 @@ namespace Console
             //Console.WriteLine(DoSome<String>());
 
             //Console.WriteLine(DoSome<DateTime>());
+#if DEBUG
+            string schemaSql = "category.sql";
+#else
+            if(args==null || args.Length==0){
+                System.Console.WriteLine("Usage: cli  </path/to/schema.sql> [/path/to/crudless.yml]");
+                return;
+            }
+            string schemaSql = args[0];
+#endif
+            string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + @"\crudless.yml";
 
-            ParseSQL();
-
+            ParseSQL(schemaSql, crudlessYaml);
 
             System.Console.Read();
         }
 
-        public static void ParseSQL()
+        public static void ParseSQL(string sqlFilePath, string saveFilePath)
         {
-            StringBuilder builder = new StringBuilder();
-            FileStream fileStream = new FileStream("category.sql", FileMode.Open);
-            using (StreamReader reader = new StreamReader(fileStream))
+            using (FileStream fileStream = new FileStream(sqlFilePath, FileMode.Open) )
             {
-                string line = string.Empty;
-                while ((line = reader.ReadLine()) != null)
+                string fileContents;
+                using (StreamReader reader = new StreamReader(fileStream))
                 {
-                    builder.Append(line);
+                    fileContents = reader.ReadToEnd();
                 }
+
+                JObject crudlessJson = FieldFormat(fileContents);
+
+                //System.Console.WriteLine(pagesJO.ToString());
+                SaveYAMLFile(crudlessJson.ToString(), saveFilePath);
             }
-            FieldFormat(builder.ToString());
         }
 
-        public static void ParseSQL(string Sql)
+
+        public static JObject ParseSQL(string Sql)
         {
             ParseOptions opt = new ParseOptions("GO");
             Scanner parser = new Scanner(opt);
@@ -217,11 +229,12 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             }
 
             obj.Add(objName, fieldObj);
-            System.Console.WriteLine(obj.ToString());
+            //System.Console.WriteLine(obj.ToString());
+            return obj;
         }
 
 
-        public static void FieldFormat(string Sql)
+        public static JObject FieldFormat(string Sql)
         {
             ParseOptions opt = new ParseOptions("GO");
             Scanner parser = new Scanner(opt);
@@ -518,9 +531,8 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
             tableNameJO.Add(objName, obj);
             pagesJO.Add("pages", tableNameJO);
-            System.Console.WriteLine(pagesJO.ToString());
 
-            SaveYAMLFile(pagesJO.ToString());
+            return pagesJO;
         }
 
         public static T DoSome<T>()
@@ -542,21 +554,20 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             return (T)Convert.ChangeType(default(T), typeof(T));
         }
 
-        public static void SaveYAMLFile(string jsonString)
+        public static void SaveYAMLFile(string jsonString, string savePathFile)
         {
             var expConverter = new ExpandoObjectConverter();
             dynamic deserializedObject = JsonConvert.DeserializeObject<ExpandoObject>(jsonString, expConverter);
 
             var serializer = new YamlDotNet.Serialization.Serializer();
             string yaml = serializer.Serialize(deserializedObject);
-
-            //System.Console.WriteLine(yaml);
+            System.Console.WriteLine(yaml);
 
             //文件路劲
-            String filePath = Directory.GetCurrentDirectory() + @"\category.yml";
+            //String savePath = Directory.GetCurrentDirectory() + @"\category.yml";
 
             //将数据保存到YAML文件
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(filePath, false, Encoding.GetEncoding("utf-8")))
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(savePathFile, false, Encoding.GetEncoding("utf-8")))
             {
                 file.Write(yaml);
                 file.Close();
