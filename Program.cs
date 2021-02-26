@@ -25,7 +25,9 @@ namespace Console
 
             //Console.WriteLine(DoSome<DateTime>());
 #if DEBUG
-            string schemaSql = "category.sql";
+            string schemaSql = "cg-mysql-schema.sql";
+            string tableNameParam = "cg_master_resource";
+            string apiParam = "/api/crud/masterResource/masterResources";
 #else
             if(args==null || args.Length==0){
                 System.Console.WriteLine("Usage: cli  </path/to/schema.sql> [/path/to/crudless.yml]");
@@ -33,14 +35,15 @@ namespace Console
             }
             string schemaSql = args[0];
 #endif
-            string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + @"\crudless.yml";
+            //string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + @"\crudless.yml";
+            string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + "/ymlFile";
 
-            ParseSQL(schemaSql, crudlessYaml);
+            ParseSQL(schemaSql, crudlessYaml, apiParam);
 
             System.Console.Read();
         }
 
-        public static void ParseSQL(string sqlFilePath, string saveFilePath)
+        public static void ParseSQL(string sqlFilePath, string saveFilePath, string apiUrl)
         {
             using (FileStream fileStream = new FileStream(sqlFilePath, FileMode.Open) )
             {
@@ -50,10 +53,25 @@ namespace Console
                     fileContents = reader.ReadToEnd();
                 }
 
-                JObject crudlessJson = FieldFormat(fileContents);
+                JArray crudlessJsonList = FieldFormat(fileContents, apiUrl);
+
+                //判断文件夹是否存在
+                if (Directory.Exists(saveFilePath) == false)//如果不存在就创建file文件夹
+                {
+                    Directory.CreateDirectory(saveFilePath);
+                }
+
+                foreach (JObject item in crudlessJsonList)
+                {
+                    string tn = item["tableName"].ToString();
+                    string ymlJson = item["ymlJson"].ToString();
+
+                    string saveUrl = string.Format("{0}/{1}.yml", saveFilePath, tn);
+
+                    SaveYAMLFile(ymlJson, saveUrl);
+                }
 
                 //System.Console.WriteLine(pagesJO.ToString());
-                SaveYAMLFile(crudlessJson.ToString(), saveFilePath);
             }
         }
 
@@ -234,7 +252,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
         }
 
 
-        public static JObject FieldFormat(string Sql)
+        public static JArray FieldFormat(string Sql, string apiUrl)
         {
             ParseOptions opt = new ParseOptions("GO");
             Scanner parser = new Scanner(opt);
@@ -260,13 +278,25 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             bool isCreate = false;
             bool isNewFieldFlag = false;
 
+            JArray tableListJA = new JArray();
+
             JObject pagesJO = new JObject();
             JObject tableNameJO = new JObject();
             JObject obj = new JObject();
             JObject fieldObj = new JObject();
             JObject fieldChildObj = new JObject();
 
+            JObject fChildSqlObj = new JObject();
+
+            JObject viewPlainJO = new JObject();
+            JArray viewPlainJArray = new JArray();
+            JObject viewPlainItemJO = new JObject();
+            JArray viewFieldJArray = new JArray();
+            JObject viewFielditemJO = new JObject();
+
+            //表名字
             string objName = string.Empty;
+            //字段名
             string objFieldName = string.Empty;
 
             //记录每行第一，第二个 TOKEN_ID
@@ -277,15 +307,6 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             bool closeTable = false;
             bool isPrimary = false;
             bool isUnique = false;
-
-            JObject fChildSqlObj = new JObject();
-
-            JObject viewPlainJO = new JObject();
-            JArray viewPlainJArray = new JArray();
-            JObject viewPlainItemJO = new JObject();
-            JArray viewFieldJArray = new JArray();
-            JObject viewFielditemJO = new JObject();
-
 
             while (token != Tokens.EOF)
             {
@@ -317,6 +338,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                             if (Convert.ToInt32(token) == 40)
                             {
                                 isNewFieldFlag = true;
+                                
                             }
 
                             if (isNewFieldFlag && token == Tokens.TOKEN_ID && count != -1)
@@ -383,6 +405,10 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                             }
                             else if (isNewFieldFlag && isDefault && token == Tokens.TOKEN_NULL)
                             {
+                                //fChildSqlObj.Add("default", valueData); 
+                            }
+                            else if (isNewFieldFlag && isDefault && token == Tokens.TOKEN_CURRENT_TIMESTAMP)
+                            {
                                 fChildSqlObj.Add("default", valueData);
                             }
 
@@ -426,13 +452,132 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                     if (isUnique && token == Tokens.TOKEN_ID)
                     {
                         isUnique = false;
-                        isPrimary = false;
-                        closeTable = false;
                         JObject nJO = (JObject)fieldObj[valueData];
                         JObject nSqlJO = (JObject)nJO["sql"];
                         nSqlJO.Add("unique", true);
                         nJO["sql"] = nSqlJO;
                         fieldObj[valueData] = nJO;
+                    }
+
+                    if(isPrimary && closeTable && !isUnique)
+                    {
+                        isPrimary = false;
+                        closeTable = false;
+                        isNewFieldFlag = false;
+
+                        //yml固定结构
+                        //obj.Add(objName, fieldObj);
+                        obj.Add("api", apiUrl);
+                        obj.Add("path", objName);
+
+                        #region title
+                        JObject titleJO = new JObject();
+                        titleJO.Add("table", "列表");
+                        obj.Add("title", titleJO);
+                        #endregion
+
+                        #region layout
+                        JObject layoutJO = new JObject();
+                        layoutJO.Add("table", "Content");
+                        layoutJO.Add("form", "TitleContent");
+                        obj.Add("layout", layoutJO);
+                        #endregion
+
+                        #region form
+                        JObject formJO = new JObject();
+                        formJO.Add("columns", 1);
+                        obj.Add("form", formJO);
+                        #endregion
+
+                        #region list
+                        JObject searchJO = new JObject();
+
+                        JObject searchFieldJO = new JObject();
+                        JArray searchFieldList = new JArray();
+                        JObject listItem = new JObject();
+                        listItem.Add("label", "名字");
+                        listItem.Add("field", "name");
+
+                        JObject listItemProps = new JObject();
+                        listItemProps.Add("placeholder", "请输入");
+                        listItem.Add("props", listItemProps);
+                        listItem.Add("type", "input");
+                        searchFieldList.Add(listItem);
+                        searchFieldJO.Add("fields", searchFieldList);
+                        searchJO.Add("sreach", searchFieldJO);
+
+                        obj.Add("list", searchJO);
+                        #endregion
+
+                        #region action
+                        JArray actionsList = new JArray();
+                        JObject actionsListItem;
+                        actionsListItem = new JObject();
+                        actionsListItem.Add("title", "新增");
+                        actionsListItem.Add("type", "add");
+                        actionsListItem.Add("style", "primary");
+                        actionsListItem.Add("scope", "top");
+                        actionsList.Add(actionsListItem);
+                        actionsListItem = new JObject();
+                        actionsListItem.Add("title", "编辑");
+                        actionsListItem.Add("type", "edit");
+                        actionsListItem.Add("outside", true);
+                        actionsListItem.Add("scope", "item");
+                        actionsList.Add(actionsListItem);
+                        actionsListItem = new JObject();
+                        actionsListItem.Add("title", "查看详情");
+                        actionsListItem.Add("type", "view");
+                        actionsListItem.Add("outside", true);
+                        actionsListItem.Add("scope", "item");
+                        actionsList.Add(actionsListItem);
+                        actionsListItem = new JObject();
+                        actionsListItem.Add("title", "删除");
+                        actionsListItem.Add("type", "request");
+                        actionsListItem.Add("tips", "确定要删除吗?");
+                        actionsListItem.Add("method", "delete");
+                        string deleteApiUrl = string.Format("{0}/(id)", apiUrl);
+                        actionsListItem.Add("api", deleteApiUrl);
+                        actionsListItem.Add("scope", "item");
+                        actionsList.Add(actionsListItem);
+                        obj.Add("actions", actionsList);
+                        #endregion
+
+                        #region view
+                        viewPlainItemJO.Add("title", "基本信息");
+                        viewPlainItemJO.Add("type", "plain");
+                        viewPlainItemJO.Add("fields", viewFieldJArray);
+                        viewPlainJArray.Add(viewPlainItemJO);
+                        viewPlainJO.Add("left", viewPlainJArray);
+                        obj.Add("view", viewPlainJO);
+                        #endregion
+
+                        //fields
+                        obj.Add("fields", fieldObj);
+
+                        tableNameJO.Add(objName, obj);
+
+                        pagesJO.Add("pages", tableNameJO);
+
+                        JObject tableData = new JObject();
+                        tableData.Add("tableName", objName);
+                        tableData.Add("ymlJson", pagesJO);
+
+                        tableListJA.Add(tableData);
+
+                        //初始化
+                        pagesJO = new JObject();
+                        tableNameJO = new JObject();
+                        obj = new JObject();
+                        fieldObj = new JObject();
+                        fieldChildObj = new JObject();
+
+                        fChildSqlObj = new JObject();
+
+                        viewPlainJO = new JObject();
+                        viewPlainJArray = new JArray();
+                        viewPlainItemJO = new JObject();
+                        viewFieldJArray = new JArray();
+                        viewFielditemJO = new JObject();
                     }
 
                 }
@@ -441,98 +586,8 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                     System.Console.WriteLine(ex.Message);
                 }
             }
-
-            //obj.Add(objName, fieldObj);
-            obj.Add("api", "/api/crud/masterResource/masterResources");
-            obj.Add("path", objName);
-
-            #region title
-            JObject titleJO = new JObject();
-            titleJO.Add("table", "列表");
-            obj.Add("title", titleJO);
-            #endregion
-
-            #region layout
-            JObject layoutJO = new JObject();
-            layoutJO.Add("table", "Content");
-            layoutJO.Add("form", "TitleContent");
-            obj.Add("layout", layoutJO);
-            #endregion
-
-            #region form
-            JObject formJO = new JObject();
-            formJO.Add("columns", 1);
-            obj.Add("form", formJO);
-            #endregion
-
-            #region list
-            JObject searchJO = new JObject();
-
-            JObject searchFieldJO = new JObject();
-            JArray searchFieldList = new JArray();
-            JObject listItem = new JObject();
-            listItem.Add("label", "名字");
-            listItem.Add("field", "name");
-
-            JObject listItemProps = new JObject();
-            listItemProps.Add("placeholder", "请输入");
-            listItem.Add("props", listItemProps);
-            listItem.Add("type", "input");
-            searchFieldList.Add(listItem);
-            searchFieldJO.Add("fields", searchFieldList);
-            searchJO.Add("sreach", searchFieldJO);
-
-            obj.Add("list", searchJO);
-            #endregion
-
-            #region action
-            JArray actionsList = new JArray();
-            JObject actionsListItem;
-            actionsListItem = new JObject();
-            actionsListItem.Add("title", "新增");
-            actionsListItem.Add("type", "add");
-            actionsListItem.Add("style", "primary");
-            actionsListItem.Add("scope", "top");
-            actionsList.Add(actionsListItem);
-            actionsListItem = new JObject();
-            actionsListItem.Add("title", "编辑");
-            actionsListItem.Add("type", "edit");
-            actionsListItem.Add("outside", true);
-            actionsListItem.Add("scope", "item");
-            actionsList.Add(actionsListItem);
-            actionsListItem = new JObject();
-            actionsListItem.Add("title", "查看详情");
-            actionsListItem.Add("type", "view");
-            actionsListItem.Add("outside", true);
-            actionsListItem.Add("scope", "item");
-            actionsList.Add(actionsListItem);
-            actionsListItem = new JObject();
-            actionsListItem.Add("title", "删除");
-            actionsListItem.Add("type", "request");
-            actionsListItem.Add("tips", "确定要删除吗?");
-            actionsListItem.Add("method", "delete");
-            actionsListItem.Add("api", "/api/crud/masterResource/masterResources/(id)");
-            actionsListItem.Add("scope", "item");
-            actionsList.Add(actionsListItem);
-            obj.Add("actions", actionsList);
-            #endregion
-
-            #region view
-            viewPlainItemJO.Add("title", "基本信息");
-            viewPlainItemJO.Add("type", "plain");
-            viewPlainItemJO.Add("fields", viewFieldJArray);
-            viewPlainJArray.Add(viewPlainItemJO);
-            viewPlainJO.Add("left", viewPlainJArray);
-            obj.Add("view", viewPlainJO);
-            #endregion
-
-            //fields
-            obj.Add("fields", fieldObj);
-
-            tableNameJO.Add(objName, obj);
-            pagesJO.Add("pages", tableNameJO);
-
-            return pagesJO;
+            
+            return tableListJA;
         }
 
         public static T DoSome<T>()
@@ -561,7 +616,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
             var serializer = new YamlDotNet.Serialization.Serializer();
             string yaml = serializer.Serialize(deserializedObject);
-            System.Console.WriteLine(yaml);
+            //System.Console.WriteLine(yaml);
 
             //文件路劲
             //String savePath = Directory.GetCurrentDirectory() + @"\category.yml";
