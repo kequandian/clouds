@@ -27,14 +27,14 @@ namespace Console
             //Console.WriteLine(DoSome<DateTime>());
 #if DEBUG
             string schemaSql = "cg-mysql-schema.sql";
-            string table_name = ""; //空值即生成全部, 否则只生成对应的
+            string table_name = string.Empty; //空值即生成全部, 否则只生成对应的
 #else
             if(args==null || args.Length==0){
                 System.Console.WriteLine("Usage: cli  </path/to/schema.sql> [/path/to/crudless.yml]");
                 return;
             }
             string schemaSql = args[0];
-            string apiParam = "";
+            string table_name = args.Length >=2 ? args[1] : string.Empty; //空值即生成全部, 否则只生成对应的
 #endif
             //string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + @"\crudless.yml";
             string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + "/ymlFile";
@@ -62,7 +62,7 @@ namespace Console
                     Directory.CreateDirectory(saveFilePath);
                 }
 
-                if(table_name != string.Empty && !table_name.Equals(""))
+                if(!string.IsNullOrEmpty(table_name))
                 {
                     string ymlJsonString = string.Empty;
                     string saveUrl = string.Empty;
