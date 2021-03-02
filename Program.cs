@@ -27,8 +27,7 @@ namespace Console
             //Console.WriteLine(DoSome<DateTime>());
 #if DEBUG
             string schemaSql = "cg-mysql-schema.sql";
-            string table_name = "cg_master_resource_item";
-            string apiParam = "/api/crud";
+            string table_name = ""; //空值即生成全部, 否则只生成对应的
 #else
             if(args==null || args.Length==0){
                 System.Console.WriteLine("Usage: cli  </path/to/schema.sql> [/path/to/crudless.yml]");
@@ -40,12 +39,12 @@ namespace Console
             //string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + @"\crudless.yml";
             string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + "/ymlFile";
 
-            ParseSQL(schemaSql, crudlessYaml, apiParam, table_name);
+            ParseSQL(schemaSql, crudlessYaml, table_name);
 
             System.Console.Read();
         }
 
-        public static void ParseSQL(string sqlFilePath, string saveFilePath, string apiUrl, string table_name)
+        public static void ParseSQL(string sqlFilePath, string saveFilePath, string table_name)
         {
             using (FileStream fileStream = new FileStream(sqlFilePath, FileMode.Open) )
             {
@@ -55,7 +54,7 @@ namespace Console
                     fileContents = reader.ReadToEnd();
                 }
 
-                JArray crudlessJsonList = FieldFormat(fileContents, apiUrl);
+                JArray crudlessJsonList = FieldFormat(fileContents);
 
                 //判断文件夹是否存在
                 if (Directory.Exists(saveFilePath) == false)//如果不存在就创建file文件夹
@@ -273,7 +272,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
         #endregion
 
         #region sql 转 json object
-        public static JArray FieldFormat(string Sql, string apiUrl)
+        public static JArray FieldFormat(string Sql)
         {
             ParseOptions opt = new ParseOptions("GO");
             Scanner parser = new Scanner(opt);
@@ -489,7 +488,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         //yml固定结构
                         //obj.Add(objName, fieldObj);
                         string tableFileName = LineToHump(objName);
-                        string apiUrlString = string.Format("{0}/{1}/{2}", apiUrl, tableFileName, tableFileName);
+                        string apiUrlString = string.Format("/api/crud/{0}/{1}", tableFileName, tableFileName);
                         obj.Add("api", apiUrlString);
                         string pathUrl = string.Format("/{0}", tableFileName);
                         obj.Add("path", pathUrl);
@@ -560,11 +559,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         actionsListItem.Add("tips", "确定要删除吗?");
                         actionsListItem.Add("method", "delete");
 
-                        string deleteApiUrl = "";
-                        if (!apiUrl.Equals("") && apiUrl != string.Empty)
-                        {
-                            deleteApiUrl = string.Format("{0}/(id)", apiUrlString);
-                        }
+                        string deleteApiUrl = string.Format("{0}/(id)", apiUrlString);
                         actionsListItem.Add("api", deleteApiUrl);
                         actionsListItem.Add("scope", "item");
                         actionsList.Add(actionsListItem);
