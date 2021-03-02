@@ -26,7 +26,7 @@ namespace Console
             //Console.WriteLine(DoSome<DateTime>());
 #if DEBUG
             string schemaSql = "cg-mysql-schema.sql";
-            string tableNameParam = "cg_master_resource";
+            string table_name = "";
             string apiParam = "/api/crud/masterResource/masterResources";
 #else
             if(args==null || args.Length==0){
@@ -34,16 +34,17 @@ namespace Console
                 return;
             }
             string schemaSql = args[0];
+            string apiParam = "";
 #endif
             //string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + @"\crudless.yml";
             string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + "/ymlFile";
 
-            ParseSQL(schemaSql, crudlessYaml, apiParam);
+            ParseSQL(schemaSql, crudlessYaml, apiParam, table_name);
 
             System.Console.Read();
         }
 
-        public static void ParseSQL(string sqlFilePath, string saveFilePath, string apiUrl)
+        public static void ParseSQL(string sqlFilePath, string saveFilePath, string apiUrl, string table_name)
         {
             using (FileStream fileStream = new FileStream(sqlFilePath, FileMode.Open) )
             {
@@ -61,21 +62,39 @@ namespace Console
                     Directory.CreateDirectory(saveFilePath);
                 }
 
-                foreach (JObject item in crudlessJsonList)
+                if(table_name != string.Empty && !table_name.Equals(""))
                 {
-                    string tn = item["tableName"].ToString();
-                    string ymlJson = item["ymlJson"].ToString();
-
-                    string saveUrl = string.Format("{0}/{1}.yml", saveFilePath, tn);
-
-                    SaveYAMLFile(ymlJson, saveUrl);
+                    string ymlJsonString = string.Empty;
+                    string saveUrl = string.Empty;
+                    MatchTableSaveYml(crudlessJsonList, table_name, saveFilePath, out ymlJsonString, out saveUrl);
+                    if (ymlJsonString != string.Empty && saveUrl != string.Empty)
+                    {
+                        SaveYAMLFile(ymlJsonString, saveUrl);
+                    }
+                    else
+                    {
+                        System.Console.WriteLine(string.Format("{0}匹配不到相应的sql", table_name));
+                    }
                 }
+                else
+                {
+                    foreach (JObject item in crudlessJsonList)
+                    {
+                        string tn = item["tableName"].ToString();
+                        string ymlJson = item["ymlJson"].ToString();
 
+                        string saveUrl = string.Format("{0}/{1}.yml", saveFilePath, tn);
+
+                        SaveYAMLFile(ymlJson, saveUrl);
+                    }
+                }
                 //System.Console.WriteLine(pagesJO.ToString());
+
             }
         }
 
 
+        #region Demo
         public static JObject ParseSQL(string Sql)
         {
             ParseOptions opt = new ParseOptions("GO");
@@ -250,8 +269,9 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             //System.Console.WriteLine(obj.ToString());
             return obj;
         }
+        #endregion
 
-
+        #region sql 转 json object
         public static JArray FieldFormat(string Sql, string apiUrl)
         {
             ParseOptions opt = new ParseOptions("GO");
@@ -589,6 +609,28 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             
             return tableListJA;
         }
+        #endregion
+
+        #region 匹配外部传进来的table name
+        public static void MatchTableSaveYml(JArray crudlessJsonList, string table_name, string saveFilePath,
+            out string ymlJsonString, out string saveUrl)
+        {
+            string yjs = string.Empty;
+            string su = string.Empty;
+            foreach (JObject item in crudlessJsonList)
+            {
+                string tn = item["tableName"].ToString();
+                if (tn.Equals(table_name))
+                {
+                    yjs = item["ymlJson"].ToString();
+                    su = string.Format("{0}/{1}.yml", saveFilePath, tn);
+                    break;
+                }
+            }
+            ymlJsonString = yjs;
+            saveUrl = su;
+        }
+        #endregion
 
         public static T DoSome<T>()
         {
@@ -609,6 +651,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             return (T)Convert.ChangeType(default(T), typeof(T));
         }
 
+        #region 保存为yml文件
         public static void SaveYAMLFile(string jsonString, string savePathFile)
         {
             var expConverter = new ExpandoObjectConverter();
@@ -628,6 +671,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                 file.Close();
             }
         }
+        #endregion
     }
 
     class TestClass : ITest1, ITest2
