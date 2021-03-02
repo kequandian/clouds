@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
@@ -26,8 +27,8 @@ namespace Console
             //Console.WriteLine(DoSome<DateTime>());
 #if DEBUG
             string schemaSql = "cg-mysql-schema.sql";
-            string table_name = "";
-            string apiParam = "/api/crud/masterResource/masterResources";
+            string table_name = "cg_master_resource_item";
+            string apiParam = "/api/crud";
 #else
             if(args==null || args.Length==0){
                 System.Console.WriteLine("Usage: cli  </path/to/schema.sql> [/path/to/crudless.yml]");
@@ -487,8 +488,11 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
                         //yml固定结构
                         //obj.Add(objName, fieldObj);
-                        obj.Add("api", apiUrl);
-                        obj.Add("path", objName);
+                        string tableFileName = LineToHump(objName);
+                        string apiUrlString = string.Format("{0}/{1}/{2}", apiUrl, tableFileName, tableFileName);
+                        obj.Add("api", apiUrlString);
+                        string pathUrl = string.Format("/{0}", tableFileName);
+                        obj.Add("path", pathUrl);
 
                         #region title
                         JObject titleJO = new JObject();
@@ -555,7 +559,12 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         actionsListItem.Add("type", "request");
                         actionsListItem.Add("tips", "确定要删除吗?");
                         actionsListItem.Add("method", "delete");
-                        string deleteApiUrl = string.Format("{0}/(id)", apiUrl);
+
+                        string deleteApiUrl = "";
+                        if (!apiUrl.Equals("") && apiUrl != string.Empty)
+                        {
+                            deleteApiUrl = string.Format("{0}/(id)", apiUrlString);
+                        }
                         actionsListItem.Add("api", deleteApiUrl);
                         actionsListItem.Add("scope", "item");
                         actionsList.Add(actionsListItem);
@@ -574,7 +583,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         //fields
                         obj.Add("fields", fieldObj);
 
-                        tableNameJO.Add(objName, obj);
+                        tableNameJO.Add(tableFileName, obj);
 
                         pagesJO.Add("pages", tableNameJO);
 
@@ -650,6 +659,19 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
             return (T)Convert.ChangeType(default(T), typeof(T));
         }
+
+        #region
+        public static string LineToHump(string value)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var s in value.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                builder.Append(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(s));
+            }
+            string str = builder.ToString().First().ToString().ToLower() + builder.ToString().Substring(1);
+            return str;
+        }
+        #endregion
 
         #region 保存为yml文件
         public static void SaveYAMLFile(string jsonString, string savePathFile)
