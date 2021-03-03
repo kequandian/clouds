@@ -7,3 +7,10 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    volumes: 
+      - ./cg-mysql-schema.sql:/cg-mysql-schema.sql
+      - ./bin/tmp:/var/out
+    command:
+      - /cg-mysql-schema.sql
+      - cg_master_resource
+      - /var/out/crudless.yml

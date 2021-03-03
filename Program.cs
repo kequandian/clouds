@@ -26,25 +26,57 @@ namespace Console
 
             //Console.WriteLine(DoSome<DateTime>());
 #if DEBUG
-            string schemaSql = "cg-mysql-schema.sql";
-            string table_name = string.Empty; //空值即生成全部, 否则只生成对应的
-#else
-            if(args==null || args.Length==0){
-                System.Console.WriteLine("Usage: cli  </path/to/schema.sql> [/path/to/crudless.yml]");
+            args = new string[] { "cg-mysql-schema.sql", "cg_master_resource" };
+#endif
+
+            if (args == null || args.Length == 0)
+            {
+                System.Console.WriteLine("Usage: cli </path/to/schema.sql> [table-name]");
                 return;
             }
+
             string schemaSql = args[0];
-            string table_name = args.Length >=2 ? args[1] : string.Empty; //空值即生成全部, 否则只生成对应的
-#endif
-            //string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + @"\crudless.yml";
-            string crudlessYaml = (args!=null && args.Length>=2) ? args[1] : Directory.GetCurrentDirectory() + "/ymlFile";
+            string table_name = string.Empty;
+            string crudlessYaml = string.Empty;
 
-            ParseSQL(schemaSql, crudlessYaml, table_name);
+            if (args.Length==1)
+            {
+                // 仅有一个参数，默认全部表输出，输出路径为 <当前路径/yml>
+                table_name = string.Empty;
+                crudlessYaml = Directory.GetCurrentDirectory() + "/yml";
+            }
+            else if(args.Length==2)
+            {
+               string arg2 = args[1];
+               if(arg2.EndsWith("yml") || arg2.Contains(Path.PathSeparator))
+               {
+                    //这是输出路径，不是表
+                    crudlessYaml = arg2;
+               }
+               else
+               {
+                    //不以 yml 结束，说明这个是表名
+                    table_name = arg2;
+                    crudlessYaml = Directory.GetCurrentDirectory() + "/crudless.yml";
+                }
+            }
+            else if(args.Length==3)
+            {
+                table_name  = args[1];
+                crudlessYaml = args[2];
+                if(!crudlessYaml.EndsWith(".yml")){
+                    crudlessYaml = Path.Combine(crudlessYaml, "crudless.yml");
+                }
+            }
 
+            ParseSQL(schemaSql, table_name, crudlessYaml);
+
+#if DEBUG
             System.Console.Read();
+#endif
         }
 
-        public static void ParseSQL(string sqlFilePath, string saveFilePath, string table_name)
+        public static void ParseSQL(string sqlFilePath, string tableName, string saveFilePath)
         {
             using (FileStream fileStream = new FileStream(sqlFilePath, FileMode.Open) )
             {
@@ -57,23 +89,25 @@ namespace Console
                 JArray crudlessJsonList = FieldFormat(fileContents);
 
                 //判断文件夹是否存在
-                if (Directory.Exists(saveFilePath) == false)//如果不存在就创建file文件夹
+                // => 不一定是文件夹, 非文件而不存在则创建
+                if( ! saveFilePath.EndsWith(".yml") && ! Directory.Exists(saveFilePath) ) //如果不存在就创建file文件夹
                 {
                     Directory.CreateDirectory(saveFilePath);
                 }
 
-                if(!string.IsNullOrEmpty(table_name))
+                if(!string.IsNullOrEmpty(tableName))
                 {
                     string ymlJsonString = string.Empty;
                     string saveUrl = string.Empty;
-                    MatchTableSaveYml(crudlessJsonList, table_name, saveFilePath, out ymlJsonString, out saveUrl);
+                    MatchTableSaveYml(crudlessJsonList, tableName, saveFilePath, out ymlJsonString, out saveUrl);
                     if (ymlJsonString != string.Empty && saveUrl != string.Empty)
                     {
-                        SaveYAMLFile(ymlJsonString, saveUrl);
+                        //tableName provided, just output crudless.yml
+                        SaveYAMLFile(ymlJsonString, saveFilePath);
                     }
                     else
                     {
-                        System.Console.WriteLine(string.Format("{0}匹配不到相应的sql", table_name));
+                        System.Console.WriteLine(string.Format("{0}匹配不到相应的sql", tableName));
                     }
                 }
                 else
@@ -616,7 +650,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
         #endregion
 
         #region 匹配外部传进来的table name
-        public static void MatchTableSaveYml(JArray crudlessJsonList, string table_name, string saveFilePath,
+        public static void MatchTableSaveYml(JArray crudlessJsonList, string tableName, string saveFilePath,
             out string ymlJsonString, out string saveUrl)
         {
             string yjs = string.Empty;
@@ -624,7 +658,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             foreach (JObject item in crudlessJsonList)
             {
                 string tn = item["tableName"].ToString();
-                if (tn.Equals(table_name))
+                if (tn.Equals(tableName))
                 {
                     yjs = item["ymlJson"].ToString();
                     su = string.Format("{0}/{1}.yml", saveFilePath, tn);
