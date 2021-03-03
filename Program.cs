@@ -369,7 +369,11 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                 {
                     token = (Tokens)index;
 
-                    //System.Console.WriteLine($"{token} = {Sql.Substring(start, end - start + 1)}");
+                    if( start + (end - start + 1) > Sql.Length)
+                    {
+                        //System.Console.WriteLine("Sql.Length=" + Sql.Length + "; start=" + start + "; end=" + end.ToString());
+                        continue;
+                    }
 
                     string valueData = Sql.Substring(start, end - start + 1);
 
@@ -479,13 +483,19 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                                 }
                             }
 
-                            if (Convert.ToInt32(token) == 44)
+                            if (Convert.ToInt32(token) == 44) //代码什么，需要注释, 可能是", "
                             {
                                 isCreate = false;
                                 count = 0;
                                 isDefault = false;
-                                fieldChildObj.Add("scope", new JArray("list", "view", "new", "edit"));
-                                fieldChildObj.Add("sql", fChildSqlObj);
+                                if(!fieldChildObj.ContainsKey("scope"))
+                                {
+                                   fieldChildObj.Add("scope", new JArray("list", "view", "new", "edit"));
+                                }
+                                if(!fieldChildObj.ContainsKey("sql"))
+                                {
+                                   fieldChildObj.Add("sql", fChildSqlObj);
+                                }
                                 fieldObj.Add(objFieldName, fieldChildObj);
                             }
 
@@ -587,6 +597,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         actionsListItem.Add("outside", true);
                         actionsListItem.Add("scope", "item");
                         actionsList.Add(actionsListItem);
+
                         actionsListItem = new JObject();
                         actionsListItem.Add("title", "删除");
                         actionsListItem.Add("type", "request");
@@ -595,8 +606,9 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
                         string deleteApiUrl = string.Format("{0}/(id)", apiUrlString);
                         actionsListItem.Add("api", deleteApiUrl);
-                        actionsListItem.Add("scope", "item");
+                        //actionsListItem.Add("scope", "item");
                         actionsList.Add(actionsListItem);
+
                         obj.Add("actions", actionsList);
                         #endregion
 

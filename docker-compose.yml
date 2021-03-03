@@ -8,9 +8,10 @@ services:
       context: .
       dockerfile: ./Dockerfile
     volumes: 
-      - ./cg-mysql-schema.sql:/cg-mysql-schema.sql
+      - ./cg-mysql-schema.sql:/schema.sql
       - ./bin/tmp:/var/out
+      - ./Program.cs:/src/Program.cs
     command:
-      - /cg-mysql-schema.sql
+      - /schema.sql
       - cg_master_resource
-      - /var/out/crudless.yml
+      - /var/tmp/crudless.yml
