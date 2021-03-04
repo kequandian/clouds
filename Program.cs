@@ -532,7 +532,9 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         //yml固定结构
                         //obj.Add(objName, fieldObj);
                         string tableFileName = LineToHump(objName);
-                        string apiUrlString = string.Format("/api/crud/{0}/{1}", tableFileName, tableFileName);
+                        string entity = tableFileName;
+                        string entities = entity.EndsWith("x") ? (entity + "es") : (entity.EndsWith("y")? (entity.Substring(0, entity.Length-1)+"ies") : entity+"s");
+                        string apiUrlString = string.Format("/api/crud/{0}/{1}", entity, entities);
                         obj.Add("api", apiUrlString);
                         string pathUrl = string.Format("/{0}", tableFileName);
                         obj.Add("path", pathUrl);
@@ -707,7 +709,13 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
             StringBuilder builder = new StringBuilder();
             foreach (var s in value.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                builder.Append(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(s));
+                string ss = s;
+                if(builder.Length==0){
+                    if(s.Length<=3){
+                        ss = string.Empty;
+                    }
+                }
+                builder.Append(Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(ss));
             }
             string str = builder.ToString().First().ToString().ToLower() + builder.ToString().Substring(1);
             return str;

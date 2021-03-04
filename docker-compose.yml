@@ -3,9 +3,11 @@ version: '3.4'
 
 services:
   crudlessnetcore:
+    # image: crudlessnetcore:debug
     image: crudlessnetcore
     build:
       context: .
+      # dockerfile: ./Dockerfile.Debug
       dockerfile: ./Dockerfile
     volumes: 
       - ./cg-mysql-schema.sql:/schema.sql
