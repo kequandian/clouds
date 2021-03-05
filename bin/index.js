@@ -61,9 +61,10 @@ if (options['--input'] && options['--output']) {
 
 function genFile(inputPath) {
   let outputDir = cwd;
-  if (typeof inputPath === 'string' && path.isAbsolute(inputPath)) {
-    outputDir = path.dirname(inputPath);
-  }
+  // just keep workdir
+  //if (typeof inputPath === 'string' && path.isAbsolute(inputPath)) {
+  //  outputDir = path.dirname(inputPath);
+  //}
 
   let readYAMLFile = new Promise((res, rej) => {
     if (typeof inputPath === 'string') {
