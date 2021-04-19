@@ -1,0 +1,73 @@
+pages:
+    view:
+      # 目前支持 plain cardList statusLog 这几种 type
+      left:
+        - title: 详情页面
+          type: plain
+          fields:
+            - label: 名称
+              field: name
+        - title: 子项标题 # 以带有图片的卡片列表的形式渲染子项
+          type: cardList    #如不需要图片，只以卡片列表的形式显示，则用card
+          api: # 从该 api 获取子项数据
+          map:
+            title: "<title> 所属人: <name>"     #卡片的标题
+            subTitle: ""                       #标题旁的内容填写，如没有则填false
+            image: "<cover>"                   #卡片下的图片，如没有则填false
+            imageTitle: ""                     #图片胖的标题，如没有则填false
+          format:
+            - "联系方式: <phone>/<email>"
+            - "简介: <note>"
+          operation:
+            - title: 跳转页面
+              type: path
+              options:
+                outside: true
+                path: /page/myPage
+        - title: 结案         #详情页面上传文件配置，可支持多个文件上传
+          type: zele
+          canExtraData: true
+          config:
+            items:
+              - component: "Form"
+                config:
+                  layout: Grid
+                  goBack: false
+                  API:
+                    createAPI: /api/crud/orderTask/orderTasks/[id]/action/provides
+                  fields:
+                    - field: _group
+                      value: 结案文件
+                      type: group
+                    - label:
+                      field: files
+                      type: upload-file
+#                      rules:
+#                        - type: required
+#                          message: 请上传结案文件！
+                    - label:
+                      field: fileName
+                      type: hidden        
+      right:
+        - title: 联系方式
+          type: plain
+          fields:
+            - label: 手机
+              field: phone
+            - label: 邮箱
+              field: email
+            - label: 微信
+              field: weChat
+        - title: 订单状态
+          type: statusLog
+          api: /api/getLogs/[id] # 这里的动态参数 id 应该使用 方括号
+          operation:        #订单状态列表下的操作按钮
+            - title: 确认结案
+              type: request
+              options:
+                tips: 确定确认结案吗？
+                method: get
+                outside: true
+                API: /api/crud/orderTask/orderTasks/(id)/action/verify
+                button:      #表示按钮的风格，跟前面的action操作按钮中的style一样
+                  type: primary
