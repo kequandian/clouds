@@ -1,0 +1,798 @@
+{
+  "listAPI": "/api/crud/issues/issue",
+  "createAPI": "/api/crud/issues/issue",
+  "getAPI": "/api/crud/issues/issue/[id]",
+  "updateAPI": "/api/crud/issues/issue/[id]",
+  "deleteAPI": "/api/crud/issues/issue/(id)",
+  "columns": 1,
+  "createFields": [
+    {
+      "label": "名称",
+      "width": 80,
+      "props": {
+        "placeholder": "请输入"
+      },
+      "rules": [
+        {
+          "type": "required",
+          "message": "请输入名称"
+        }
+      ],
+      "options": {
+        "style": {
+          "fontWeight": 900
+        }
+      },
+      "type": "input",
+      "field": "name"
+    },
+    {
+      "label": "性别",
+      "align": "right",
+      "options": [
+        {
+          "label": "男",
+          "value": "0"
+        },
+        {
+          "label": "女",
+          "value": "1"
+        }
+      ],
+      "type": "radio",
+      "field": "sex"
+    },
+    {
+      "label": "手机号",
+      "rules": [
+        {
+          "type": "required",
+          "message": "请输入手机号"
+        },
+        {
+          "type": "phone",
+          "message": "手机号码格式不正确"
+        }
+      ],
+      "options": {
+        "style": {
+          "color": "#888"
+        }
+      },
+      "type": "input",
+      "field": "phone"
+    },
+    {
+      "label": "状态",
+      "options": [
+        {
+          "label": "开放",
+          "value": "OPEN"
+        },
+        {
+          "label": "草稿",
+          "value": "DRAFT"
+        }
+      ],
+      "type": "select",
+      "field": "status"
+    },
+    {
+      "label": "图片",
+      "options": {
+        "type": "text"
+      },
+      "type": "upload-image",
+      "field": "image"
+    },
+    {
+      "label": "备注",
+      "props": {
+        "autoSize": {
+          "minRows": 4
+        },
+        "placeholder": "请输入……"
+      },
+      "type": "text-area",
+      "field": "descriptions",
+      "span": 24
+    }
+  ],
+  "updateFields": [
+    {
+      "label": "名称",
+      "width": 80,
+      "props": {
+        "placeholder": "请输入"
+      },
+      "rules": [
+        {
+          "type": "required",
+          "message": "请输入名称"
+        }
+      ],
+      "options": {
+        "style": {
+          "fontWeight": 900
+        }
+      },
+      "type": "input",
+      "field": "name"
+    },
+    {
+      "label": "性别",
+      "align": "right",
+      "options": [
+        {
+          "label": "男",
+          "value": "0"
+        },
+        {
+          "label": "女",
+          "value": "1"
+        }
+      ],
+      "type": "radio",
+      "field": "sex"
+    },
+    {
+      "label": "手机号",
+      "rules": [
+        {
+          "type": "required",
+          "message": "请输入手机号"
+        },
+        {
+          "type": "phone",
+          "message": "手机号码格式不正确"
+        }
+      ],
+      "options": {
+        "style": {
+          "color": "#888"
+        }
+      },
+      "type": "input",
+      "field": "phone"
+    },
+    {
+      "label": "图片",
+      "options": {
+        "type": "text"
+      },
+      "type": "upload-image",
+      "field": "image"
+    },
+    {
+      "label": "备注",
+      "props": {
+        "autoSize": {
+          "minRows": 4
+        },
+        "placeholder": "请输入……"
+      },
+      "type": "text-area",
+      "field": "descriptions",
+      "span": 24
+    }
+  ],
+  "pageName": {
+    "table": "页面名称",
+    "new": "新增数据",
+    "edit": "编辑数据"
+  },
+  "map": {
+    "sex": {
+      "map": {
+        "0": "男",
+        "1": "女"
+      },
+      "options": [
+        {
+          "label": "男",
+          "value": "0"
+        },
+        {
+          "label": "女",
+          "value": "1"
+        }
+      ],
+      "color": {}
+    },
+    "status": {
+      "map": {
+        "OPEN": "开放",
+        "DRAFT": "草稿"
+      },
+      "options": [
+        {
+          "label": {
+            "label": "开放",
+            "color": "#1890ff"
+          },
+          "value": "OPEN"
+        },
+        {
+          "label": {
+            "label": "草稿",
+            "color": "#1890ff"
+          },
+          "value": "DRAFT"
+        }
+      ],
+      "color": {
+        "OPEN": "#1890ff",
+        "DRAFT": "#1890ff"
+      }
+    }
+  },
+  "layout": {
+    "table": "Content",
+    "form": "TitleContent"
+  },
+  "searchFields": [
+    {
+      "label": "搜索",
+      "field": "search",
+      "type": "input",
+      "props": {
+        "placeholder": "请输入姓名/电话"
+      }
+    }
+  ],
+  "tableActions": [
+    {
+      "type": "tabs",
+      "options": {
+        "field": "status",
+        "all": true,
+        "tabs": [
+          {
+            "label": "打开",
+            "value": "Open"
+          },
+          {
+            "label": "草稿",
+            "value": "Draft"
+          }
+        ]
+      }
+    },
+    {
+      "title": "新建",
+      "type": "path",
+      "options": {
+        "style": "default",
+        "path": "issue/issue-add"
+      }
+    },
+    {
+      "title": "新建",
+      "type": "modal",
+      "options": {
+        "modalTitle": "新建数据",
+        "modalWidth": 760,
+        "items": [
+          {
+            "component": "Form",
+            "config": {
+              "layout": "Grid",
+              "layoutConfig": {
+                "value": [
+                  24
+                ]
+              },
+              "API": {
+                "createAPI": "/api/crud/issues/issue"
+              },
+              "fields": [
+                {
+                  "label": "名称",
+                  "width": 80,
+                  "props": {
+                    "placeholder": "请输入"
+                  },
+                  "rules": [
+                    {
+                      "type": "required",
+                      "message": "请输入名称"
+                    }
+                  ],
+                  "options": {
+                    "style": {
+                      "fontWeight": 900
+                    }
+                  },
+                  "type": "input",
+                  "field": "name"
+                },
+                {
+                  "label": "性别",
+                  "align": "right",
+                  "options": [
+                    {
+                      "label": "男",
+                      "value": "0"
+                    },
+                    {
+                      "label": "女",
+                      "value": "1"
+                    }
+                  ],
+                  "type": "radio",
+                  "field": "sex"
+                },
+                {
+                  "label": "手机号",
+                  "rules": [
+                    {
+                      "type": "required",
+                      "message": "请输入手机号"
+                    },
+                    {
+                      "type": "phone",
+                      "message": "手机号码格式不正确"
+                    }
+                  ],
+                  "options": {
+                    "style": {
+                      "color": "#888"
+                    }
+                  },
+                  "type": "input",
+                  "field": "phone"
+                },
+                {
+                  "label": "状态",
+                  "options": [
+                    {
+                      "label": "开放",
+                      "value": "OPEN"
+                    },
+                    {
+                      "label": "草稿",
+                      "value": "DRAFT"
+                    }
+                  ],
+                  "type": "select",
+                  "field": "status"
+                },
+                {
+                  "label": "图片",
+                  "options": {
+                    "type": "text"
+                  },
+                  "type": "upload-image",
+                  "field": "image"
+                },
+                {
+                  "label": "备注",
+                  "props": {
+                    "autoSize": {
+                      "minRows": 4
+                    },
+                    "placeholder": "请输入……"
+                  },
+                  "type": "text-area",
+                  "field": "descriptions",
+                  "span": 24
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "导出",
+      "type": "export",
+      "options": {
+        "data": {
+          "sql": "SELECT '申请' as '名称',(CASE Open WHEN 'Open' THEN '打开' WHEN '2' THEN '提交' END) as '状态' FROM (select 'Open') t"
+        },
+        "API": "/api/io/excel/teamReward"
+      }
+    },
+    {
+      "title": "导入",
+      "type": "import",
+      "options": {
+        "name": "importScopeName"
+      }
+    },
+    {
+      "title": "导入",
+      "type": "import-modal",
+      "options": {
+        "modalTitle": "导入",
+        "modalWidth": 600,
+        "templateUrl": "/attachments/影片排期.xlsx",
+        "name": "ca_film_schedule"
+      },
+      "expect": {
+        "permission": "filmschedule.new"
+      }
+    },
+    {
+      "title": "打印",
+      "type": "print",
+      "options": {}
+    }
+  ],
+  "tableOperation": [
+    {
+      "title": "编辑",
+      "type": "path",
+      "options": {
+        "outside": true,
+        "path": "issue/issue-edit"
+      },
+      "expect": {
+        "permission": "advertingplan.edit"
+      }
+    },
+    {
+      "title": "编辑",
+      "type": "modal",
+      "options": {
+        "modalTitle": "编辑数据",
+        "modalWidth": 760,
+        "outside": false,
+        "items": [
+          {
+            "component": "Form",
+            "config": {
+              "layout": "Grid",
+              "layoutConfig": {
+                "value": [
+                  24
+                ]
+              },
+              "API": {
+                "getAPI": "/api/crud/(id)/action",
+                "updateAPI": "/api/crud/(id)/action"
+              },
+              "fields": [
+                {
+                  "label": "名称",
+                  "type": "input",
+                  "field": "name"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "详情",
+      "type": "path",
+      "options": {
+        "path": "issue/issue-view",
+        "outside": false
+      }
+    },
+    {
+      "title": "删除",
+      "type": "delete",
+      "options": {
+        "tips": "确定要删除吗?",
+        "outside": false
+      }
+    },
+    {
+      "title": "审核通过",
+      "type": "action",
+      "options": {
+        "API": "/api/crud/issue/issues/{id}/action/approve",
+        "outside": false
+      },
+      "expect": {
+        "field": "status",
+        "value": "SUBMITTED",
+        "permission": "ordertask.edit"
+      }
+    },
+    {
+      "title": "审核通过",
+      "type": "action",
+      "options": {
+        "action": "approve",
+        "outside": false
+      },
+      "expect": {
+        "field": [
+          "status",
+          "assistantName"
+        ],
+        "value": [
+          "PENDING_APPROVAL",
+          "IS_NOT_NULL"
+        ]
+      }
+    },
+    {
+      "title": "拒绝",
+      "type": "action",
+      "options": {
+        "meta": "cancel",
+        "outside": false
+      }
+    },
+    {
+      "title": "不通过",
+      "type": "modal",
+      "options": {
+        "modalTitle": "拒绝原因",
+        "modalWidth": 550,
+        "outside": true,
+        "items": [
+          {
+            "component": "Form",
+            "config": {
+              "layout": "Grid",
+              "layoutConfig": {
+                "value": [
+                  24
+                ]
+              },
+              "API": {
+                "updateAPI": "/api/crud/advertiser/advertisers/pass/(id)/REFUSE"
+              },
+              "fields": [
+                {
+                  "label": "拒绝原因",
+                  "type": "text-area",
+                  "span": 24,
+                  "field": "note",
+                  "rules": [
+                    {
+                      "type": "required"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "审核通过",
+      "type": "action",
+      "options": {
+        "action": "approve",
+        "outside": false
+      }
+    },
+    {
+      "title": "审批",
+      "options": {
+        "outside": false
+      }
+    },
+    {
+      "title": "拒绝",
+      "options": {
+        "outside": false
+      }
+    },
+    {
+      "title": "提交",
+      "type": "meta",
+      "options": {
+        "outside": false
+      }
+    }
+  ],
+  "tableFields": [
+    {
+      "label": "名称",
+      "width": 80,
+      "options": {
+        "style": {
+          "fontWeight": 900
+        }
+      },
+      "field": "name"
+    },
+    {
+      "label": "联系信息",
+      "options": {
+        "format": [
+          "姓名: <name>",
+          "电话: <phone>"
+        ]
+      },
+      "field": "contact",
+      "valueType": "plain"
+    },
+    {
+      "label": "复合字段",
+      "options": {
+        "fields": [
+          {
+            "field": "cover",
+            "type": "image"
+          },
+          {
+            "field": "money",
+            "type": "currency"
+          }
+        ],
+        "direction": "horizontal"
+      },
+      "field": "demo",
+      "valueType": "complex"
+    },
+    {
+      "label": "性别",
+      "align": "right",
+      "field": "sex",
+      "options": {
+        "map": {
+          "0": "男",
+          "1": "女"
+        }
+      }
+    },
+    {
+      "label": "手机号",
+      "options": {
+        "style": {
+          "color": "#888"
+        }
+      },
+      "field": "phone"
+    },
+    {
+      "label": "状态",
+      "field": "status",
+      "valueType": "tag",
+      "options": {
+        "map": {
+          "OPEN": "开放",
+          "DRAFT": "草稿"
+        },
+        "color": {
+          "OPEN": "#1890ff",
+          "DRAFT": "#1890ff"
+        }
+      }
+    },
+    {
+      "label": "图片",
+      "field": "image",
+      "valueType": "image",
+      "options": {
+        "width": 36,
+        "height": 36,
+        "border": true
+      }
+    },
+    {
+      "label": "创建时间",
+      "field": "createTime"
+    },
+    {
+      "label": "备注",
+      "field": "descriptions",
+      "valueType": "ellipsis"
+    }
+  ],
+  "viewConfig": {
+    "left": [
+      {
+        "title": "详情页面",
+        "type": "plain",
+        "fields": [
+          {
+            "label": "名称",
+            "field": "name"
+          }
+        ]
+      },
+      {
+        "title": "子项标题",
+        "type": "cardList",
+        "api": null,
+        "map": {
+          "title": "<title> 所属人: <name>",
+          "subTitle": "",
+          "image": "<cover>",
+          "imageTitle": ""
+        },
+        "format": [
+          "联系方式: <phone>/<email>",
+          "简介: <note>"
+        ],
+        "operation": [
+          {
+            "title": "跳转页面",
+            "type": "path",
+            "options": {
+              "outside": true,
+              "path": "/page/myPage"
+            }
+          }
+        ]
+      },
+      {
+        "title": "结案",
+        "type": "zele",
+        "canExtraData": true,
+        "config": {
+          "items": [
+            {
+              "component": "Form",
+              "config": {
+                "layout": "Grid",
+                "goBack": false,
+                "API": {
+                  "createAPI": "/api/crud/orderTask/orderTasks/[id]/action/provides"
+                },
+                "fields": [
+                  {
+                    "field": "_group",
+                    "value": "结案文件",
+                    "type": "group"
+                  },
+                  {
+                    "label": null,
+                    "field": "files",
+                    "type": "upload-file"
+                  },
+                  {
+                    "label": null,
+                    "field": "fileName",
+                    "type": "hidden"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "right": [
+      {
+        "title": "联系方式",
+        "type": "plain",
+        "fields": [
+          {
+            "label": "手机",
+            "field": "phone"
+          },
+          {
+            "label": "邮箱",
+            "field": "email"
+          },
+          {
+            "label": "微信",
+            "field": "weChat"
+          }
+        ]
+      },
+      {
+        "title": "订单状态",
+        "type": "statusLog",
+        "api": "/api/getLogs/[id]",
+        "operation": [
+          {
+            "title": "确认结案",
+            "type": "request",
+            "options": {
+              "tips": "确定确认结案吗？",
+              "method": "get",
+              "outside": true,
+              "API": "/api/crud/orderTask/orderTasks/(id)/action/verify",
+              "button": {
+                "type": "primary"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

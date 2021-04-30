@@ -1,0 +1,29 @@
+{
+  "listAPI": "/api/adm/stat/meta/agentReport",
+  "createAPI": "/api/adm/stat/meta/agentReport",
+  "getAPI": "/api/adm/stat/meta/agentReport/[id]",
+  "updateAPI": "/api/adm/stat/meta/agentReport/[id]",
+  "deleteAPI": "/api/adm/stat/meta/agentReport/(id)",
+  "columns": 2,
+  "createFields": [],
+  "updateFields": [],
+  "pageName": {
+    "table": "股东毛利净利报表"
+  },
+  "map": {},
+  "searchFields": [],
+  "tableActions": [
+    {
+      "title": "导出",
+      "type": "export",
+      "options": {
+        "API": "/api/io/excel/export/agentReport"
+      },
+      "expect": {
+        "permission": "agentReport.export"
+      }
+    }
+  ],
+  "tableOperation": [],
+  "tableFields": []
+}
