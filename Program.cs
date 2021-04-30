@@ -440,9 +440,11 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
 
                             if (isNewFieldFlag && token == Tokens.TOKEN_NOT)
                             {
-                                JObject rule = new JObject();
-                                rule.Add("type", "required");
-                                rule.Add("message", "请输入");
+                                JArray rule = new JArray();
+                                JObject ruleItem = new JObject();
+                                ruleItem.Add("type", "required");
+                                ruleItem.Add("message", "请输入");
+                                rule.Add(ruleItem);
                                 fieldChildObj.Add("rules", rule);
                                 fChildSqlObj.Add("notnull", true);
                             }
