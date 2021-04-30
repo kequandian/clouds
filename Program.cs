@@ -611,7 +611,7 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         //actionsListItem.Add("scope", "item");
                         actionsList.Add(actionsListItem);
 
-                        obj.Add("actions", actionsList);
+                        searchJO.Add("actions", actionsList);
                         #endregion
 
                         #region view
