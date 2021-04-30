@@ -585,13 +585,24 @@ where AccountId='23123123123' AND LocationId =   'asdfdfasdfasdf' order by DateA
                         JObject actionsListItem;
                         actionsListItem = new JObject();
                         actionsListItem.Add("title", "新增");
-                        actionsListItem.Add("type", "add");
+                        actionsListItem.Add("type", "modal");
                         actionsListItem.Add("style", "primary");
+                        actionsListItem.Add("modalTitle", "新增");
+                        actionsListItem.Add("modalWidth", 760);
                         actionsListItem.Add("scope", "top");
                         actionsList.Add(actionsListItem);
                         actionsListItem = new JObject();
                         actionsListItem.Add("title", "编辑");
-                        actionsListItem.Add("type", "edit");
+                        actionsListItem.Add("type", "modal");
+                        actionsListItem.Add("modalTitle", "编辑");
+                        actionsListItem.Add("modalWidth", 760);
+                        JObject meApi = new JObject();
+                        JObject meApiChild = new JObject();
+                        meApiChild.Add("getAPI", string.Format("/api/crud/{0}/{1}/(id)", entity, entities));
+                        meApiChild.Add("updateAPI", string.Format("/api/crud/{0}/{1}/(id)", entity, entities));
+                        meApi.Add("api", meApiChild);
+                        actionsListItem.Add("modal", meApi);
+
                         actionsListItem.Add("outside", true);
                         actionsListItem.Add("scope", "item");
                         actionsList.Add(actionsListItem);
